@@ -120,15 +120,21 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
     const maxSrc = isMediaClip(o) && o.type !== 'image' && m ? m.duration : Infinity;
     const main = o.trackId === MAIN_TRACK;
     const speed = isMediaClip(o) ? o.speed : 1;
-    // magnets: the playhead first, then the edges of the other clips
-    const targets = [st.time, ...st.clips.filter((c) => c.id !== o.id).flatMap((c) => [c.start, c.start + c.duration])];
-    let stuck = false;
+    // magnets: the playhead always wins; then the start / end of what's on OTHER rows (texts, stickers,
+    // audio, overlays…) and 0 s. Never the neighbour on the same row: its edge is where this clip already is.
+    const playhead = st.time;
+    const others = [0, ...st.clips.filter((c) => c.id !== o.id && c.trackId !== o.trackId).flatMap((c) => [c.start, c.start + c.duration])];
+    let stuck: number | null = null;
     const magnet = (t: number) => {
-      const near = targets.reduce((best, x) => (Math.abs(x - t) < Math.abs(best - t) ? x : best), Infinity);
-      const hit = Math.abs(near - t) * zoom < SNAP_PX;
-      if (hit && !stuck) buzz();
-      stuck = hit;
-      return hit ? near : t;
+      let to: number | null = null;
+      if (Math.abs(playhead - t) * zoom < SNAP_PX) to = playhead;
+      else {
+        const near = others.reduce((best, x) => (Math.abs(x - t) < Math.abs(best - t) ? x : best), Infinity);
+        if (Math.abs(near - t) * zoom < SNAP_PX * 0.75) to = near;
+      }
+      if (to !== null && to !== stuck) buzz();
+      stuck = to;
+      return to ?? t;
     };
     const move = (ev: PointerEvent) => {
       const dt = (ev.clientX - x0) / zoom;

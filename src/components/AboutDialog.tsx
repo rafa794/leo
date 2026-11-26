@@ -63,6 +63,7 @@ export default function AboutDialog() {
   const [custom, setCustom] = useState('');
   const [thanks, setThanks] = useState<{ emoji: string; label: string } | null>(null);
   const [bizum, setBizum] = useState(false);
+  const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     openFn = () => {
@@ -167,7 +168,10 @@ export default function AboutDialog() {
               <div className="bizum">
                 {bizum ? (
                   <span>
-                    <Phone size={13} /> Bizum (solo España): <b>{AUTHOR.bizumPhone}</b>
+                    <Phone size={13} /> Bizum (solo España): <b translate="no">{AUTHOR.bizumPhone.replace(/(\d{3})(?=\d)/g, '$1 ')}</b>{' '}
+                    <button className="link" onClick={() => void navigator.clipboard?.writeText(AUTHOR.bizumPhone).then(() => setCopied(true)).catch(() => {})}>
+                      {copied ? 'Copiado ✓' : 'Copiar'}
+                    </button>
                   </span>
                 ) : (
                   <button className="link" onClick={() => setBizum(true)}>

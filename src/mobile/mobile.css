@@ -60,15 +60,21 @@
 .mt-clip.audio { background: var(--audio); }
 .mt-clip.text { background: var(--text-clip); }
 .mt-clip.image { background: #3a5a7a; }
-.mt-clip.sel { outline: 2px solid #fff; outline-offset: -1px; overflow: visible; z-index: 2; }
+.mt-clip.sel { outline: 2px solid #fff; outline-offset: -2px; overflow: visible; z-index: 2; }
 .mt-thumbs { display: flex; height: 100%; overflow: hidden; border-radius: 6px; pointer-events: none; }
 .mt-thumbs img { height: 100%; object-fit: cover; flex: none; }
 .mt-label { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 16px); pointer-events: none; }
 .mt-dur { position: absolute; left: 4px; top: 4px; font-size: 10.5px; font-weight: 600; padding: 1px 5px; border-radius: 4px; background: rgba(0, 0, 0, .6); pointer-events: none; }
-.mt-handle { position: absolute; top: -2px; bottom: -2px; width: 18px; background: #fff; z-index: 3; touch-action: none; cursor: ew-resize; }
-.mt-handle.l { left: -18px; border-radius: 6px 0 0 6px; }
-.mt-handle.r { right: -18px; border-radius: 0 6px 6px 0; }
+/* the white frame of the selected clip sits INSIDE it (like CapCut): its outer edge is the clip's real edge,
+   so when an edge sticks to the playhead, the frame lines up with it exactly */
+.mt-handle { position: absolute; top: 0; bottom: 0; width: 16px; background: #fff; z-index: 3; touch-action: none; cursor: ew-resize; }
+.mt-handle.l { left: 0; border-radius: 5px 0 0 5px; }
+.mt-handle.r { right: 0; border-radius: 0 5px 5px 0; }
 .mt-handle::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 16px; border-radius: 2px; background: #9a9aa3; transform: translate(-50%, -50%); }
+/* invisible, wider touch area for fingers */
+.mt-handle::before { content: ""; position: absolute; top: -6px; bottom: -6px; width: 34px; }
+.mt-handle.l::before { right: -6px; }
+.mt-handle.r::before { left: -6px; }
 .mt-side { position: absolute; top: 0; width: 64px; height: 100%; border-radius: 8px; border: none; background: var(--panel-2); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; cursor: pointer; }
 .mt-side.on { color: #f87171; }
 .mt-empty, .mt-lane { position: absolute; top: 0; height: 100%; display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: 6px; background: var(--panel-2); color: var(--muted); font-size: 13px; padding: 0 14px; cursor: pointer; white-space: nowrap; }
@@ -122,3 +128,4 @@
 /* notices and the export card sit above the bottom tools */
 body:has(.m-app) .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
 body:has(.m-app) .export-jobs { bottom: calc(80px + env(safe-area-inset-bottom)); left: 8px; right: 8px; width: auto; }
+.mt-clip.sel .mt-dur { left: 20px; }

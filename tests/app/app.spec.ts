@@ -315,7 +315,7 @@ test('phone: home → new project → timeline, clip tools, split, sheets', asyn
   const before = await dur();
   const head = (await page.locator('.mt-playhead').boundingBox())!;
   const handle = (await page.locator('.mt-clip').first().locator('.mt-handle.l').boundingBox())!;
-  await page.mouse.move(handle.x + handle.width - 2, handle.y + handle.height / 2);
+  await page.mouse.move(handle.x + 2, handle.y + handle.height / 2); // the frame is inside the clip: its outer edge is the clip edge
   await page.mouse.down();
   await page.mouse.move(head.x - 6, handle.y + handle.height / 2, { steps: 8 }); // stop a few px short
   await page.mouse.up();

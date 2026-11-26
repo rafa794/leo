@@ -17,7 +17,7 @@ export const AUTHOR = {
   hello: '¡Hola! Soy Rafa, quien hace Orion 👋',
   bio: 'Lo creé para editar mis vídeos sin pagar suscripciones. Orion es completamente gratis y siempre lo será: sin anuncios, sin marcas de agua y todo se procesa en tu ordenador.',
   ask: 'Si te ayuda y te apetece, invítame a algo. Desde 1 €, lo que tú quieras.',
-  paypalMe: '',
+  paypalMe: 'rafaLeoM794',
   currency: 'EUR',
   bizumPhone: '',
   website: '',
