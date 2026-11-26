@@ -62,12 +62,9 @@ export default function AboutDialog() {
   const [photoOk, setPhotoOk] = useState(true);
   const [custom, setCustom] = useState('');
   const [thanks, setThanks] = useState<{ emoji: string; label: string; amount?: number } | null>(null);
-  const [bizum, setBizum] = useState(false);
-  const [copied, setCopied] = useState(false);
   useEffect(() => {
     openFn = () => {
       setThanks(null);
-      setBizum(false);
       setOpen(true);
     };
     return () => {
@@ -85,8 +82,6 @@ export default function AboutDialog() {
 
   // pick a treat: the thank-you dance + confetti on top and, at the same time, how to pay below
   const give = (emoji: string, label: string, amount?: number) => {
-    setBizum(false);
-    setCopied(false);
     setThanks({ emoji, label, amount });
   };
   const customAmount = Math.max(0, Number(custom.replace(',', '.')) || 0);
@@ -115,27 +110,7 @@ export default function AboutDialog() {
                     PayPal
                   </button>
                 )}
-                {AUTHOR.bizumPhone && (
-                  <button className={`pay-btn bizum-btn ${bizum ? 'active' : ''}`} onClick={() => setBizum(true)}>
-                    <span className="pay-logo">B</span>
-                    Bizum
-                  </button>
-                )}
               </div>
-              {bizum && AUTHOR.bizumPhone && (
-                <div className="bizum-info">
-                  <span>
-                    Envía{thanks.amount ? <b> {thanks.amount} € </b> : ' lo que quieras '}por Bizum al
-                  </span>
-                  <b className="bizum-number" translate="no">
-                    {AUTHOR.bizumPhone.replace(/(\d{3})(?=\d)/g, '$1 ')}
-                  </b>
-                  <button className="btn small" onClick={() => void navigator.clipboard?.writeText(AUTHOR.bizumPhone).then(() => setCopied(true)).catch(() => {})}>
-                    {copied ? 'Copiado ✓' : 'Copiar número'}
-                  </button>
-                  <span className="hint">Solo en España, desde la app de tu banco.</span>
-                </div>
-              )}
               <button className="link" onClick={() => setThanks(null)}>
                 Volver
               </button>

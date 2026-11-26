@@ -99,7 +99,6 @@
   "Barrido ↑": "Varrer ↑",
   "Barrido →": "Varrer →",
   "Barrido ↓": "Varrer ↓",
-  "Bizum (solo España):": "Bizum (Espanha):",
   "Blanco y negro": "Preto e branco",
   "Blancos": "Brancos",
   "Bocina": "Buzina",
@@ -495,7 +494,6 @@
   "Orion: no se pudo guardar el proyecto": "Orion: não foi possível salvar o projeto",
   "Oscurecer": "Escurecer",
   "PARTIDO DEL DOMINGO": "JOGO DE DOMINGO",
-  "Pagar con Bizum (España)": "Pagar com Bizum (Espanha)",
   "Palabras por subtítulo": "Palavras por legenda",
   "Paneo": "Panorâmica",
   "Para crear una pista nueva, arrastra clips del mismo tipo (vídeo, audio o texto)": "Para criar uma faixa nova, arraste clipes do mesmo tipo (vídeo, áudio ou texto)",
@@ -802,11 +800,5 @@
   "Toca + para añadir tus vídeos": "Toque em + para adicionar seus vídeos",
   "Transformar": "Transformar",
   "Volver a tus proyectos": "Voltar aos seus projetos",
-  "Copiado ✓": "Copiado ✓",
-  "¿Cómo quieres pagar?": "Como você quer pagar?",
-  "Envía": "Envie",
-  "lo que quieras": "o que quiser",
-  "por Bizum al": "por Bizum para o",
-  "Copiar número": "Copiar número",
-  "Solo en España, desde la app de tu banco.": "Só na Espanha, pelo app do seu banco."
+  "¿Cómo quieres pagar?": "Como você quer pagar?"
 }

@@ -229,13 +229,12 @@ test('about, suggestions and licenses dialogs open (nothing is sent)', async () 
   await expect(page.locator('.modal')).toContainText('mediabunny');
   await page.locator('.modal .modal-head .icon-btn').first().click();
   await expect(page.locator('.modal')).toHaveCount(0);
-  // coffee: the thank-you dance and, at the same time, PayPal / Bizum (nothing opens by itself)
+  // coffee: the thank-you dance and, at the same time, how to pay (nothing opens by itself)
   await page.locator('.coffee-btn').click();
   await page.locator('.treat').first().click();
   await expect(page.locator('.thanks-video')).toBeVisible();
-  await expect(page.locator('.pay-btn')).toHaveCount(2);
-  await page.locator('.pay-btn.bizum-btn').click();
-  await expect(page.locator('.bizum-number')).toBeVisible();
+  await expect(page.locator('.pay-btn')).toHaveCount(1);
+  await expect(page.locator('.pay-btn.paypal')).toBeVisible();
   await page.locator('.about-close').click(); // the X stays clickable over the thank-you screen
   await expect(page.locator('.modal')).toHaveCount(0);
 });

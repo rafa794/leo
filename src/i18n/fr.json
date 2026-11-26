@@ -96,7 +96,6 @@
   "Barrido ↑": "Balayage ↑",
   "Barrido →": "Balayage →",
   "Barrido ↓": "Balayage ↓",
-  "Bizum (solo España):": "Bizum (Espagne) :",
   "Blanco y negro": "Noir et blanc",
   "Blancos": "Blancs",
   "Bocina": "Klaxon",
@@ -489,7 +488,6 @@
   "Orion: no se pudo guardar el proyecto": "Orion : impossible d'enregistrer le projet",
   "Oscurecer": "Obscurcir",
   "PARTIDO DEL DOMINGO": "LE MATCH DU DIMANCHE",
-  "Pagar con Bizum (España)": "Payer avec Bizum (Espagne)",
   "Palabras por subtítulo": "Mots par sous-titre",
   "Paneo": "Panoramique",
   "Para crear una pista nueva, arrastra clips del mismo tipo (vídeo, audio o texto)": "Pour créer une nouvelle piste, glisse des clips du même type (vidéo, audio ou texte)",
@@ -795,11 +793,5 @@
   "Transformar": "Transformer",
   "Volver a tus proyectos": "Retour à tes projets",
   "{0} min {1} s": "{0} min {1} s",
-  "Copiado ✓": "Copié ✓",
-  "¿Cómo quieres pagar?": "Comment veux-tu payer ?",
-  "Envía": "Envoie",
-  "lo que quieras": "ce que tu veux",
-  "por Bizum al": "par Bizum au",
-  "Copiar número": "Copier le numéro",
-  "Solo en España, desde la app de tu banco.": "Espagne uniquement, depuis l’app de ta banque."
+  "¿Cómo quieres pagar?": "Comment veux-tu payer ?"
 }

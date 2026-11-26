@@ -5,7 +5,7 @@
  * - paypalMe: your PayPal.me name (the part after paypal.me/). The coffee buttons open
  *   paypal.me/<name>/<amount>EUR with the amount already filled in; "Lo que quieras" lets them type any amount.
  *   Leave it empty until you have it: the buttons still show the thank-you animation.
- * - bizumPhone: optional, Spain only. Only shown after pressing "Bizum (España)".
+ *   (No Bizum: it has no payment links for individuals, only a phone number, which must not be published.)
  * - thanksVideo: the clip played when someone picks a coffee (transparent WebM works best).
  * - suggestionsEmail: where suggestions arrive. web3formsKey: free key from https://web3forms.com (enter that
  *   same email, they send you the key). With the key, suggestions are sent from inside the app; without it,
@@ -19,7 +19,6 @@ export const AUTHOR = {
   ask: 'Si te ayuda y te apetece, invítame a algo. Desde 1 €, lo que tú quieras.',
   paypalMe: 'rafaLeoM794',
   currency: 'EUR',
-  bizumPhone: '',
   website: '',
   thanksVideo: `${import.meta.env.BASE_URL}support/dance.webm`,
   suggestionsEmail: 'rafamendo1994@gmail.com',

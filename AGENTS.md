@@ -24,7 +24,7 @@ The promise to users, which every change must keep:
   (GitHub Releases, Cloudflare Pages). Never add paid APIs, paid SDKs or trackers.
 
 The maintainer is a solo creator (he also runs sports channels, but the product is pitched as a **general**
-editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me, Bizum)
+editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me only)
 in `src/config/author.ts`.
 
 Website: https://orion.rafael-mendoza.com (Cloudflare Pages, `/` = landing page, `/app/` = web version).
@@ -160,9 +160,13 @@ Phone editor (`src/mobile`, used for Android and any screen ≤ 820 px)
 - Viewer: drag to move, finger-sized corners, two-finger pinch to scale and twist to rotate.
 
 Coffee / donations
-- `AUTHOR.paypalMe` and `AUTHOR.bizumPhone` in `src/config/author.ts`. The dance video
-  (`public/support/dance.webm`) plays **only after** someone picks a coffee (full-screen thanks + confetti).
-  Don't show it before (the maintainer doesn't want it to feel like spam).
+- `AUTHOR.paypalMe` in `src/config/author.ts`. Picking a coffee shows, at the same time, the dance video
+  (`public/support/dance.webm`, full-screen thanks + confetti) on top and "¿Cómo quieres pagar?" (PayPal) below;
+  nothing opens by itself. Don't show the dance before a coffee is picked (the maintainer doesn't want it to feel
+  like spam).
+- **No Bizum**: Bizum has no payment links for individuals (only shops via Redsys), so it would require publishing
+  the maintainer's phone number. **Never put his phone number in the repo, the app or the website.**
+  Card / Google Pay / Apple Pay would need a Stripe Payment Link or Ko-fi account created by the maintainer.
 
 ---
 
@@ -218,7 +222,7 @@ Coffee / donations
 - Commits go out as the maintainer's personal GitHub identity (configured locally for this repo). Never change
   git/gh accounts globally.
 - **Never add references to the maintainer's employer, work accounts or work email** anywhere (code, docs,
-  commits, metadata). His own name, photo and donation links are fine.
+  commits, metadata). His own name, photo and donation links are fine; **his phone number is not**.
 - Keep IDE folders (`.idea/`, `.vscode/`), simulator state (`.wrangler/`), build output (`dist/`, `release/`,
   `site-dist/`) and test output out of git (already in `.gitignore`).
 - Before committing, scan the staged files for secrets and private data.

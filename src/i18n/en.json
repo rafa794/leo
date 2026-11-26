@@ -102,7 +102,6 @@
   "Barrido ↑": "Wipe ↑",
   "Barrido →": "Wipe →",
   "Barrido ↓": "Wipe ↓",
-  "Bizum (solo España):": "Bizum (Spain only):",
   "Blanco y negro": "Black & white",
   "Blancos": "Whites",
   "Bocina": "Air horn",
@@ -498,7 +497,6 @@
   "Orion: no se pudo guardar el proyecto": "Orion: couldn't save the project",
   "Oscurecer": "Darken",
   "PARTIDO DEL DOMINGO": "SUNDAY MATCH",
-  "Pagar con Bizum (España)": "Pay with Bizum (Spain)",
   "Palabras por subtítulo": "Words per caption",
   "Paneo": "Pan",
   "Para crear una pista nueva, arrastra clips del mismo tipo (vídeo, audio o texto)": "To create a new track, drag clips of the same type (video, audio or text)",
@@ -809,11 +807,5 @@
   "Transformar": "Transform",
   "Volver a tus proyectos": "Back to your projects",
   "{0} min {1} s": "{0} min {1} s",
-  "Copiado ✓": "Copied ✓",
-  "¿Cómo quieres pagar?": "How would you like to pay?",
-  "Envía": "Send",
-  "lo que quieras": "whatever you like",
-  "por Bizum al": "by Bizum to",
-  "Copiar número": "Copy number",
-  "Solo en España, desde la app de tu banco.": "Spain only, from your bank’s app."
+  "¿Cómo quieres pagar?": "How would you like to pay?"
 }
