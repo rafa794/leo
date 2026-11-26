@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /app/__download
+
+Sitemap: https://orion.rafael-mendoza.com/sitemap.xml
