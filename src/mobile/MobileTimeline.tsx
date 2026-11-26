@@ -286,14 +286,18 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
           {!hasAudio && (
             <div className="mt-row add" style={{ height: ROW_H.other }}>
               <button className="mt-lane" style={{ left: pad, width: laneW }} onClick={(e) => (e.stopPropagation(), onAddAudio())}>
-                <Plus size={14} /> Añadir audio
+                <span className="lane-label">
+                  <Plus size={14} /> Añadir audio
+                </span>
               </button>
             </div>
           )}
           {!hasText && (
             <div className="mt-row add" style={{ height: ROW_H.other }}>
               <button className="mt-lane" style={{ left: pad, width: laneW }} onClick={(e) => (e.stopPropagation(), onAddText())}>
-                <Plus size={14} /> Añadir texto
+                <span className="lane-label">
+                  <Plus size={14} /> Añadir texto
+                </span>
               </button>
             </div>
           )}
