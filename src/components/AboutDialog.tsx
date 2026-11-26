@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExternalLink, Heart, Lightbulb, Phone, X } from 'lucide-react';
+import { ExternalLink, Heart, Lightbulb, X } from 'lucide-react';
 import { AUTHOR, TREATS, donateUrl } from '../config/author';
 import { openLicenses } from './LicensesDialog';
 import { openSuggestions } from './SuggestionsDialog';
@@ -61,10 +61,9 @@ export default function AboutDialog() {
   const [open, setOpen] = useState(false);
   const [photoOk, setPhotoOk] = useState(true);
   const [custom, setCustom] = useState('');
-  const [thanks, setThanks] = useState<{ emoji: string; label: string } | null>(null);
+  const [thanks, setThanks] = useState<{ emoji: string; label: string; amount?: number } | null>(null);
   const [bizum, setBizum] = useState(false);
   const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     openFn = () => {
       setThanks(null);
@@ -75,7 +74,6 @@ export default function AboutDialog() {
       openFn = null;
     };
   }, []);
-  useEffect(() => () => void (timer.current && clearTimeout(timer.current)), []);
   if (!open) return null;
 
   const initials = AUTHOR.name
@@ -85,12 +83,11 @@ export default function AboutDialog() {
     .slice(0, 2)
     .toUpperCase();
 
-  // pick a treat: thank-you dance + confetti, then the payment page opens
+  // pick a treat: the thank-you dance + confetti on top and, at the same time, how to pay below
   const give = (emoji: string, label: string, amount?: number) => {
-    setThanks({ emoji, label });
-    const url = donateUrl(amount);
-    if (timer.current) clearTimeout(timer.current);
-    if (url) timer.current = setTimeout(() => window.open(url, '_blank', 'noopener'), 2200);
+    setBizum(false);
+    setCopied(false);
+    setThanks({ emoji, label, amount });
   };
   const customAmount = Math.max(0, Number(custom.replace(',', '.')) || 0);
 
@@ -109,11 +106,37 @@ export default function AboutDialog() {
               <b>¡GRACIAS! {thanks.emoji}</b>
               <span>{thanks.label}</span>
             </div>
-            <p className="hint" style={{ textAlign: 'center', position: 'relative' }}>
-              {donateUrl() ? 'Abriendo PayPal en tu navegador…' : '(El enlace de PayPal todavía no está configurado.)'}
-            </p>
-            <div className="btn-row" style={{ justifyContent: 'center', position: 'relative' }}>
-              <button className="btn small" onClick={() => setThanks(null)}>
+            <div className="pay-choice">
+              <b>¿Cómo quieres pagar?</b>
+              <div className="pay-buttons">
+                {donateUrl() && (
+                  <button className="pay-btn paypal" onClick={() => window.open(donateUrl(thanks.amount)!, '_blank', 'noopener')}>
+                    <span className="pay-logo">P</span>
+                    PayPal
+                  </button>
+                )}
+                {AUTHOR.bizumPhone && (
+                  <button className={`pay-btn bizum-btn ${bizum ? 'active' : ''}`} onClick={() => setBizum(true)}>
+                    <span className="pay-logo">B</span>
+                    Bizum
+                  </button>
+                )}
+              </div>
+              {bizum && AUTHOR.bizumPhone && (
+                <div className="bizum-info">
+                  <span>
+                    Envía{thanks.amount ? <b> {thanks.amount} € </b> : ' lo que quieras '}por Bizum al
+                  </span>
+                  <b className="bizum-number" translate="no">
+                    {AUTHOR.bizumPhone.replace(/(\d{3})(?=\d)/g, '$1 ')}
+                  </b>
+                  <button className="btn small" onClick={() => void navigator.clipboard?.writeText(AUTHOR.bizumPhone).then(() => setCopied(true)).catch(() => {})}>
+                    {copied ? 'Copiado ✓' : 'Copiar número'}
+                  </button>
+                  <span className="hint">Solo en España, desde la app de tu banco.</span>
+                </div>
+              )}
+              <button className="link" onClick={() => setThanks(null)}>
                 Volver
               </button>
             </div>
@@ -164,23 +187,6 @@ export default function AboutDialog() {
                 Invitar
               </button>
             </div>
-            {AUTHOR.bizumPhone && (
-              <div className="bizum">
-                {bizum ? (
-                  <span>
-                    <Phone size={13} /> Bizum (solo España): <b translate="no">{AUTHOR.bizumPhone.replace(/(\d{3})(?=\d)/g, '$1 ')}</b>{' '}
-                    <button className="link" onClick={() => void navigator.clipboard?.writeText(AUTHOR.bizumPhone).then(() => setCopied(true)).catch(() => {})}>
-                      {copied ? 'Copiado ✓' : 'Copiar'}
-                    </button>
-                  </span>
-                ) : (
-                  <button className="link" onClick={() => setBizum(true)}>
-                    Pagar con Bizum (España)
-                  </button>
-                )}
-              </div>
-            )}
-
             <div className="about-links">
               <button
                 className="link"

@@ -229,6 +229,15 @@ test('about, suggestions and licenses dialogs open (nothing is sent)', async () 
   await expect(page.locator('.modal')).toContainText('mediabunny');
   await page.locator('.modal .modal-head .icon-btn').first().click();
   await expect(page.locator('.modal')).toHaveCount(0);
+  // coffee: the thank-you dance and, at the same time, PayPal / Bizum (nothing opens by itself)
+  await page.locator('.coffee-btn').click();
+  await page.locator('.treat').first().click();
+  await expect(page.locator('.thanks-video')).toBeVisible();
+  await expect(page.locator('.pay-btn')).toHaveCount(2);
+  await page.locator('.pay-btn.bizum-btn').click();
+  await expect(page.locator('.bizum-number')).toBeVisible();
+  await page.locator('.about-close').click(); // the X stays clickable over the thank-you screen
+  await expect(page.locator('.modal')).toHaveCount(0);
 });
 
 test('voice isolation shows real progress and finishes', async () => {
@@ -315,7 +324,7 @@ test('phone: home → new project → timeline, clip tools, split, sheets', asyn
   const before = await dur();
   const head = (await page.locator('.mt-playhead').boundingBox())!;
   const handle = (await page.locator('.mt-clip').first().locator('.mt-handle.l').boundingBox())!;
-  await page.mouse.move(handle.x + 2, handle.y + handle.height / 2); // the frame is inside the clip: its outer edge is the clip edge
+  await page.mouse.move(handle.x + handle.width - 2, handle.y + handle.height / 2); // the grip is outside the clip: its inner edge is the clip edge
   await page.mouse.down();
   await page.mouse.move(head.x - 6, handle.y + handle.height / 2, { steps: 8 }); // stop a few px short
   await page.mouse.up();

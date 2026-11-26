@@ -143,8 +143,9 @@ General
   - Phones vibrate very briefly when something snaps (`buzz()` in `Preview.tsx`; Android needs the VIBRATE
     permission, already in the manifest).
   - Viewer: corner resize and pinch stick at 100 % scale and 0° / 90°.
-- **The selected clip's white frame is drawn INSIDE the clip** (phone timeline): its outer edge is the clip's real
-  edge, so an edge stuck to the playhead lines up with it exactly. Touch areas are enlarged invisibly.
+- **The selected clip's white frame = its grips, drawn OUTSIDE the clip** (phone timeline), like CapCut: no picture
+  under them, the clip is only what's between them. The grip's **inner edge** is the clip's first / last pixel and is
+  what sticks to the playhead; the grip sticks out on the other side. Touch areas are enlarged invisibly, outwards.
 - Export defaults: the frame rate of the footage, and never upscale beyond the project resolution.
 
 Phone editor (`src/mobile`, used for Android and any screen ≤ 820 px)

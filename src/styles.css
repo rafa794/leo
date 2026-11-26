@@ -510,7 +510,7 @@ input[type=color] { width: 100%; height: 30px; border: 1px solid var(--border); 
 /* ---------- about / support ---------- */
 .support-btn { color: #fbbf24; }
 .modal.about { width: min(440px, 100%); position: relative; }
-.about-close { position: absolute; top: 10px; right: 10px; }
+.about-close { position: absolute; top: 10px; right: 10px; z-index: 6; } /* above the thank-you screen and its confetti */
 .about-top { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .about-logo { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #a855f7); display: grid; place-items: center; color: #000; font-size: 20px; }
 .about-me { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--panel-2); }
@@ -615,3 +615,18 @@ input[type=color] { width: 100%; height: 30px; border: 1px solid var(--border); 
 .app.compact .project-bar { top: calc(7px + env(safe-area-inset-top)); }
 .app.compact .missing-banner { top: calc(48px + env(safe-area-inset-top)); }
 .lang-screen { padding-top: max(16px, env(safe-area-inset-top)); padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
+/* coffee: how to pay (shown together with the thank-you dance) */
+.pay-choice { position: relative; z-index: 3; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 4px 4px; }
+.pay-choice > b { font-size: 15px; }
+.pay-buttons { display: flex; gap: 10px; width: 100%; max-width: 360px; }
+.pay-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 9px; height: 48px; border-radius: 12px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); font-weight: 700; font-size: 15px; cursor: pointer; transition: transform .1s, border-color .12s; }
+.pay-btn:active { transform: scale(.98); }
+.pay-btn.paypal { background: #ffc439; color: #111; border-color: #ffc439; }
+.pay-btn.bizum-btn { background: #05c3b6; color: #031614; border-color: #05c3b6; }
+.pay-btn.active { box-shadow: 0 0 0 3px rgba(5, 195, 182, .35); }
+.pay-logo { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; font-weight: 900; font-size: 14px; background: rgba(0, 0, 0, .14); }
+.bizum-info { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; border-radius: 12px; background: rgba(5, 195, 182, .1); border: 1px solid rgba(5, 195, 182, .35); text-align: center; font-size: 13.5px; }
+.bizum-number { font-size: 22px; letter-spacing: 1px; }
+.thanks { justify-content: flex-start; padding-top: 6px; }
+.thanks-video { width: 190px; }
