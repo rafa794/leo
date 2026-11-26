@@ -95,7 +95,15 @@ npm run dev            # browser version at http://localhost:5173
 | `npm run mac:build` | Build `release/mac-*/Orion.app` |
 | `npm run dist:mac` / `dist:win` / `dist:linux` | Installers for each system |
 | `npm run site:build` | Website + web app (`site-dist/`, for Cloudflare Pages) |
-| `npm run android:build` | Android APK (Capacitor, needs Java 21 + Android SDK) |
+| `npm run android:release` | Signed Android APK (Capacitor, needs Java 21 + Android SDK) |
+| `npm run android:live` | Live reload on a phone plugged in by USB (installs a separate "Orion Dev" app) |
+
+### Developing on an Android phone
+
+Turn on *Developer options → USB debugging* on the phone, plug it in, accept the prompt, then run
+`npm run android:live`. It installs **Orion Dev** next to the normal app and loads the editor from your
+computer through the cable, so every code change appears on the phone right away. Chrome → `chrome://inspect`
+shows the phone's console. If you unplug the cable, run the command again.
 
 ## Tests
 

@@ -15,6 +15,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1.0"
+        // the app's name (the dev build below is "Orion Dev", installed next to the real one)
+        resValue "string", "app_name", "Orion"
+        resValue "string", "title_activity_main", "Orion"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -33,6 +36,13 @@ android {
         }
     }
     buildTypes {
+        // `npm run android:live`: a separate app that loads the editor from the Mac's dev server (live reload)
+        debug {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            resValue "string", "app_name", "Orion Dev"
+            resValue "string", "title_activity_main", "Orion Dev"
+        }
         release {
             if (keystoreProps['storeFile']) signingConfig signingConfigs.release
             minifyEnabled false
