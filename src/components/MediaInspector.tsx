@@ -1008,12 +1008,16 @@ function AdjustTab({ clip }: { clip: MediaClip }) {
 
 /* =================== shell =================== */
 
-type MainTab = 'video' | 'audio' | 'speed' | 'anim' | 'adjust';
-type VideoTab = 'basic' | 'bg' | 'mask';
+export type MainTab = 'video' | 'audio' | 'speed' | 'anim' | 'adjust';
+export type VideoTab = 'basic' | 'bg' | 'mask';
 let lastMain: MainTab = 'video';
 let lastVideo: VideoTab = 'basic';
 
-export default function MediaInspector({ clip, multi }: { clip: MediaClip; multi?: number }) {
+/**
+ * Properties of a video / photo / audio clip. On phones a tool can open just one part of it:
+ * `only` shows a single tab (no tab bar) and `videoSub` picks Básico / Quitar fondo / Máscara.
+ */
+export default function MediaInspector({ clip, multi, only, videoSub }: { clip: MediaClip; multi?: number; only?: MainTab; videoSub?: VideoTab }) {
   const hasAudio = useEditor((s) => clipHasAudio(clip, s.media));
   const media = useEditor((s) => s.media.find((m) => m.id === clip.mediaId));
   const visual = clip.type !== 'audio';
@@ -1025,16 +1029,16 @@ export default function MediaInspector({ clip, multi }: { clip: MediaClip; multi
   const [main, setMain] = useState<MainTab>(tabs.some((t) => t[0] === lastMain) ? lastMain : tabs[0][0]);
   const [vt0, setVt] = useState<VideoTab>(lastVideo);
   // several clips: only what makes sense for all of them (no background removal, mask or tools)
-  const vt: VideoTab = multi ? 'basic' : vt0;
-  const active = tabs.some((t) => t[0] === main) ? main : tabs[0][0];
-  lastMain = active;
-  if (!multi) lastVideo = vt;
+  const vt: VideoTab = multi ? 'basic' : (videoSub ?? vt0);
+  const active = only ?? (tabs.some((t) => t[0] === main) ? main : tabs[0][0]);
+  if (!only) lastMain = active;
+  if (!multi && !videoSub) lastVideo = vt;
   const store = useEditor.getState();
   const keyCount = keyTimes(clip).length;
 
   return (
     <>
-      <div className="main-tabs">
+      <div className="main-tabs" hidden={!!only}>
         {tabs.map(([id, label]) => (
           <button key={id} className={active === id ? 'active' : ''} onClick={() => setMain(id)}>
             {label}
@@ -1071,7 +1075,7 @@ export default function MediaInspector({ clip, multi }: { clip: MediaClip; multi
 
         {active === 'video' && (
           <>
-            {!multi && (
+            {!multi && !videoSub && (
               <SubTabs
                 tabs={[
                   ['basic', 'Básico'],
@@ -1092,7 +1096,7 @@ export default function MediaInspector({ clip, multi }: { clip: MediaClip; multi
         {active === 'anim' && <AnimTab clip={clip} />}
         {active === 'adjust' && <AdjustTab clip={clip} />}
 
-        <div className="section">
+        <div className="section" hidden={!!only}>
           {multi ? (
             <div className="btn-row">
               <button className="btn small" onClick={() => store.createCompound()} title="Juntarlos en un solo clip">

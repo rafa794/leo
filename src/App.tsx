@@ -18,7 +18,7 @@ import { importFiles } from './lib/importFiles';
 import { useEditor } from './store/editor';
 import { LEFT_MIN, PANEL_MAX, RAIL_W, RIGHT_MIN, useCompact, useLayout } from './store/layout';
 import { flushSave, hasPendingSave } from './lib/project';
-import MobileNav from './components/MobileNav';
+import MobileApp from './mobile/MobileApp';
 
 export default function App() {
   const exportRequest = useEditor((s) => s.exportRequest);
@@ -109,30 +109,22 @@ export default function App() {
 
   const cols = `${RAIL_W + (layout.leftOpen ? layout.leftW : 0)}px 5px minmax(0, 1fr) 5px ${layout.rightOpen ? layout.rightW : 0}px`;
 
-  // phones / narrow windows: preview on top, timeline below, panels as bottom sheets
-  const resizePreview = (e: React.PointerEvent) => {
-    const h0 = (document.querySelector('.workspace') as HTMLElement)?.offsetHeight ?? 300;
-    drag(e, (_dx, dy) => layout.set({ previewH: Math.min(window.innerHeight - 240, Math.max(160, h0 + dy)) }), 'row-resize');
-  };
+  // phones / narrow windows: the mobile editor
   if (compact)
     return (
-      <div className="app compact" style={{ ['--preview-h' as string]: layout.previewH ? `${layout.previewH}px` : '42vh' }}>
-        <TopBar onExport={() => requestExport({})} />
-        <ProjectBar />
-        <div className="workspace">
-          <Preview />
-        </div>
-        <div className="splitter" title="Arrastra para cambiar el tamaño del visor" onPointerDown={resizePreview} />
-        <Timeline />
-        <MobileNav />
-        {exportRequest && <ExportDialog clipId={exportRequest.clipId} clipIds={exportRequest.clipIds} onClose={() => requestExport(null)} />}
-        <PasteAttributes />
-        <ExportJobs />
-        <LicensesDialog />
-        <AboutDialog />
-        <SuggestionsDialog />
-        <Toast />
-      </div>
+      <MobileApp
+        dialogs={
+          <>
+            {exportRequest && <ExportDialog clipId={exportRequest.clipId} clipIds={exportRequest.clipIds} onClose={() => requestExport(null)} />}
+            <PasteAttributes />
+            <ExportJobs />
+            <LicensesDialog />
+            <AboutDialog />
+            <SuggestionsDialog />
+            <Toast />
+          </>
+        }
+      />
     );
 
   return (

@@ -4,7 +4,7 @@ import ts from 'typescript-js';
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-const roots = ['src/components', 'src/App.tsx', 'src/lib', 'src/store', 'src/ai', 'src/config'];
+const roots = ['src/components', 'src/mobile', 'src/App.tsx', 'src/lib', 'src/store', 'src/ai', 'src/config'];
 const files = [];
 const walk = (p) => (statSync(p).isDirectory() ? readdirSync(p).forEach((f) => walk(join(p, f))) : /\.(tsx?|)$/.test(p) && !p.endsWith('.d.ts') && files.push(p));
 roots.forEach(walk);

@@ -293,3 +293,34 @@ test('the language is remembered after restarting', async () => {
   await expect(page.locator('.lang-screen')).toHaveCount(0);
   await expect(page.locator('.topbar .btn.primary')).toHaveText(/Export$/, { timeout: 10_000 });
 });
+
+test('phone: home → new project → timeline, clip tools, split, sheets', async () => {
+  // a phone-sized window switches to the mobile editor
+  await page.setViewportSize({ width: 412, height: 900 });
+  await expect(page.locator('.m-home')).toBeVisible();
+  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.locator('.m-new').click()]);
+  await chooser.setFiles([CLIP1, CLIP2]);
+  // straight to the timeline with both clips, nothing selected
+  await expect(page.locator('.mt-clip')).toHaveCount(2, { timeout: 30_000 });
+  await expect(page.locator('.m-tool[data-tool="overlay"]')).toBeVisible();
+  // swipe the timeline (scroll) = move the playhead
+  await page.locator('.mt').evaluate((el) => {
+    el.dispatchEvent(new TouchEvent('touchstart', { bubbles: true }));
+    el.scrollLeft = 140;
+  });
+  await expect.poll(() => page.evaluate(() => (document.querySelector('.mt-time b')?.textContent ?? ''))).not.toBe('00:00');
+  // tap a clip → its tools; split at the playhead
+  await page.locator('.mt-clip').first().click({ position: { x: 10, y: 10 } });
+  await expect(page.locator('.m-tool[data-tool="split"]')).toBeVisible();
+  await page.locator('.m-tool[data-tool="split"]').click();
+  await expect(page.locator('.mt-clip')).toHaveCount(3);
+  // a tool opens its panel as a sheet
+  await page.locator('.m-tool[data-tool="speed"]').click();
+  await expect(page.locator('.m-sheet')).toBeVisible();
+  await page.locator('.m-sheet-head .icon-btn').click();
+  await expect(page.locator('.m-sheet')).toHaveCount(0);
+  // back to the general tools
+  await page.locator('.m-back').click();
+  await expect(page.locator('.m-tool[data-tool="text"]')).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
+});

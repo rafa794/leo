@@ -72,7 +72,8 @@ export function startColorPick(cb: ((hex: string) => void) | null) {
 export const isPickingColor = () => !!colorPick;
 export const onColorPickChange = (f: () => void) => (pickListeners.add(f), () => void pickListeners.delete(f));
 
-export default function Preview() {
+/** The viewer. `bare` (phones) leaves out the controls row: the mobile editor has its own. */
+export default function Preview({ bare = false }: { bare?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const settings = useEditor((s) => s.settings);
@@ -336,13 +337,13 @@ export default function Preview() {
         {empty && (
           <div className="empty-hint">
             <div>
-              <div style={{ fontSize: 15, color: 'var(--text)', marginBottom: 6 }}>{touch ? 'Toca «Multimedia» abajo para empezar' : 'Arrastra tus vídeos aquí para empezar'}</div>
+              <div style={{ fontSize: 15, color: 'var(--text)', marginBottom: 6 }}>{touch ? 'Toca + para añadir tus vídeos' : 'Arrastra tus vídeos aquí para empezar'}</div>
               <div>{touch ? 'Elige tus vídeos, música o fotos' : 'Se añadirán a la biblioteca multimedia'}</div>
             </div>
           </div>
         )}
       </div>
-      <div className="transport">
+      <div className="transport" hidden={bare}>
         <div className="left-side timecode">
           <b>{formatTime(time, true, settings.fps)}</b> / {formatTime(duration, true, settings.fps)}
         </div>
