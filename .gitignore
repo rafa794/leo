@@ -1,0 +1,14 @@
+node_modules
+dist
+.DS_Store
+public/mediapipe-wasm
+public/_test
+release
+test-results/
+playwright-report/
+.claude/
+*.tsbuildinfo
+site-dist/
+.idea/
+*.iml
+.vscode/

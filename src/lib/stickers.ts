@@ -1,0 +1,101 @@
+/**
+ * Stickers: Microsoft Fluent Emoji 3D (MIT license, free for any use, including monetized videos).
+ * The PNGs are bundled in public/stickers so they work offline.
+ */
+export interface Sticker {
+  file: string;
+  name: string;
+  cat: StickerCategory;
+}
+
+export type StickerCategory = 'futbol' | 'reacciones' | 'caras' | 'manos';
+
+export const STICKER_CATEGORIES: { id: StickerCategory; label: string }[] = [
+  { id: 'futbol', label: 'Fútbol' },
+  { id: 'reacciones', label: 'Reacciones' },
+  { id: 'caras', label: 'Caras' },
+  { id: 'manos', label: 'Manos' },
+];
+
+export const STICKERS: Sticker[] = [
+  { file: 'soccer-ball.png', name: 'Balón', cat: 'futbol' },
+  { file: 'goal-net.png', name: 'Portería', cat: 'futbol' },
+  { file: 'trophy.png', name: 'Trofeo', cat: 'futbol' },
+  { file: '1st-place-medal.png', name: 'Medalla de oro', cat: 'futbol' },
+  { file: 'sports-medal.png', name: 'Medalla', cat: 'futbol' },
+  { file: 'gloves.png', name: 'Guantes', cat: 'futbol' },
+  { file: 'running-shoe.png', name: 'Bota', cat: 'futbol' },
+  { file: 'stopwatch.png', name: 'Cronómetro', cat: 'futbol' },
+  { file: 'yellow-square.png', name: 'Tarjeta amarilla', cat: 'futbol' },
+  { file: 'red-square.png', name: 'Tarjeta roja', cat: 'futbol' },
+  { file: 'megaphone.png', name: 'Megáfono', cat: 'futbol' },
+  { file: 'chequered-flag.png', name: 'Bandera', cat: 'futbol' },
+  { file: 'bullseye.png', name: 'Diana', cat: 'futbol' },
+  { file: 'goat.png', name: 'GOAT', cat: 'futbol' },
+  { file: 'crown.png', name: 'Corona', cat: 'futbol' },
+  { file: 'person-running-facing-right.png', name: 'Corriendo', cat: 'futbol' },
+  { file: 'flexed-biceps.png', name: 'Músculo', cat: 'futbol' },
+  { file: 'lion.png', name: 'León', cat: 'futbol' },
+  { file: 'fire.png', name: 'Fuego', cat: 'reacciones' },
+  { file: 'hundred-points.png', name: '100', cat: 'reacciones' },
+  { file: 'collision.png', name: 'Boom', cat: 'reacciones' },
+  { file: 'high-voltage.png', name: 'Rayo', cat: 'reacciones' },
+  { file: 'sparkles.png', name: 'Brillos', cat: 'reacciones' },
+  { file: 'star.png', name: 'Estrella', cat: 'reacciones' },
+  { file: 'glowing-star.png', name: 'Estrella brillante', cat: 'reacciones' },
+  { file: 'party-popper.png', name: 'Fiesta', cat: 'reacciones' },
+  { file: 'confetti-ball.png', name: 'Confeti', cat: 'reacciones' },
+  { file: 'rocket.png', name: 'Cohete', cat: 'reacciones' },
+  { file: 'eyes.png', name: 'Ojos', cat: 'reacciones' },
+  { file: 'red-heart.png', name: 'Corazón', cat: 'reacciones' },
+  { file: 'skull.png', name: 'Calavera', cat: 'reacciones' },
+  { file: 'bomb.png', name: 'Bomba', cat: 'reacciones' },
+  { file: 'dashing-away.png', name: 'Velocidad', cat: 'reacciones' },
+  { file: 'red-exclamation-mark.png', name: 'Exclamación', cat: 'reacciones' },
+  { file: 'red-question-mark.png', name: 'Pregunta', cat: 'reacciones' },
+  { file: 'check-mark-button.png', name: 'Check', cat: 'reacciones' },
+  { file: 'cross-mark.png', name: 'Cruz', cat: 'reacciones' },
+  { file: 'warning.png', name: 'Atención', cat: 'reacciones' },
+  { file: 'musical-notes.png', name: 'Música', cat: 'reacciones' },
+  { file: 'loudspeaker.png', name: 'Altavoz', cat: 'reacciones' },
+  { file: 'hourglass-not-done.png', name: 'Reloj de arena', cat: 'reacciones' },
+  { file: 'alarm-clock.png', name: 'Despertador', cat: 'reacciones' },
+  { file: 'exploding-head.png', name: 'Mente volada', cat: 'caras' },
+  { file: 'face-screaming-in-fear.png', name: 'Grito', cat: 'caras' },
+  { file: 'face-with-tears-of-joy.png', name: 'Risa', cat: 'caras' },
+  { file: 'rolling-on-the-floor-laughing.png', name: 'Muerto de risa', cat: 'caras' },
+  { file: 'star-struck.png', name: 'Alucinado', cat: 'caras' },
+  { file: 'smiling-face-with-sunglasses.png', name: 'Chulo', cat: 'caras' },
+  { file: 'saluting-face.png', name: 'Saludo', cat: 'caras' },
+  { file: 'loudly-crying-face.png', name: 'Llorando', cat: 'caras' },
+  { file: 'pleading-face.png', name: 'Por favor', cat: 'caras' },
+  { file: 'clown-face.png', name: 'Payaso', cat: 'caras' },
+  { file: 'face-with-monocle.png', name: 'Analizando', cat: 'caras' },
+  { file: 'thinking-face.png', name: 'Pensando', cat: 'caras' },
+  { file: 'shushing-face.png', name: 'Silencio', cat: 'caras' },
+  { file: 'zany-face.png', name: 'Loco', cat: 'caras' },
+  { file: 'hot-face.png', name: 'Calor', cat: 'caras' },
+  { file: 'cold-face.png', name: 'Frío', cat: 'caras' },
+  { file: 'face-holding-back-tears.png', name: 'Emocionado', cat: 'caras' },
+  { file: 'melting-face.png', name: 'Derretido', cat: 'caras' },
+  { file: 'astonished-face.png', name: 'Asombrado', cat: 'caras' },
+  { file: 'face-with-rolling-eyes.png', name: 'Ojos en blanco', cat: 'caras' },
+  { file: 'smirking-face.png', name: 'Pícaro', cat: 'caras' },
+  { file: 'partying-face.png', name: 'De fiesta', cat: 'caras' },
+  { file: 'face-with-steam-from-nose.png', name: 'Enfadado', cat: 'caras' },
+  { file: 'nerd-face.png', name: 'Empollón', cat: 'caras' },
+  { file: 'ghost.png', name: 'Fantasma', cat: 'caras' },
+  { file: 'clapping-hands.png', name: 'Aplausos', cat: 'manos' },
+  { file: 'raising-hands.png', name: 'Manos arriba', cat: 'manos' },
+  { file: 'thumbs-up.png', name: 'Like', cat: 'manos' },
+  { file: 'thumbs-down.png', name: 'Dislike', cat: 'manos' },
+  { file: 'pinched-fingers.png', name: 'Ma che', cat: 'manos' },
+  { file: 'victory-hand.png', name: 'Victoria', cat: 'manos' },
+  { file: 'oncoming-fist.png', name: 'Puño', cat: 'manos' },
+  { file: 'ok-hand.png', name: 'OK', cat: 'manos' },
+  { file: 'folded-hands.png', name: 'Gracias', cat: 'manos' },
+  { file: 'index-pointing-at-the-viewer.png', name: 'Tú', cat: 'manos' },
+  { file: 'backhand-index-pointing-right.png', name: 'Mira', cat: 'manos' },
+];
+
+export const stickerUrl = (s: Sticker) => `${import.meta.env.BASE_URL}stickers/${s.file}`;

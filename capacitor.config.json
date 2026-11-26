@@ -1,0 +1,20 @@
+{
+  "appId": "app.orion.editor",
+  "appName": "Orion",
+  "webDir": "dist",
+  "backgroundColor": "#0e0e10",
+  "android": {
+    "backgroundColor": "#0e0e10",
+    "webContentsDebuggingEnabled": true
+  },
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK",
+      "insetsHandling": "native",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}
