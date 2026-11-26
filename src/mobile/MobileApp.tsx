@@ -1,6 +1,6 @@
 import { useRef, useState, type ReactNode } from 'react';
 import {
-  AudioLines, Captions, ChevronDown, ChevronLeft, Copy, Diamond, Download, Eraser, Film, Gauge, Layers, Maximize2, Minimize2, Move, Music,
+  AudioLines, Captions, Coffee, ChevronDown, ChevronLeft, Copy, Diamond, Download, Eraser, Film, Gauge, Layers, Maximize2, Minimize2, Move, Music,
   Pause, Pencil, Play, Redo2, Rewind, Scissors, SlidersHorizontal, Snowflake, Sparkles, Sticker, Trash2, Type, Undo2, Volume2, X,
   CircleDashed, RectangleHorizontal,
 } from 'lucide-react';
@@ -15,6 +15,7 @@ import { markFormatChosen, originalSize } from '../lib/autoFormat';
 import { clipHasAudio } from '../lib/timeline';
 import { isMediaClip, type MediaClip } from '../types';
 import Preview from '../components/Preview';
+import { openAbout } from '../components/AboutDialog';
 import ProjectBar from '../components/ProjectBar';
 import LeftPanel from '../components/LeftPanel';
 import Inspector from '../components/Inspector';
@@ -182,6 +183,9 @@ export default function MobileApp({ dialogs }: { dialogs: ReactNode }) {
           <X size={22} />
         </button>
         <span className="spacer" />
+        <button className="icon-btn m-coffee" title="Invítame a un café" onClick={() => openAbout()}>
+          <Coffee size={20} />
+        </button>
         <button className="m-chip" onClick={() => setSheet({ kind: 'format', title: 'Formato' })}>
           {formatLabel} <ChevronDown size={14} />
         </button>

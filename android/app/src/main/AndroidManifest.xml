@@ -41,6 +41,8 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- a tiny vibration when a clip snaps into place -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <!-- only old phones (Android 9-10) need this to save exported videos in Documents -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
 </manifest>

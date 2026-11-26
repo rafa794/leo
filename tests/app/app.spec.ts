@@ -309,8 +309,20 @@ test('phone: home → new project → timeline, clip tools, split, sheets', asyn
     el.scrollLeft = 140;
   });
   await expect.poll(() => page.evaluate(() => (document.querySelector('.mt-time b')?.textContent ?? ''))).not.toBe('00:00');
+  // trimming: the edge sticks to the playhead when it gets close (magnet)
+  await page.locator('.mt-clip').first().click({ position: { x: 30, y: 30 } });
+  const dur = async () => Number((await page.locator('.mt-clip').first().locator('.mt-dur').textContent())!.replace('s', ''));
+  const before = await dur();
+  const head = (await page.locator('.mt-playhead').boundingBox())!;
+  const handle = (await page.locator('.mt-clip').first().locator('.mt-handle.l').boundingBox())!;
+  await page.mouse.move(handle.x + handle.width - 2, handle.y + handle.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(head.x - 6, handle.y + handle.height / 2, { steps: 8 }); // stop a few px short
+  await page.mouse.up();
+  const t = await page.locator('.mt').evaluate((el) => el.scrollLeft / 70);
+  await expect.poll(dur).toBeCloseTo(before - Math.round(t * 10) / 10, 1);
   // tap a clip → its tools; split at the playhead
-  await page.locator('.mt-clip').first().click({ position: { x: 10, y: 10 } });
+  await page.locator('.mt-clip').first().click({ position: { x: 30, y: 30 } });
   await expect(page.locator('.m-tool[data-tool="split"]')).toBeVisible();
   await page.locator('.m-tool[data-tool="split"]').click();
   await expect(page.locator('.mt-clip')).toHaveCount(3);

@@ -4,6 +4,7 @@ import { MAIN_TRACK, projectDuration, useEditor } from '../store/editor';
 import { player } from '../lib/player';
 import { formatTime } from '../lib/util';
 import { isMediaClip, type Clip, type MediaClip, type Track } from '../types';
+import { buzz } from '../components/Preview';
 
 /**
  * Phone timeline (like the mobile editors people know): the playhead stays in the middle and the
@@ -14,6 +15,7 @@ import { isMediaClip, type Clip, type MediaClip, type Track } from '../types';
 const MIN_ZOOM = 8; // px per second
 const MAX_ZOOM = 600;
 const MIN_CLIP = 0.1;
+const SNAP_PX = 12; // how close (on screen) an edge must get to stick to the playhead or another clip
 const ROW_H = { main: 56, other: 34 };
 
 export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd: () => void; onAddAudio: () => void; onAddText: () => void }) {
@@ -117,32 +119,53 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
     const m = isMediaClip(o) ? mediaById.get(o.mediaId) : undefined;
     const maxSrc = isMediaClip(o) && o.type !== 'image' && m ? m.duration : Infinity;
     const main = o.trackId === MAIN_TRACK;
+    const speed = isMediaClip(o) ? o.speed : 1;
+    // magnets: the playhead first, then the edges of the other clips
+    const targets = [st.time, ...st.clips.filter((c) => c.id !== o.id).flatMap((c) => [c.start, c.start + c.duration])];
+    let stuck = false;
+    const magnet = (t: number) => {
+      const near = targets.reduce((best, x) => (Math.abs(x - t) < Math.abs(best - t) ? x : best), Infinity);
+      const hit = Math.abs(near - t) * zoom < SNAP_PX;
+      if (hit && !stuck) buzz();
+      stuck = hit;
+      return hit ? near : t;
+    };
     const move = (ev: PointerEvent) => {
       const dt = (ev.clientX - x0) / zoom;
       const s = useEditor.getState();
-      const speed = isMediaClip(o) ? o.speed : 1;
       if (side === 'r') {
         const maxDur = isMediaClip(o) ? (maxSrc - o.trimStart) / speed : Infinity;
-        s.updateClip(o.id, { duration: Math.min(maxDur, Math.max(MIN_CLIP, o.duration + dt)) }, false);
-        player.showAt(o.start + Math.min(maxDur, Math.max(MIN_CLIP, o.duration + dt)) - 1 / fps / 2);
+        const end = magnet(o.start + o.duration + dt);
+        const dur = Math.min(maxDur, Math.max(MIN_CLIP, end - o.start));
+        s.updateClip(o.id, { duration: dur }, false);
+        player.showAt(o.start + dur - 1 / fps / 2); // the preview shows the frame where it ends
       } else {
         const trim = isMediaClip(o) ? o.trimStart : Infinity;
-        let d = Math.max(dt, -trim / speed, main ? -Infinity : -o.start);
+        let d = magnet(o.start + dt) - o.start;
+        d = Math.max(d, -trim / speed, main ? -Infinity : -o.start);
         d = Math.min(d, o.duration - MIN_CLIP);
-        const patch: Record<string, number> = { duration: o.duration - d, start: main ? o.start : o.start + d };
+        // the left edge follows the finger; the main track closes any gap when you let go
+        const patch: Record<string, number> = { duration: o.duration - d, start: o.start + d };
         if (isMediaClip(o)) patch.trimStart = o.trimStart + d * speed;
         useEditor.setState({ clips: s.clips.map((c) => (c.id === o.id ? ({ ...c, ...patch } as Clip) : c)) });
-        player.showAt(o.start + 1e-4);
+        player.showAt(o.start + d + 1e-4); // the preview shows the frame where it starts
       }
     };
     const up = () => {
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
       player.showAt(null);
-      useEditor.getState().normalize(); // the main track closes the gap (magnet)
+      if (side === 'l' && main) {
+        // back to its slot so it keeps its order; the magnet puts it right after the clip before it
+        const cur = useEditor.getState().clips;
+        useEditor.setState({ clips: cur.map((c) => (c.id === o.id ? { ...c, start: o.start } : c)) });
+      }
+      useEditor.getState().normalize();
     };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
   };
 
   const select = (e: React.MouseEvent, clip: Clip) => {
@@ -151,12 +174,12 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
     st.select(st.selectedIds.length === 1 && st.selectedIds[0] === clip.id ? [] : [clip.id]);
   };
 
-  /* ---- rows ---- */
-  const rowsFor = (kind: 'overlay' | 'text' | 'audio'): Track[] =>
-    tracks.filter((t) => t.id !== MAIN_TRACK && (kind === 'overlay' ? t.kind === 'video' : t.kind === kind) && clips.some((c) => c.trackId === t.id));
-  const overlays = rowsFor('overlay');
-  const texts = rowsFor('text');
-  const audios = rowsFor('audio');
+  /* ---- rows: same order as the Mac app — what's higher is in front in the video ---- */
+  const used = (t: Track) => t.id === MAIN_TRACK || clips.some((c) => c.trackId === t.id);
+  const above = tracks.slice(0, Math.max(0, tracks.findIndex((t) => t.id === MAIN_TRACK))).filter((t) => t.kind !== 'audio' && used(t));
+  const below = tracks.slice(tracks.findIndex((t) => t.id === MAIN_TRACK) + 1).filter(used);
+  const hasAudio = tracks.some((t) => t.kind === 'audio' && used(t));
+  const hasText = tracks.some((t) => t.kind === 'text' && used(t));
 
   const clipBox = (clip: Clip, h: number) => {
     const sel = selectedIds.includes(clip.id);
@@ -197,6 +220,7 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
   const step = [0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600].find((s) => s * zoom >= 90) ?? 600;
   for (let t = 0; t <= total + step; t += step) ticks.push(t);
   const contentW = pad * 2 + total * zoom;
+  const laneW = Math.max(160, total * zoom); // the add-lanes run to the end of the timeline (the clip that ends last)
 
   return (
     <div className="mt-wrap">
@@ -223,6 +247,11 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
               </span>
             ))}
           </div>
+          {above.map((t) => (
+            <div key={t.id} className={`mt-row ${t.hidden ? 'hidden' : ''}`} style={{ height: ROW_H.other }}>
+              {clips.filter((c) => c.trackId === t.id).map((c) => clipBox(c, ROW_H.other))}
+            </div>
+          ))}
           {/* main track, with its mute button before 0 s */}
           <div className="mt-row main" style={{ height: ROW_H.main }}>
             <button
@@ -243,31 +272,21 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
               </button>
             )}
           </div>
-          {overlays.map((t) => (
+          {below.map((t) => (
             <div key={t.id} className={`mt-row ${t.hidden ? 'hidden' : ''}`} style={{ height: ROW_H.other }}>
               {clips.filter((c) => c.trackId === t.id).map((c) => clipBox(c, ROW_H.other))}
             </div>
           ))}
-          {texts.map((t) => (
-            <div key={t.id} className="mt-row" style={{ height: ROW_H.other }}>
-              {clips.filter((c) => c.trackId === t.id).map((c) => clipBox(c, ROW_H.other))}
-            </div>
-          ))}
-          {audios.map((t) => (
-            <div key={t.id} className="mt-row" style={{ height: ROW_H.other }}>
-              {clips.filter((c) => c.trackId === t.id).map((c) => clipBox(c, ROW_H.other))}
-            </div>
-          ))}
-          {!audios.length && (
+          {!hasAudio && (
             <div className="mt-row add" style={{ height: ROW_H.other }}>
-              <button className="mt-lane" style={{ left: pad }} onClick={(e) => (e.stopPropagation(), onAddAudio())}>
+              <button className="mt-lane" style={{ left: pad, width: laneW }} onClick={(e) => (e.stopPropagation(), onAddAudio())}>
                 <Plus size={14} /> Añadir audio
               </button>
             </div>
           )}
-          {!texts.length && (
+          {!hasText && (
             <div className="mt-row add" style={{ height: ROW_H.other }}>
-              <button className="mt-lane" style={{ left: pad }} onClick={(e) => (e.stopPropagation(), onAddText())}>
+              <button className="mt-lane" style={{ left: pad, width: laneW }} onClick={(e) => (e.stopPropagation(), onAddText())}>
                 <Plus size={14} /> Añadir texto
               </button>
             </div>
@@ -275,7 +294,7 @@ export default function MobileTimeline({ onAdd, onAddAudio, onAddText }: { onAdd
         </div>
       </div>
       <div className={`mt-playhead ${playing ? 'playing' : ''}`} />
-      <button className="mt-plus" title="Añadir vídeos o fotos al final" onClick={onAdd}>
+      <button className="mt-plus" style={{ top: 28 + 6 + above.length * (ROW_H.other + 6) + (ROW_H.main - 40) / 2 }} title="Añadir vídeos o fotos al final" onClick={onAdd}>
         <Plus size={22} />
       </button>
     </div>

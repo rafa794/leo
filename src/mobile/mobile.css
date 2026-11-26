@@ -72,7 +72,7 @@
 .mt-side { position: absolute; top: 0; width: 64px; height: 100%; border-radius: 8px; border: none; background: var(--panel-2); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; cursor: pointer; }
 .mt-side.on { color: #f87171; }
 .mt-empty, .mt-lane { position: absolute; top: 0; height: 100%; display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: 6px; background: var(--panel-2); color: var(--muted); font-size: 13px; padding: 0 14px; cursor: pointer; white-space: nowrap; }
-.mt-lane { width: 220px; }
+.mt-lane { justify-content: flex-start; }
 .mt-empty { width: 240px; color: var(--text); background: rgba(34, 211, 238, .12); }
 .mt-playhead { position: absolute; left: 50%; top: 24px; bottom: 6px; width: 2px; margin-left: -1px; background: #fff; border-radius: 2px; pointer-events: none; z-index: 5; box-shadow: 0 0 4px rgba(0, 0, 0, .6); }
 .mt-plus { position: absolute; right: 10px; top: 40px; width: 40px; height: 40px; border-radius: 10px; border: none; background: #fff; color: #000; display: grid; place-items: center; z-index: 6; box-shadow: 0 4px 14px rgba(0, 0, 0, .4); cursor: pointer; }

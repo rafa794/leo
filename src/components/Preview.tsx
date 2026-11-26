@@ -15,6 +15,15 @@ const MAX_BACKING = 4096;
 
 type Pt = { x: number; y: number };
 
+/** A tiny vibration when something snaps into place (phones; ignored elsewhere). */
+export const buzz = () => {
+  try {
+    navigator.vibrate?.(8);
+  } catch {
+    /* not available */
+  }
+};
+
 /** Corner positions of a (possibly rotated) box. */
 function corners(h: HitBox): Pt[] {
   const a = (h.rotation * Math.PI) / 180;
@@ -121,10 +130,10 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
     return { x: (ev.clientX - rect.left) * sx, y: (ev.clientY - rect.top) * sx };
   };
 
-  /** Which selected box's corner (if any) is under the pointer. */
-  const cornerAt = (p: Pt) => {
+  /** Which selected box's corner (if any) is under the pointer (fingers get a bigger target). */
+  const cornerAt = (p: Pt, finger = false) => {
     const sel = useEditor.getState().selectedIds;
-    const r = HANDLE_CSS * k;
+    const r = HANDLE_CSS * k * (finger ? 2.4 : 1);
     for (const h of [...player.hits].reverse()) {
       if (!sel.includes(h.clipId)) continue;
       const i = corners(h).findIndex((c) => Math.hypot(c.x - p.x, c.y - p.y) <= r);
@@ -134,9 +143,9 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
   };
   const boxAt = (p: Pt) => [...player.hits].reverse().find((h) => inside(h, p));
   /** The rotation handle of a selected video/photo under the pointer. */
-  const rotAt = (p: Pt) => {
+  const rotAt = (p: Pt, finger = false) => {
     const s = useEditor.getState();
-    const r = HANDLE_CSS * k;
+    const r = HANDLE_CSS * k * (finger ? 2.4 : 1);
     return [...player.hits].reverse().find((h) => {
       if (!s.selectedIds.includes(h.clipId) || !s.clips.some((c) => c.id === h.clipId && isMediaClip(c))) return false;
       const q = rotHandlePos(h, player.handlePx, canvasRef.current!.width, canvasRef.current!.height);
@@ -156,6 +165,61 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
     if (next !== cursor) setCursor(next);
   };
 
+  /* ---- two fingers on the viewer: pinch = bigger / smaller, twist = rotate (phones) ---- */
+  const touches = useRef(new Map<number, Pt>());
+  const cancelDrag = useRef<(() => void) | null>(null);
+  const startPinch = () => {
+    const canvas = canvasRef.current!;
+    const s = useEditor.getState();
+    const [a, b] = [...touches.current.values()];
+    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    const id = s.selectedIds.length === 1 ? s.selectedIds[0] : [...player.hits].reverse().find((h) => inside(h, mid))?.clipId;
+    const clip = id && s.clips.find((c) => c.id === id);
+    if (!clip) return;
+    s.select([clip.id]);
+    s.checkpoint();
+    const size0 = getSize(clip);
+    const rot0 = isMediaClip(clip) ? valueAt(clip, 'transform.rotation', s.time) : 0;
+    const d0 = Math.max(1, Math.hypot(a.x - b.x, a.y - b.y));
+    const ang0 = Math.atan2(b.y - a.y, b.x - a.x);
+    let snappedSize = false;
+    let snappedRot = false;
+    const move = (ev: PointerEvent) => {
+      if (!touches.current.has(ev.pointerId)) return;
+      touches.current.set(ev.pointerId, toCanvas(ev));
+      if (touches.current.size < 2) return;
+      const [p1, p2] = [...touches.current.values()];
+      let size = (size0 * Math.hypot(p1.x - p2.x, p1.y - p2.y)) / d0;
+      // a little magnet at 100 % (videos and photos), with a tap of the phone's vibration
+      const atFull = isMediaClip(clip) && Math.abs(size - 1) < 0.04;
+      if (atFull) size = 1;
+      if (atFull && !snappedSize) buzz();
+      snappedSize = atFull;
+      const cur = useEditor.getState().clips.find((c) => c.id === clip.id);
+      if (!cur) return;
+      if (isMediaClip(cur)) {
+        let r = rot0 + ((Math.atan2(p2.y - p1.y, p2.x - p1.x) - ang0) * 180) / Math.PI;
+        r = ((((r + 180) % 360) + 360) % 360) - 180;
+        const near = Math.round(r / 90) * 90;
+        const atRight = Math.abs(r - near) < 5;
+        if (atRight) r = near;
+        if (atRight && !snappedRot) buzz();
+        snappedRot = atRight;
+        useEditor.getState().setTransform(cur.id, { scale: clamp(size, 0.05, 10), rotation: Math.round(r * 10) / 10 }, false);
+      } else setSize(cur, size, false);
+    };
+    const end = (ev: PointerEvent) => {
+      touches.current.delete(ev.pointerId);
+      if (touches.current.size >= 2) return;
+      canvas.removeEventListener('pointermove', move);
+      canvas.removeEventListener('pointerup', end);
+      canvas.removeEventListener('pointercancel', end);
+    };
+    canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerup', end);
+    canvas.addEventListener('pointercancel', end);
+  };
+
   // Click to select, drag to move; drag a corner to make it bigger/smaller
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (e.button !== 0) return;
@@ -163,6 +227,26 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
     const canvas = canvasRef.current!;
     const p = toCanvas(e);
     const s = useEditor.getState();
+    const finger = e.pointerType === 'touch' || e.pointerType === 'pen';
+    if (e.pointerType === 'touch') {
+      touches.current.set(e.pointerId, p);
+      const forget = (ev: PointerEvent) => {
+        if (ev.pointerId !== e.pointerId) return;
+        touches.current.delete(ev.pointerId);
+        canvas.removeEventListener('pointerup', forget);
+        canvas.removeEventListener('pointercancel', forget);
+      };
+      canvas.addEventListener('pointerup', forget);
+      canvas.addEventListener('pointercancel', forget);
+      // second finger: stop moving the clip and pinch it instead
+      if (touches.current.size === 2) {
+        cancelDrag.current?.();
+        cancelDrag.current = null;
+        startPinch();
+        return;
+      }
+      if (touches.current.size > 2) return;
+    }
     // chroma key color picker: read the pixel under the click (3×3 average)
     if (colorPick) {
       const d = canvas.getContext('2d')!.getImageData(Math.round(p.x) - 1, Math.round(p.y) - 1, 3, 3).data;
@@ -174,7 +258,7 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
       return;
     }
     // rotation handle: turn around the center (snaps to 0/90/180°, ⇧ = steps of 15°)
-    const rh = rotAt(p);
+    const rh = rotAt(p, finger);
     if (rh) {
       const clip = s.clips.find((c) => c.id === rh.clipId);
       if (!clip || !isMediaClip(clip)) return;
@@ -207,7 +291,7 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
       canvas.addEventListener('pointercancel', up);
       return;
     }
-    const corner = cornerAt(p);
+    const corner = cornerAt(p, finger);
     const hit = corner?.hit ?? boxAt(p);
     if (!hit) {
       s.select([]);
@@ -217,6 +301,7 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
     const clip = s.clips.find((c) => c.id === hit.clipId)!;
     canvas.setPointerCapture(e.pointerId);
     let moved = false;
+    let snapped = false;
     let last: Pt | null = null;
     let raf = 0;
     const rec = newRecording();
@@ -225,7 +310,12 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
     /** new position/size for the pointer at q */
     const targetAt = (q: Pt): { media?: Partial<Transform>; text?: { x: number; y: number } } => {
       if (corner) {
-        const size = (getSize0 * Math.hypot(q.x - hit.cx, q.y - hit.cy)) / d0;
+        let size = (getSize0 * Math.hypot(q.x - hit.cx, q.y - hit.cy)) / d0;
+        // magnet at 100 %: it sticks there until you pull a bit further
+        const atFull = isMediaClip(clip) && Math.abs(size - 1) < 0.03;
+        if (atFull) size = 1;
+        if (atFull && !snapped) buzz();
+        snapped = atFull;
         return isMediaClip(clip) ? { media: { scale: clamp(size, 0.05, 10) } } : { text: undefined };
       }
       const dx = (q.x - p.x) / canvas.width;
@@ -279,7 +369,9 @@ export default function Preview({ bare = false }: { bare?: boolean }) {
       canvas.removeEventListener('pointermove', move);
       canvas.removeEventListener('pointerup', up);
       canvas.removeEventListener('pointercancel', up);
+      if (cancelDrag.current === up) cancelDrag.current = null;
     };
+    cancelDrag.current = up;
     canvas.addEventListener('pointermove', move);
     canvas.addEventListener('pointerup', up);
     canvas.addEventListener('pointercancel', up);
