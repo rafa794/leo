@@ -65,7 +65,7 @@
     .icon svg { width: 20px; height: 20px; }
 
     /* downloads */
-    .dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .dl .card { display: flex; flex-direction: column; gap: 10px; }
     .dl .os { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
     .dl .os svg { width: 22px; height: 22px; }
@@ -131,7 +131,7 @@
           <span data-i="hero.web">Open in your browser</span>
         </a>
       </div>
-      <p class="small muted" data-i="hero.systems">macOS · Windows · Linux · Chrome &amp; Edge</p>
+      <p class="small muted" data-i="hero.systems">macOS · Windows · Linux · Android · Chrome &amp; Edge</p>
       <div class="shot"><img src="screenshot.jpg" width="2000" height="1250" alt="Orion video editor" /></div>
     </div>
   </header>
@@ -158,7 +158,7 @@
       <div class="dl">
         <div class="card">
           <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.9-.9-3.1-.8c-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3.1.7 2-1.1 2.8-2.3c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-.9-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.8 1-2.9-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2.1-.5 2.7-1.3z" /></svg> macOS</div>
-          <a class="file" data-os="mac-arm" href="https://github.com/rafa794/orion/releases/latest/download/Orion-mac-arm64.dmg">Apple Silicon (M1–M4) <span>.dmg</span></a>
+          <a class="file" data-os="mac-arm" href="https://github.com/rafa794/orion/releases/latest/download/Orion-mac-arm64.dmg">Apple Silicon <span>.dmg</span></a>
           <a class="file" data-os="mac-intel" href="https://github.com/rafa794/orion/releases/latest/download/Orion-mac-x64.dmg">Intel <span>.dmg</span></a>
         </div>
         <div class="card">
@@ -172,6 +172,11 @@
           <a class="file" data-os="linux-x64" href="https://github.com/rafa794/orion/releases/latest/download/Orion-linux-x86_64.AppImage">AppImage x64 <span>.AppImage</span></a>
           <a class="file" href="https://github.com/rafa794/orion/releases/latest/download/Orion-linux-amd64.deb">Debian / Ubuntu x64 <span>.deb</span></a>
           <a class="file" href="https://github.com/rafa794/orion/releases/latest/download/Orion-linux-arm64.AppImage">AppImage ARM <span>.AppImage</span></a>
+        </div>
+        <div class="card">
+          <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.5 19.3 6.6a.4.4 0 0 0-.7-.4l-1.7 3A10.5 10.5 0 0 0 12 8.2c-1.8 0-3.4.4-4.9 1l-1.7-3a.4.4 0 1 0-.7.4l1.7 2.9A9.7 9.7 0 0 0 1.5 17h21a9.7 9.7 0 0 0-4.9-7.5zM7 14.4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" /></svg> Android</div>
+          <a class="file" data-os="android" href="https://github.com/rafa794/orion/releases/latest/download/Orion-android.apk"><b>APK</b> <span>.apk</span></a>
+          <p class="small muted" style="margin:2px 0 0" data-i="d.android">Open the file and allow installing apps from this source when Android asks. Android 7 or newer.</p>
         </div>
       </div>
       <div class="note">
@@ -217,7 +222,7 @@
         'hero.badge': 'Gratis · Código abierto · Sin cuenta',
         'hero.title': 'El editor de vídeo <span class="grad">gratis de verdad</span>',
         'hero.lead': 'Sin marca de agua, sin suscripción, sin registrarte. Todo —también la IA— funciona en tu ordenador y tus vídeos nunca salen de él.',
-        'hero.download': 'Descargar', 'hero.web': 'Abrir en el navegador', 'hero.systems': 'macOS · Windows · Linux · Chrome y Edge',
+        'hero.download': 'Descargar', 'hero.web': 'Abrir en el navegador', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome y Edge',
         'f.title': 'Todo lo que necesitas para editar', 'f.sub': 'Línea de tiempo y paneles como los editores que ya conoces, sin pagar por ellos.',
         'f1.t': 'Línea de tiempo profesional', 'f1.d': 'Pista principal magnética, capas, pistas de texto y audio, clips combinados y vista previa fluida, incluso en 4K.',
         'f2.t': 'Fotogramas clave en todo', 'f2.d': 'Anima posición, escala, color, volumen o máscaras, o graba un movimiento mientras se reproduce el vídeo.',
@@ -226,7 +231,7 @@
         'f5.t': 'Exporta hasta 4K', 'f5.d': 'MP4 de 720p a 4K y hasta 60 fps, en segundo plano mientras sigues editando. Cualquier formato: 16:9, 9:16, 1:1…',
         'f6.t': 'Privado de verdad', 'f6.d': 'Sin cuenta ni rastreo dentro del editor. Los proyectos se guardan solos en tu equipo.',
         'd.title': 'Descarga Orion', 'd.sub': 'Gratis para todos los sistemas. No necesita tarjeta gráfica.',
-        'd.installer': 'Instalador', 'd.portable': 'Portable (sin instalar)', 'd.all': 'Todas las versiones y novedades →',
+        'd.installer': 'Instalador', 'd.portable': 'Portable (sin instalar)', 'd.android': 'Abre el archivo y permite instalar apps de este origen cuando Android lo pida. Android 7 o superior.', 'd.all': 'Todas las versiones y novedades →',
         'd.mac': '<b>¿Primera vez en Mac?</b> Orion aún no está firmado con un certificado de pago de Apple. Abre el .dmg, arrastra Orion a Aplicaciones y luego clic derecho → <b>Abrir</b> → <b>Abrir</b>. Solo la primera vez.',
         'd.win': '<b>¿Aviso de SmartScreen en Windows?</b> Pulsa <b>Más información</b> → <b>Ejecutar de todas formas</b>. Sale porque el instalador aún no está firmado con un certificado de pago.',
         'w.title': 'O úsalo en el navegador', 'w.text': 'El mismo editor, sin instalar nada. Va mejor en Chrome o Edge en un ordenador. Tus archivos se siguen procesando en tu equipo.', 'w.btn': 'Abrir Orion en el navegador',
@@ -238,7 +243,7 @@
         'hero.badge': 'Gratuit · Open source · Sans compte',
         'hero.title': 'L’éditeur vidéo <span class="grad">vraiment gratuit</span>',
         'hero.lead': 'Sans filigrane, sans abonnement, sans inscription. Tout — IA comprise — tourne sur ton ordinateur, et tes vidéos ne le quittent jamais.',
-        'hero.download': 'Télécharger', 'hero.web': 'Ouvrir dans le navigateur', 'hero.systems': 'macOS · Windows · Linux · Chrome et Edge',
+        'hero.download': 'Télécharger', 'hero.web': 'Ouvrir dans le navigateur', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome et Edge',
         'f.title': 'Tout ce qu’il faut pour monter', 'f.sub': 'Une timeline et des panneaux comme dans les éditeurs que tu connais déjà, sans les payer.',
         'f1.t': 'Timeline pro', 'f1.d': 'Piste principale magnétique, calques, pistes texte et audio, clips composés et lecture fluide, même en 4K.',
         'f2.t': 'Images clés partout', 'f2.d': 'Anime la position, l’échelle, la couleur, le volume ou les masques, ou enregistre un mouvement pendant la lecture.',
@@ -247,7 +252,7 @@
         'f5.t': 'Export jusqu’en 4K', 'f5.d': 'MP4 de 720p à 4K jusqu’à 60 i/s, en arrière-plan pendant que tu continues. Tous les formats : 16:9, 9:16, 1:1…',
         'f6.t': 'Privé par conception', 'f6.d': 'Pas de compte ni de pistage dans l’éditeur. Les projets s’enregistrent tout seuls sur ton appareil.',
         'd.title': 'Télécharger Orion', 'd.sub': 'Gratuit pour tous les systèmes. Pas besoin de carte graphique.',
-        'd.installer': 'Installateur', 'd.portable': 'Portable (sans installation)', 'd.all': 'Toutes les versions et nouveautés →',
+        'd.installer': 'Installateur', 'd.portable': 'Portable (sans installation)', 'd.android': 'Ouvre le fichier et autorise l’installation depuis cette source quand Android le demande. Android 7 ou plus récent.', 'd.all': 'Toutes les versions et nouveautés →',
         'd.mac': '<b>Première fois sur Mac ?</b> Orion n’est pas encore signé avec un certificat Apple payant. Ouvre le .dmg, glisse Orion dans Applications, puis clic droit → <b>Ouvrir</b> → <b>Ouvrir</b>. Une seule fois.',
         'd.win': '<b>Alerte SmartScreen sur Windows ?</b> Clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>. Elle apparaît car l’installateur n’est pas encore signé.',
         'w.title': 'Ou utilise-le dans ton navigateur', 'w.text': 'Le même éditeur, rien à installer. Mieux dans Chrome ou Edge sur ordinateur. Tes fichiers restent traités sur ton appareil.', 'w.btn': 'Ouvrir Orion dans le navigateur',
@@ -259,7 +264,7 @@
         'hero.badge': 'Grátis · Código aberto · Sem conta',
         'hero.title': 'O editor de vídeo <span class="grad">grátis de verdade</span>',
         'hero.lead': 'Sem marca d’água, sem assinatura, sem cadastro. Tudo — inclusive a IA — roda no seu computador, e seus vídeos nunca saem dele.',
-        'hero.download': 'Baixar', 'hero.web': 'Abrir no navegador', 'hero.systems': 'macOS · Windows · Linux · Chrome e Edge',
+        'hero.download': 'Baixar', 'hero.web': 'Abrir no navegador', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome e Edge',
         'f.title': 'Tudo o que você precisa para editar', 'f.sub': 'Linha do tempo e painéis como os editores que você já conhece, sem pagar por eles.',
         'f1.t': 'Linha do tempo profissional', 'f1.d': 'Faixa principal magnética, sobreposições, faixas de texto e áudio, clipes compostos e prévia fluida, até em 4K.',
         'f2.t': 'Quadros-chave em tudo', 'f2.d': 'Anime posição, escala, cor, volume ou máscaras, ou grave um movimento enquanto o vídeo toca.',
@@ -268,7 +273,7 @@
         'f5.t': 'Exporte até 4K', 'f5.d': 'MP4 de 720p a 4K e até 60 fps, em segundo plano enquanto você continua editando. Qualquer formato: 16:9, 9:16, 1:1…',
         'f6.t': 'Privado de verdade', 'f6.d': 'Sem conta e sem rastreamento no editor. Os projetos são salvos sozinhos no seu dispositivo.',
         'd.title': 'Baixe o Orion', 'd.sub': 'Grátis para todos os sistemas. Não precisa de placa de vídeo.',
-        'd.installer': 'Instalador', 'd.portable': 'Portátil (sem instalar)', 'd.all': 'Todas as versões e novidades →',
+        'd.installer': 'Instalador', 'd.portable': 'Portátil (sem instalar)', 'd.android': 'Abra o arquivo e permita instalar apps desta fonte quando o Android pedir. Android 7 ou mais recente.', 'd.all': 'Todas as versões e novidades →',
         'd.mac': '<b>Primeira vez no Mac?</b> O Orion ainda não é assinado com um certificado pago da Apple. Abra o .dmg, arraste o Orion para Aplicativos e depois clique com o botão direito → <b>Abrir</b> → <b>Abrir</b>. Só na primeira vez.',
         'd.win': '<b>Aviso do SmartScreen no Windows?</b> Clique em <b>Mais informações</b> → <b>Executar assim mesmo</b>. Aparece porque o instalador ainda não é assinado.',
         'w.title': 'Ou use no navegador', 'w.text': 'O mesmo editor, sem instalar nada. Funciona melhor no Chrome ou Edge em um computador. Seus arquivos continuam sendo processados no seu dispositivo.', 'w.btn': 'Abrir o Orion no navegador',
@@ -301,10 +306,11 @@
       try { arch = uad ? (await uad.getHighEntropyValues(['architecture'])).architecture : ''; } catch {}
       if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) os = arch === 'x86' ? 'mac-intel' : 'mac-arm';
       else if (/Windows/.test(ua)) os = arch === 'arm' ? 'win-arm' : 'win-x64';
-      else if (/Linux/.test(ua) && !/Android/.test(ua)) os = 'linux-x64';
+      else if (/Android/.test(ua)) os = 'android';
+      else if (/Linux/.test(ua)) os = 'linux-x64';
       osButton(document.documentElement.lang);
     }
-    const NAMES = { 'mac-arm': 'macOS', 'mac-intel': 'macOS (Intel)', 'win-x64': 'Windows', 'win-arm': 'Windows (ARM)', 'linux-x64': 'Linux' };
+    const NAMES = { android: 'Android', 'mac-arm': 'macOS', 'mac-intel': 'macOS (Intel)', 'win-x64': 'Windows', 'win-arm': 'Windows (ARM)', 'linux-x64': 'Linux' };
     const FOR = { en: 'Download for', es: 'Descargar para', fr: 'Télécharger pour', pt: 'Baixar para' };
     function osButton(lang) {
       const link = os && document.querySelector(`a.file[data-os="${os}"]`);

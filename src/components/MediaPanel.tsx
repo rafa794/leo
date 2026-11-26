@@ -4,12 +4,14 @@ import { useEditor } from '../store/editor';
 import { importFiles } from '../lib/importFiles';
 import { formatTime } from '../lib/util';
 import ContextMenu, { type MenuState } from './ContextMenu';
+import { useCompact } from '../store/layout';
 
 export const MEDIA_DRAG_TYPE = 'application/x-orion-media';
 
 type Box = { x: number; y: number; w: number; h: number };
 
 export default function MediaPanel() {
+  const touch = useCompact(); // phones: there's nothing to drag files from
   const media = useEditor((s) => s.media);
   const status = useEditor((s) => s.status);
   const selection = useEditor((s) => s.mediaSelection);
@@ -129,7 +131,7 @@ export default function MediaPanel() {
         >
           <Upload size={22} style={{ marginBottom: 6 }} />
           <div style={{ fontWeight: 600, color: 'var(--text)' }}>Importar</div>
-          <div className="hint">Arrastra aquí vídeos, música o fotos</div>
+          <div className="hint">{touch ? 'Toca para elegir vídeos, música o fotos' : 'Arrastra aquí vídeos, música o fotos'}</div>
         </div>
         <input
           ref={inputRef}
@@ -245,7 +247,7 @@ export default function MediaPanel() {
           </p>
         )}
         {media.length > 1 && (
-          <p className="hint" style={{ marginTop: 12 }}>
+          <p className="hint desktop-only" style={{ marginTop: 12 }}>
             Haz clic en un hueco y arrastra para seleccionar varios con un recuadro (o ⌘+clic, ⇧+clic). Luego arrástralos a la línea de tiempo, o cópialos con ⌘C y pégalos con ⌘V.
           </p>
         )}

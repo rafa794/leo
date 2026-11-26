@@ -70,6 +70,7 @@ Get the latest version from the [website](https://orion.rafael-mendoza.com) or t
 | Windows (installer) | `Orion-Setup-x64.exe` · `Orion-Setup-arm64.exe` |
 | Windows (portable) | `Orion-Portable.exe` |
 | Linux | `Orion-linux-x86_64.AppImage` · `.deb` |
+| Android 7+ | `Orion-android.apk` (allow installing from this source when asked) |
 
 > The apps are not signed with paid certificates yet.
 > **macOS:** the first time, right-click Orion in Applications → *Open* → *Open*.

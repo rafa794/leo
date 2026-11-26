@@ -12,3 +12,4 @@ site-dist/
 .idea/
 *.iml
 .vscode/
+.wrangler/

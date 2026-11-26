@@ -1,6 +1,7 @@
 import { Coffee, Download, Globe, Redo2, Undo2 } from 'lucide-react';
 import { openLanguagePicker } from './LanguagePicker';
 import { useLang } from '../i18n';
+import { useCompact } from '../store/layout';
 import { openAbout } from './AboutDialog';
 import { useEditor } from '../store/editor';
 import { markFormatChosen, originalSize } from '../lib/autoFormat';
@@ -14,6 +15,7 @@ export const FORMATS = [
 
 export default function TopBar({ onExport }: { onExport: () => void }) {
   const lang = useLang();
+  const compact = useCompact(); // phone: short format names so the bar fits
   const settings = useEditor((s) => s.settings);
   const setSettings = useEditor((s) => s.setSettings);
   const canUndo = useEditor((s) => s.past.length > 0);
@@ -57,11 +59,11 @@ export default function TopBar({ onExport }: { onExport: () => void }) {
           if (f) setSettings({ width: f.w, height: f.h });
         }}
       >
-        {orig && <option value={-2}>Original del vídeo · {orig.width}×{orig.height}</option>}
-        {current === -1 && <option value={-1}>Personalizado · {settings.width}×{settings.height}</option>}
+        {orig && <option value={-2}>{compact ? 'Original' : `Original del vídeo · ${orig.width}×${orig.height}`}</option>}
+        {current === -1 && <option value={-1}>{compact ? `${settings.width}×${settings.height}` : `Personalizado · ${settings.width}×${settings.height}`}</option>}
         {FORMATS.map((f, i) => (
           <option key={f.label} value={i}>
-            {f.label}
+            {compact ? f.label.split(' · ')[0] : f.label}
           </option>
         ))}
       </select>

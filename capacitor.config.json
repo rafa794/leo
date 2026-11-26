@@ -4,8 +4,7 @@
   "webDir": "dist",
   "backgroundColor": "#0e0e10",
   "android": {
-    "backgroundColor": "#0e0e10",
-    "webContentsDebuggingEnabled": true
+    "backgroundColor": "#0e0e10"
   },
   "server": {
     "androidScheme": "https"

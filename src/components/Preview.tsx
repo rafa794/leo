@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Maximize2, Minimize2, PanelLeft, PanelRight, Pause, Play, SkipBack, StepBack, StepForward } from 'lucide-react';
-import { useLayout } from '../store/layout';
+import { useCompact, useLayout } from '../store/layout';
 import { projectDuration, useEditor } from '../store/editor';
 import { player, rotHandlePos } from '../lib/player';
 import { clamp, formatTime } from '../lib/util';
@@ -84,6 +84,7 @@ export default function Preview() {
   const [cursor, setCursor] = useState('default');
   const layout = useLayout();
   const focus = !layout.leftOpen && !layout.rightOpen;
+  const touch = useCompact();
 
   // Fit the canvas inside the stage (never overlapping the controls or the timeline)
   useLayoutEffect(() => {
@@ -335,8 +336,8 @@ export default function Preview() {
         {empty && (
           <div className="empty-hint">
             <div>
-              <div style={{ fontSize: 15, color: 'var(--text)', marginBottom: 6 }}>Arrastra tus vídeos aquí para empezar</div>
-              <div>Se añadirán a la biblioteca multimedia</div>
+              <div style={{ fontSize: 15, color: 'var(--text)', marginBottom: 6 }}>{touch ? 'Toca «Multimedia» abajo para empezar' : 'Arrastra tus vídeos aquí para empezar'}</div>
+              <div>{touch ? 'Elige tus vídeos, música o fotos' : 'Se añadirán a la biblioteca multimedia'}</div>
             </div>
           </div>
         )}

@@ -24,7 +24,8 @@
     "test:all": "vitest run && vite build && playwright test",
     "test:mac-app": "ORION_APP=release/mac-arm64/Orion.app/Contents/MacOS/Orion playwright test",
     "site:build": "node scripts/licenses.mjs && vite build --base=/app/ --outDir site-dist/app --emptyOutDir && node scripts/build-site.mjs",
-    "site:preview": "npx --yes wrangler@4 pages dev site-dist"
+    "site:preview": "npx --yes wrangler@4 pages dev site-dist",
+    "android:release": "node scripts/licenses.mjs && vite build && cap sync android && cd android && JAVA_HOME=/opt/homebrew/opt/openjdk@21 ./gradlew assembleRelease && cp app/build/outputs/apk/release/app-release.apk ../release/Orion-android.apk"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
