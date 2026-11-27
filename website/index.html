@@ -91,7 +91,12 @@
     .icon svg { width: 20px; height: 20px; }
 
     /* downloads */
-    .dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .dl { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+    .hey { margin-bottom: 14px; font-size: 15px; line-height: 1.6; color: var(--muted); border-color: rgba(251, 191, 36, .35); background: linear-gradient(180deg, rgba(251, 191, 36, .07), transparent 70%), var(--panel); }
+    .hey b { color: var(--text); }
+    .hey .coffee { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .hey .coffee a { padding: 9px 14px; border-radius: 10px; font-weight: 700; font-size: 14px; background: #fbbf24; color: #1a1200; }
+    .hey .coffee a.alt { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
     .dl .card { display: flex; flex-direction: column; gap: 10px; }
     .dl .os { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
     .dl .os svg { width: 22px; height: 22px; }
@@ -115,6 +120,7 @@
 
     @media (max-width: 900px) {
       .grid, .dl { grid-template-columns: 1fr 1fr; }
+      .dl .card:last-child { grid-column: 1 / -1; }
     }
     @media (max-width: 640px) {
       nav .links a.hide-sm { display: none; }
@@ -181,6 +187,14 @@
     <div class="wrap">
       <h2 data-i="d.title">Download Leo</h2>
       <p class="sub" data-i="d.sub">Free for every system. No graphics card needed.</p>
+      <div class="card hey">
+        <div data-i="d.hey" data-html><b>Hey, one thing before you download.</b> I make Leo on my own, in my free time and with no money behind it. That's why it isn't on the App Store, Google Play or the Microsoft Store: being there costs money every year, and right now I don't have it. Yes, installing it like this is a bit rough around the edges. I know. But there are no viruses, no ads, no account, and it doesn't listen through your microphone. If you don't trust me (fair enough), the whole source code is on GitHub so you can read it, change it or make it better. And if it's useful to you and you want to give me a hand, buy me a coffee: maybe one day it’ll be in the stores like a proper app.</div>
+        <div class="coffee">
+          <a href="https://paypal.me/rafaLeoM794" target="_blank" rel="noopener">☕ PayPal</a>
+          <a class="alt" href="https://buy.stripe.com/bJe3cx8XC5Au4XR7OIb7y04" target="_blank" rel="noopener" data-i="d.card">☕ Card · Google Pay · Apple Pay</a>
+          <a class="alt" href="https://github.com/rafa794/leo" target="_blank" rel="noopener" data-i="d.code">See the code</a>
+        </div>
+      </div>
       <div class="dl">
         <div class="card">
           <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.9-.9-3.1-.8c-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3.1.7 2-1.1 2.8-2.3c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-.9-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.8 1-2.9-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2.1-.5 2.7-1.3z" /></svg> macOS</div>
@@ -202,12 +216,17 @@
         <div class="card">
           <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.5 19.3 6.6a.4.4 0 0 0-.7-.4l-1.7 3A10.5 10.5 0 0 0 12 8.2c-1.8 0-3.4.4-4.9 1l-1.7-3a.4.4 0 1 0-.7.4l1.7 2.9A9.7 9.7 0 0 0 1.5 17h21a9.7 9.7 0 0 0-4.9-7.5zM7 14.4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" /></svg> Android</div>
           <a class="file" data-os="android" href="https://github.com/rafa794/leo/releases/latest/download/Leo-android.apk"><b>APK</b> <span>.apk</span></a>
-          <p class="small muted" style="margin:2px 0 0" data-i="d.android">Open the file and allow installing apps from this source when Android asks. Android 7 or newer.</p>
+          <p class="small muted" style="margin:2px 0 0" data-i="d.android">Open the file and let Android install apps from this source. It'll warn you with a scary face: that's normal, it isn't on Google Play because I haven't been able to afford it yet. Android 7 or newer.</p>
+        </div>
+        <div class="card">
+          <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="12" cy="18" r="1.2" /></svg> iPhone / iPad</div>
+          <a class="file" data-os="ios" href="/app/"><b data-i="d.ios.btn">Open in Safari</b> <span>web app</span></a>
+          <p class="small muted" style="margin:2px 0 0" data-i="d.ios" data-html>Apple doesn't let you install apps from a website (unless you pay €99 a year, and that's where I am). What you can do: open Leo in <b>Safari</b>, tap <b>Share</b> → <b>Add to Home Screen</b> and it'll sit there with its icon like any other app.</p>
         </div>
       </div>
       <div class="note">
-        <div class="card" data-i="d.mac" data-html><b>First time on a Mac?</b> Leo isn't signed with a paid Apple certificate yet. Open the .dmg, drag Leo to Applications, then right-click it → <b>Open</b> → <b>Open</b>. Only needed once.</div>
-        <div class="card" data-i="d.win" data-html><b>Windows SmartScreen?</b> Click <b>More info</b> → <b>Run anyway</b>. It shows up because the installer isn't signed with a paid certificate yet.</div>
+        <div class="card" data-i="d.mac" data-html><b>First time on a Mac?</b> Apple doesn't know me yet either (signing apps costs €99 a year). Open the .dmg, drag Leo to Applications, then right-click it → <b>Open</b> → <b>Open</b>. Only the first time.</div>
+        <div class="card" data-i="d.win" data-html><b>Windows says I'm dangerous?</b> Fair, it doesn't know me: I haven't paid for the certificate that would make that warning go away. Click <b>More info</b> → <b>Run anyway</b>. I promise all it does is edit video.</div>
       </div>
       <p class="small muted" style="margin-top:14px"><a href="https://github.com/rafa794/leo/releases" data-i="d.all">All versions and release notes →</a></p>
     </div>
@@ -245,6 +264,11 @@
   <script>
     const T = {
       es: {
+        'd.ios': 'Apple no deja instalar apps desde una web (salvo que pagues 99 € al año, y en eso estamos). Lo que sí puedes hacer: abre Leo en <b>Safari</b>, toca <b>Compartir</b> → <b>Añadir a pantalla de inicio</b> y lo tendrás con su icono como una app más.',
+        'd.ios.btn': 'Abrir en Safari',
+        'd.code': 'Ver el código',
+        'd.card': '☕ Tarjeta · Google Pay · Apple Pay',
+        'd.hey': '<b>Hey, una cosa antes de descargar.</b> Leo lo hago yo solo, en mis ratos libres y sin un duro detrás. Por eso no está en la App Store, ni en Google Play, ni en la tienda de Microsoft: estar ahí cuesta dinero cada año y ahora mismo no lo tengo. Sí, instalarlo así es un poco cutre. Lo sé. Pero no lleva virus, ni anuncios, ni te pide cuenta, ni te escucha por el micro. Si no te fías (haces bien), el código está entero en GitHub para que lo mires, lo cambies o lo mejores. Y si te sirve y me quieres echar un cable, invítame a un café: a lo mejor algún día lo subo a las tiendas como Dios manda.',
         'nav.features': 'Funciones', 'nav.download': 'Descargar', 'nav.code': 'Código',
         'hero.badge': 'Gratis · Código abierto · Sin cuenta',
         'hero.title': 'El editor de vídeo <span class="grad">gratis de verdad</span>',
@@ -258,15 +282,20 @@
         'f5.t': 'Exporta hasta 4K', 'f5.d': 'MP4 de 720p a 4K y hasta 60 fps, en segundo plano mientras sigues editando. Cualquier formato: 16:9, 9:16, 1:1…',
         'f6.t': 'Privado de verdad', 'f6.d': 'Sin cuenta ni rastreo dentro del editor. Los proyectos se guardan solos en tu equipo.',
         'd.title': 'Descarga Leo', 'd.sub': 'Gratis para todos los sistemas. No necesita tarjeta gráfica.',
-        'd.installer': 'Instalador', 'd.portable': 'Portable (sin instalar)', 'd.android': 'Abre el archivo y permite instalar apps de este origen cuando Android lo pida. Android 7 o superior.', 'd.all': 'Todas las versiones y novedades →',
-        'd.mac': '<b>¿Primera vez en Mac?</b> Leo aún no está firmado con un certificado de pago de Apple. Abre el .dmg, arrastra Leo a Aplicaciones y luego clic derecho → <b>Abrir</b> → <b>Abrir</b>. Solo la primera vez.',
-        'd.win': '<b>¿Aviso de SmartScreen en Windows?</b> Pulsa <b>Más información</b> → <b>Ejecutar de todas formas</b>. Sale porque el instalador aún no está firmado con un certificado de pago.',
+        'd.installer': 'Instalador', 'd.portable': 'Portable (sin instalar)', 'd.android': 'Abre el archivo y deja que Android instale apps de este origen. Te avisará con cara de susto: es normal, no está en Google Play porque de momento no me lo puedo permitir. Android 7 o superior.', 'd.all': 'Todas las versiones y novedades →',
+        'd.mac': '<b>¿Primera vez en Mac?</b> Apple tampoco me conoce todavía (firmar apps cuesta 99 € al año). Abre el .dmg, arrastra Leo a Aplicaciones y luego clic derecho → <b>Abrir</b> → <b>Abrir</b>. Solo la primera vez.',
+        'd.win': '<b>¿Windows dice que soy peligroso?</b> Normal, no me conoce: no he pagado el certificado que quita ese aviso. Pulsa <b>Más información</b> → <b>Ejecutar de todas formas</b>. Prometo que lo único que hace es editar vídeo.',
         'w.title': 'O úsalo en el navegador', 'w.text': 'El mismo editor, sin instalar nada. Va mejor en Chrome o Edge en un ordenador. Tus archivos se siguen procesando en tu equipo.', 'w.btn': 'Abrir Leo en el navegador',
         'o.title': 'Código abierto', 'o.text': 'Todo el código está en GitHub con licencia GPL-3.0. Léelo, compílalo, tradúcelo o envía un pull request: ideas y avisos de fallos son bienvenidos.', 'o.btn': 'Ver en GitHub',
         'meta.title': 'Leo — editor de vídeo gratis, sin marca de agua y sin cuenta', 'meta.desc': 'Editor de vídeo gratis y de código abierto para Mac, Windows, Linux, Android y el navegador. Sin cuenta, sin marca de agua, sin anuncios. Subtítulos automáticos, quitar fondo, filtros y efectos con IA en tu dispositivo.', 'foot.privacy': 'Esta web cuenta las visitas de forma anónima, sin cookies. El editor no cuenta nada.',
         'foot.made': 'Hecho por', 'foot.issues': 'Avisar de un fallo',
       },
       fr: {
+        'd.ios': 'Apple ne laisse pas installer d’apps depuis un site (sauf si tu paies 99 € par an, et c’est là que j’en suis). Ce que tu peux faire : ouvre Leo dans <b>Safari</b>, touche <b>Partager</b> → <b>Sur l’écran d’accueil</b> et il sera là avec son icône comme n’importe quelle app.',
+        'd.ios.btn': 'Ouvrir dans Safari',
+        'd.code': 'Voir le code',
+        'd.card': '☕ Carte · Google Pay · Apple Pay',
+        'd.hey': '<b>Hey, un truc avant de télécharger.</b> Leo, je le fais tout seul, sur mon temps libre et sans un sou. C’est pour ça qu’il n’est ni sur l’App Store, ni sur Google Play, ni sur le Microsoft Store : y être coûte de l’argent chaque année, et là, je ne l’ai pas. Oui, l’installer comme ça fait un peu bricolage. Je sais. Mais il n’y a pas de virus, pas de pub, pas de compte, et il ne t’écoute pas par le micro. Si tu ne me fais pas confiance (tu as raison), tout le code est sur GitHub pour que tu le lises, le modifies ou l’améliores. Et s’il te sert et que tu veux me donner un coup de main, offre-moi un café : peut-être qu’un jour il sera dans les stores comme une vraie app.',
         'nav.features': 'Fonctions', 'nav.download': 'Télécharger', 'nav.code': 'Code source',
         'hero.badge': 'Gratuit · Open source · Sans compte',
         'hero.title': 'L’éditeur vidéo <span class="grad">vraiment gratuit</span>',
@@ -280,15 +309,20 @@
         'f5.t': 'Export jusqu’en 4K', 'f5.d': 'MP4 de 720p à 4K jusqu’à 60 i/s, en arrière-plan pendant que tu continues. Tous les formats : 16:9, 9:16, 1:1…',
         'f6.t': 'Privé par conception', 'f6.d': 'Pas de compte ni de pistage dans l’éditeur. Les projets s’enregistrent tout seuls sur ton appareil.',
         'd.title': 'Télécharger Leo', 'd.sub': 'Gratuit pour tous les systèmes. Pas besoin de carte graphique.',
-        'd.installer': 'Installateur', 'd.portable': 'Portable (sans installation)', 'd.android': 'Ouvre le fichier et autorise l’installation depuis cette source quand Android le demande. Android 7 ou plus récent.', 'd.all': 'Toutes les versions et nouveautés →',
-        'd.mac': '<b>Première fois sur Mac ?</b> Leo n’est pas encore signé avec un certificat Apple payant. Ouvre le .dmg, glisse Leo dans Applications, puis clic droit → <b>Ouvrir</b> → <b>Ouvrir</b>. Une seule fois.',
-        'd.win': '<b>Alerte SmartScreen sur Windows ?</b> Clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>. Elle apparaît car l’installateur n’est pas encore signé.',
+        'd.installer': 'Installateur', 'd.portable': 'Portable (sans installation)', 'd.android': 'Ouvre le fichier et laisse Android installer des apps depuis cette source. Il va te prévenir avec une tête paniquée : c’est normal, l’app n’est pas sur Google Play parce que je ne peux pas me le permettre pour l’instant. Android 7 ou plus récent.', 'd.all': 'Toutes les versions et nouveautés →',
+        'd.mac': '<b>Première fois sur Mac ?</b> Apple ne me connaît pas encore non plus (signer une app coûte 99 € par an). Ouvre le .dmg, glisse Leo dans Applications, puis clic droit → <b>Ouvrir</b> → <b>Ouvrir</b>. Seulement la première fois.',
+        'd.win': '<b>Windows dit que je suis dangereux ?</b> Normal, il ne me connaît pas : je n’ai pas payé le certificat qui enlève cet avertissement. Clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>. Promis, tout ce qu’il fait, c’est monter des vidéos.',
         'w.title': 'Ou utilise-le dans ton navigateur', 'w.text': 'Le même éditeur, rien à installer. Mieux dans Chrome ou Edge sur ordinateur. Tes fichiers restent traités sur ton appareil.', 'w.btn': 'Ouvrir Leo dans le navigateur',
         'o.title': 'Open source', 'o.text': 'Tout le code est sur GitHub sous licence GPL-3.0. Lis-le, compile-le, traduis-le ou envoie une pull request : idées et bugs sont les bienvenus.', 'o.btn': 'Voir sur GitHub',
         'meta.title': 'Leo — éditeur vidéo gratuit, sans filigrane ni compte', 'meta.desc': 'Éditeur vidéo gratuit et open source pour Mac, Windows, Linux, Android et le navigateur. Sans compte, sans filigrane, sans pub. Sous-titres automatiques, suppression d’arrière-plan, filtres et effets avec l’IA sur ton appareil.', 'foot.privacy': 'Ce site compte les visites de façon anonyme, sans cookies. L’éditeur ne compte rien.',
         'foot.made': 'Fait par', 'foot.issues': 'Signaler un bug',
       },
       pt: {
+        'd.ios': 'A Apple não deixa instalar apps a partir de um site (a não ser que você pague 99 € por ano, e é aí que eu estou). O que dá para fazer: abra o Leo no <b>Safari</b>, toque em <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b> e ele fica lá com o ícone, como qualquer app.',
+        'd.ios.btn': 'Abrir no Safari',
+        'd.code': 'Ver o código',
+        'd.card': '☕ Cartão · Google Pay · Apple Pay',
+        'd.hey': '<b>Ei, uma coisa antes de baixar.</b> Eu faço o Leo sozinho, no meu tempo livre e sem grana nenhuma por trás. Por isso ele não está na App Store, nem no Google Play, nem na loja da Microsoft: estar lá custa dinheiro todo ano, e agora eu não tenho. Sim, instalar assim é meio gambiarra. Eu sei. Mas não tem vírus, nem anúncio, nem conta, e ele não fica te ouvindo pelo microfone. Se você não confia em mim (faz bem), o código inteiro está no GitHub para você ler, mudar ou melhorar. E se ele te ajuda e você quer me dar uma força, me paga um café: quem sabe um dia ele chega nas lojas como app de verdade.',
         'nav.features': 'Recursos', 'nav.download': 'Baixar', 'nav.code': 'Código-fonte',
         'hero.badge': 'Grátis · Código aberto · Sem conta',
         'hero.title': 'O editor de vídeo <span class="grad">grátis de verdade</span>',
@@ -302,9 +336,9 @@
         'f5.t': 'Exporte até 4K', 'f5.d': 'MP4 de 720p a 4K e até 60 fps, em segundo plano enquanto você continua editando. Qualquer formato: 16:9, 9:16, 1:1…',
         'f6.t': 'Privado de verdade', 'f6.d': 'Sem conta e sem rastreamento no editor. Os projetos são salvos sozinhos no seu dispositivo.',
         'd.title': 'Baixe o Leo', 'd.sub': 'Grátis para todos os sistemas. Não precisa de placa de vídeo.',
-        'd.installer': 'Instalador', 'd.portable': 'Portátil (sem instalar)', 'd.android': 'Abra o arquivo e permita instalar apps desta fonte quando o Android pedir. Android 7 ou mais recente.', 'd.all': 'Todas as versões e novidades →',
-        'd.mac': '<b>Primeira vez no Mac?</b> O Leo ainda não é assinado com um certificado pago da Apple. Abra o .dmg, arraste o Leo para Aplicativos e depois clique com o botão direito → <b>Abrir</b> → <b>Abrir</b>. Só na primeira vez.',
-        'd.win': '<b>Aviso do SmartScreen no Windows?</b> Clique em <b>Mais informações</b> → <b>Executar assim mesmo</b>. Aparece porque o instalador ainda não é assinado.',
+        'd.installer': 'Instalador', 'd.portable': 'Portátil (sem instalar)', 'd.android': 'Abra o arquivo e deixe o Android instalar apps desta fonte. Ele vai avisar com cara de susto: é normal, o app não está no Google Play porque por enquanto não consigo pagar. Android 7 ou mais recente.', 'd.all': 'Todas as versões e novidades →',
+        'd.mac': '<b>Primeira vez no Mac?</b> A Apple também ainda não me conhece (assinar apps custa 99 € por ano). Abra o .dmg, arraste o Leo para Aplicativos e depois clique com o botão direito → <b>Abrir</b> → <b>Abrir</b>. Só na primeira vez.',
+        'd.win': '<b>O Windows diz que eu sou perigoso?</b> Normal, ele não me conhece: não paguei o certificado que tira esse aviso. Clique em <b>Mais informações</b> → <b>Executar assim mesmo</b>. Prometo que a única coisa que ele faz é editar vídeo.',
         'w.title': 'Ou use no navegador', 'w.text': 'O mesmo editor, sem instalar nada. Funciona melhor no Chrome ou Edge em um computador. Seus arquivos continuam sendo processados no seu dispositivo.', 'w.btn': 'Abrir o Leo no navegador',
         'o.title': 'Código aberto', 'o.text': 'Todo o código está no GitHub sob a licença GPL-3.0. Leia, compile, traduza ou envie um pull request: ideias e relatos de bugs são bem-vindos.', 'o.btn': 'Ver no GitHub',
         'meta.title': 'Leo — editor de vídeo grátis, sem marca d’água e sem conta', 'meta.desc': 'Editor de vídeo grátis e de código aberto para Mac, Windows, Linux, Android e navegador. Sem conta, sem marca d’água, sem anúncios. Legendas automáticas, remover fundo, filtros e efeitos com IA no seu dispositivo.', 'foot.privacy': 'Este site conta as visitas de forma anônima, sem cookies. O editor não conta nada.',
@@ -335,13 +369,15 @@
       const uad = navigator.userAgentData;
       let arch = '';
       try { arch = uad ? (await uad.getHighEntropyValues(['architecture'])).architecture : ''; } catch {}
-      if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) os = arch === 'x86' ? 'mac-intel' : 'mac-arm';
+      if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) os = 'ios';
+      else if (/Mac/.test(ua)) os = arch === 'x86' ? 'mac-intel' : 'mac-arm';
       else if (/Windows/.test(ua)) os = arch === 'arm' ? 'win-arm' : 'win-x64';
       else if (/Android/.test(ua)) os = 'android';
       else if (/Linux/.test(ua)) os = 'linux-x64';
       osButton(document.documentElement.lang);
     }
-    const NAMES = { android: 'Android', 'mac-arm': 'macOS', 'mac-intel': 'macOS (Intel)', 'win-x64': 'Windows', 'win-arm': 'Windows (ARM)', 'linux-x64': 'Linux' };
+    const NAMES = { ios: 'iPhone', android: 'Android', 'mac-arm': 'macOS', 'mac-intel': 'macOS (Intel)', 'win-x64': 'Windows', 'win-arm': 'Windows (ARM)', 'linux-x64': 'Linux' };
+    const USE = { en: 'Open Leo on your iPhone', es: 'Abrir Leo en el iPhone', fr: 'Ouvrir Leo sur l’iPhone', pt: 'Abrir o Leo no iPhone' };
     const FOR = { en: 'Download for', es: 'Descargar para', fr: 'Télécharger pour', pt: 'Baixar para' };
     function osButton(lang) {
       const link = os && document.querySelector(`a.file[data-os="${os}"]`);
@@ -349,7 +385,7 @@
       if (!link) return;
       link.classList.add('mine');
       document.getElementById('main-dl').href = link.href;
-      document.getElementById('main-dl-text').textContent = `${FOR[lang] ?? FOR.en} ${NAMES[os]}`;
+      document.getElementById('main-dl-text').textContent = os === 'ios' ? (USE[lang] ?? USE.en) : `${FOR[lang] ?? FOR.en} ${NAMES[os]}`;
     }
 
     let saved = null;
