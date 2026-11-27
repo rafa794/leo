@@ -16,8 +16,9 @@ for (const f of readdirSync('site-dist/app/assets')) {
   console.log(`left out ${f} (loaded from the CDN on the web)`);
 }
 
-// the editor is a single-page app: unknown paths under /app go to its page
-writeFileSync('site-dist/_redirects', ['/app /app/ 301', '/app/* /app/ 200', ''].join('\n'));
+// /app → /app/. No catch-all rewrite for /app/*: Cloudflare Pages applies _redirects BEFORE static files, so a
+// "/app/* … 200" rule would answer every asset (CSS, images…) with the HTML page and the editor stays blank.
+writeFileSync('site-dist/_redirects', ['/app /app/ 301', ''].join('\n'));
 
 writeFileSync(
   'site-dist/_headers',

@@ -244,6 +244,9 @@ Coffee / donations
 - Reverse audio must be resampled to 48 kHz stereo before AAC encoding.
 - Newer Android WebViews draw under the status bar: keep `env(safe-area-inset-*)` paddings.
 - Electron: links open in the system browser; downloads in tests are redirected with `will-download`.
+- Cloudflare Pages applies `_redirects` **before** static files: never add a catch-all like `/app/* /app/ 200`
+  (it served every CSS / image as HTML and the web editor went blank). After deploying, check that
+  `/app/assets/*.css` comes back as `text/css`.
 
 ---
 
