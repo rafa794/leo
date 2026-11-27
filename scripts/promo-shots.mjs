@@ -18,7 +18,7 @@ mkdirSync(OUT, { recursive: true });
 const TITLE = process.env.PROMO_TITLE ?? '¡GOLAZO!';
 const FILTER = process.env.PROMO_FILTER ?? 'accion';
 
-const profile = mkdtempSync(join(tmpdir(), 'orion-promo-'));
+const profile = mkdtempSync(join(tmpdir(), 'leo-promo-'));
 const app = await electron.launch({ args: [ROOT, `--user-data-dir=${profile}`], cwd: ROOT });
 const optional = async (what, fn) => {
   try {
@@ -69,12 +69,12 @@ try {
     await page.locator(`.panel.right .look[data-look="${FILTER}"]`).click();
   });
   await page.waitForTimeout(3500); // let notices ("Formato del vídeo original…") fade out
-  await shot('orion-mac-filtros');
+  await shot('leo-mac-filtros');
   await optional('effects tab', async () => {
     await page.locator('.main-tabs button', { hasText: /^Efectos$/ }).click();
     await page.locator('.panel.right .chip', { hasText: /^Todos$/ }).click();
   });
-  await shot('orion-mac-efectos');
+  await shot('leo-mac-efectos');
 
   // ---- phone (9:16): the same app switches to the phone editor on a narrow window ----
   await setSize(412, 732);
@@ -85,12 +85,12 @@ try {
   });
   await page.waitForTimeout(1200);
   await optional('select clip', () => page.locator('.mt-clip:not(.text)').first().click({ position: { x: 30, y: 30 } }));
-  await shot('orion-movil');
+  await shot('leo-movil');
   await optional('effects sheet', async () => {
     await page.locator('.m-tool[data-tool="effects"]').click();
     await page.locator('.m-sheet .look-grid').waitFor();
   });
-  await shot('orion-movil-efectos');
+  await shot('leo-movil-efectos');
 } finally {
   await app.close();
   rmSync(profile, { recursive: true, force: true });
