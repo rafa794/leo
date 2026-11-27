@@ -1,6 +1,6 @@
 // How many times each installer was downloaded from GitHub Releases (public numbers, no account needed):
 //   npm run stats
-const REPO = 'rafa794/orion';
+const REPO = 'rafa794/leo';
 const res = await fetch(`https://api.github.com/repos/${REPO}/releases?per_page=100`, { headers: { Accept: 'application/vnd.github+json' } });
 if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
 const releases = await res.json();

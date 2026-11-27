@@ -1,6 +1,6 @@
 // Live reload on an Android phone (or emulator) connected by USB: `npm run android:live`
 //
-// Installs "Orion Dev" (a separate app, next to the real Orion) that loads the editor straight from this
+// Installs "Leo Dev" (a separate app, next to the real Leo) that loads the editor straight from this
 // computer's dev server through the USB cable (adb reverse). Every code change shows up on the phone at once.
 // Chrome on the computer → chrome://inspect shows the phone's console.
 //
@@ -57,7 +57,7 @@ if (!existsSync(apk)) throw new Error('No se generó el APK de desarrollo');
 adb('install', '-r', apk);
 adb('reverse', `tcp:${PORT}`, `tcp:${PORT}`);
 adb('shell', 'am', 'start', '-n', `${APP_ID}/app.orion.editor.MainActivity`);
-console.log('\n✓ «Orion Dev» abierto en el móvil. Los cambios se ven al momento.');
+console.log('\n✓ «Leo Dev» abierto en el móvil. Los cambios se ven al momento.');
 console.log('  Consola del móvil: Chrome → chrome://inspect');
 if (server) console.log('  (Ctrl+C para parar el servidor)');
 else process.exit(0);

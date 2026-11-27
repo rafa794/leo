@@ -4,7 +4,7 @@ import { isNative } from './platform';
 
 /**
  * Remembers WHERE your videos came from (a "file handle", Chrome / Mac app), so after a reload
- * or reopening Orion they come back by themselves instead of asking you to pick the folder again.
+ * or reopening Leo they come back by themselves instead of asking you to pick the folder again.
  * Nothing is copied: only the permission to read the original file is kept.
  */
 

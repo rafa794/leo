@@ -22,7 +22,7 @@ test.describe.configure({ mode: 'serial' });
 test.beforeAll(async () => {
   profile = mkdtempSync(join(tmpdir(), 'orion-test-profile-'));
   downloads = mkdtempSync(join(tmpdir(), 'orion-test-out-'));
-  // ORION_APP=release/mac-arm64/Orion.app/Contents/MacOS/Orion tests the packaged app instead of the dev build
+  // ORION_APP=release/mac-arm64/Leo.app/Contents/MacOS/Leo tests the packaged app instead of the dev build
   const packaged = process.env.ORION_APP;
   app = await electron.launch(
     packaged ? { executablePath: resolve(ROOT, packaged), args: [`--user-data-dir=${profile}`] } : { args: [ROOT, `--user-data-dir=${profile}`], cwd: ROOT },

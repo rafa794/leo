@@ -75,7 +75,7 @@ export default function ExportJobs() {
             {t.state === 'error' && <div className="hint" style={{ color: 'var(--danger)' }}>{t.error}</div>}
             {t.state === 'done' && t.nudge && !donated && (
               <div className="coffee-nudge">
-                <span>{`☕ ¡Ya llevas ${NUDGE_AT} vídeos hechos con Orion! Si te está sirviendo, puedes invitarme a un café. Solo te lo digo esta vez.`}</span>
+                <span>{`☕ ¡Ya llevas ${NUDGE_AT} vídeos hechos con Leo! Si te está sirviendo, puedes invitarme a un café. Solo te lo digo esta vez.`}</span>
                 <div className="coffee-nudge-actions">
                   <button className="btn small coffee-yes" onClick={() => openAbout()}>
                     Invitar a un café

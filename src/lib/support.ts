@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /**
- * The coffee reminder, kept polite: Orion asks ONCE, after the 10th video exported on this device, and never
+ * The coffee reminder, kept polite: Leo asks ONCE, after the 10th video exported on this device, and never
  * again (nor at all) once the user says they already bought a coffee. Everything stays in this device's storage.
  */
 

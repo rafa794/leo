@@ -19,7 +19,7 @@ export default function MobileHome({ onNew, onOpen }: { onNew: () => void; onOpe
     <div className="m-home">
       <header className="m-home-top">
         <div className="logo">
-          <div className="logo-dot">◆</div> Orion
+          <div className="logo-dot">◆</div> Leo
         </div>
         <span className="spacer" />
         <button className="icon-btn" title="Idioma · Language" onClick={() => openLanguagePicker()}>

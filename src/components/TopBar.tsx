@@ -32,7 +32,7 @@ export default function TopBar({ onExport }: { onExport: () => void }) {
   return (
     <header className="topbar">
       <div className="logo">
-        <div className="logo-dot">◆</div> Orion
+        <div className="logo-dot">◆</div> Leo
       </div>
       <div className="row" style={{ flex: 'none', gap: 2, marginLeft: 12 }}>
         <button className="icon-btn" title="Deshacer (⌘Z)" disabled={!canUndo} onClick={undo}>
@@ -67,7 +67,7 @@ export default function TopBar({ onExport }: { onExport: () => void }) {
           </option>
         ))}
       </select>
-      <button className="coffee-btn" title="Orion es gratis. Si te ayuda, invítame a un café" onClick={() => openAbout()}>
+      <button className="coffee-btn" title="Leo es gratis. Si te ayuda, invítame a un café" onClick={() => openAbout()}>
         <Coffee size={15} />
         <span>Invítame a un café</span>
       </button>

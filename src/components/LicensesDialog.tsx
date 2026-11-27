@@ -24,7 +24,7 @@ export function openLicenses() {
 }
 (window as unknown as { __orionShowLicenses?: () => void }).__orionShowLicenses = () => openLicenses();
 
-/** Licenses of every library, model, font and sticker set Orion uses (generated at build time). */
+/** Licenses of every library, model, font and sticker set Leo uses (generated at build time). */
 export default function LicensesDialog() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<Data | null>(null);

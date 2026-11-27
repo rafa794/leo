@@ -1,4 +1,4 @@
-// Orion for macOS (Electron). Same engine as Chrome, so the editor behaves exactly like in the browser.
+// Leo for macOS (Electron). Same engine as Chrome, so the editor behaves exactly like in the browser.
 const { app, BrowserWindow, ipcMain, Menu, net, protocol, shell } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -12,7 +12,13 @@ const MIME = {
   '.woff2': 'font/woff2', '.txt': 'text/plain', '.tflite': 'application/octet-stream', '.data': 'application/octet-stream', '.ico': 'image/x-icon',
 };
 
-// app://orion/… serves the built editor (a real origin, so workers, WebAssembly and IndexedDB work)
+// The app was called "Orion" before it became Leo. Its data (projects in IndexedDB, settings, cached AI models) lives
+// in the "Orion" profile folder and under the app://orion origin: keep both, or people would open Leo to an empty
+// project list. A --user-data-dir given on the command line (throwaway test profiles) still wins.
+if (!app.commandLine.hasSwitch('user-data-dir')) app.setPath('userData', path.join(app.getPath('appData'), 'Orion'));
+
+// app://orion/… serves the built editor (a real origin, so workers, WebAssembly and IndexedDB work). Keep the
+// "orion" host: changing it would change the origin and hide everyone's saved projects.
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true, codeCache: true } },
 ]);
@@ -49,7 +55,7 @@ function createWindow() {
     minWidth: 360,
     minHeight: 560,
     backgroundColor: '#0e0e10',
-    title: 'Orion',
+    title: 'Leo',
     titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 14, y: 16 },
     webPreferences: { contextIsolation: true, sandbox: true, spellcheck: false, preload: path.join(__dirname, 'preload.cjs') },
@@ -97,10 +103,10 @@ function editItem(label, accelerator, key, nativeCmd, shift = false) {
 
 /** Menu texts in each language of the editor (the editor tells us which one is picked). */
 const MENU = {
-  es: { about: 'Acerca de Orion · Invítame a un café', lang: 'Idioma…', edit: 'Edición', undo: 'Deshacer', redo: 'Rehacer', cut: 'Cortar', copy: 'Copiar', paste: 'Pegar', all: 'Seleccionar todo', view: 'Ver', full: 'Pantalla completa', reload: 'Recargar', dev: 'Herramientas de desarrollo', window: 'Ventana', help: 'Ayuda', suggest: 'Enviar una sugerencia…', licenses: 'Licencias y créditos', chromium: 'Licencias de Chromium' },
-  en: { about: 'About Orion · Buy me a coffee', lang: 'Language…', edit: 'Edit', undo: 'Undo', redo: 'Redo', cut: 'Cut', copy: 'Copy', paste: 'Paste', all: 'Select All', view: 'View', full: 'Full Screen', reload: 'Reload', dev: 'Developer Tools', window: 'Window', help: 'Help', suggest: 'Send a suggestion…', licenses: 'Licenses and credits', chromium: 'Chromium licenses' },
-  fr: { about: 'À propos d’Orion · Offre-moi un café', lang: 'Langue…', edit: 'Édition', undo: 'Annuler', redo: 'Rétablir', cut: 'Couper', copy: 'Copier', paste: 'Coller', all: 'Tout sélectionner', view: 'Présentation', full: 'Plein écran', reload: 'Recharger', dev: 'Outils de développement', window: 'Fenêtre', help: 'Aide', suggest: 'Envoyer une suggestion…', licenses: 'Licences et crédits', chromium: 'Licences de Chromium' },
-  pt: { about: 'Sobre o Orion · Me paga um café', lang: 'Idioma…', edit: 'Editar', undo: 'Desfazer', redo: 'Refazer', cut: 'Recortar', copy: 'Copiar', paste: 'Colar', all: 'Selecionar tudo', view: 'Visualizar', full: 'Tela cheia', reload: 'Recarregar', dev: 'Ferramentas de desenvolvedor', window: 'Janela', help: 'Ajuda', suggest: 'Enviar uma sugestão…', licenses: 'Licenças e créditos', chromium: 'Licenças do Chromium' },
+  es: { about: 'Acerca de Leo · Invítame a un café', lang: 'Idioma…', edit: 'Edición', undo: 'Deshacer', redo: 'Rehacer', cut: 'Cortar', copy: 'Copiar', paste: 'Pegar', all: 'Seleccionar todo', view: 'Ver', full: 'Pantalla completa', reload: 'Recargar', dev: 'Herramientas de desarrollo', window: 'Ventana', help: 'Ayuda', suggest: 'Enviar una sugerencia…', licenses: 'Licencias y créditos', chromium: 'Licencias de Chromium' },
+  en: { about: 'About Leo · Buy me a coffee', lang: 'Language…', edit: 'Edit', undo: 'Undo', redo: 'Redo', cut: 'Cut', copy: 'Copy', paste: 'Paste', all: 'Select All', view: 'View', full: 'Full Screen', reload: 'Reload', dev: 'Developer Tools', window: 'Window', help: 'Help', suggest: 'Send a suggestion…', licenses: 'Licenses and credits', chromium: 'Chromium licenses' },
+  fr: { about: 'À propos de Leo · Offre-moi un café', lang: 'Langue…', edit: 'Édition', undo: 'Annuler', redo: 'Rétablir', cut: 'Couper', copy: 'Copier', paste: 'Coller', all: 'Tout sélectionner', view: 'Présentation', full: 'Plein écran', reload: 'Recharger', dev: 'Outils de développement', window: 'Fenêtre', help: 'Aide', suggest: 'Envoyer une suggestion…', licenses: 'Licences et crédits', chromium: 'Licences de Chromium' },
+  pt: { about: 'Sobre o Leo · Me paga um café', lang: 'Idioma…', edit: 'Editar', undo: 'Desfazer', redo: 'Refazer', cut: 'Recortar', copy: 'Copiar', paste: 'Colar', all: 'Selecionar tudo', view: 'Visualizar', full: 'Tela cheia', reload: 'Recarregar', dev: 'Ferramentas de desenvolvedor', window: 'Janela', help: 'Ajuda', suggest: 'Enviar uma sugestão…', licenses: 'Licenças e créditos', chromium: 'Licenças do Chromium' },
 };
 let menuLang = 'es';
 const run = (js) => (_i, w) => (w ?? win)?.webContents.executeJavaScript(js, true);
@@ -112,7 +118,7 @@ function buildMenu() {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       {
-        label: 'Orion',
+        label: 'Leo',
         submenu: [
           about,
           language,

@@ -525,7 +525,7 @@ class ColorPass {
     try {
       if (!this.init()) return null;
     } catch (e) {
-      console.warn('Orion: WebGL color pass disabled', e);
+      console.warn('Leo: WebGL color pass disabled', e);
       this.failed = true;
       return null;
     }

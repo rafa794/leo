@@ -10,7 +10,7 @@ export function openLanguagePicker() {
 (window as unknown as { __orionShowLanguage?: () => void }).__orionShowLanguage = () => openLanguagePicker();
 
 /**
- * The first screen of Orion: pick a language (Español, English, Français, Português).
+ * The first screen of Leo: pick a language (Español, English, Français, Português).
  * Shown once; later it opens from the 🌐 button in the top bar.
  */
 export default function LanguagePicker() {
@@ -42,7 +42,7 @@ export default function LanguagePicker() {
           </button>
         )}
         <div className="lang-logo">
-          <div className="logo-dot">◆</div> Orion
+          <div className="logo-dot">◆</div> Leo
         </div>
         <h1>{shown.hello}</h1>
         <p className="hint">{LANGS.filter((l) => l.id !== shown.id).map((l) => l.hello).join(' · ')}</p>

@@ -250,7 +250,7 @@ export default function ProjectBar() {
               Licencias y créditos
             </button>
             <p className="hint" style={{ marginBottom: 0 }}>
-              Se guarda solo, en este equipo. La música, los efectos, las fotos y los clips pequeños van dentro del proyecto; los vídeos grandes de la cámara se quedan en tu carpeta y Orion los busca al abrir.
+              Se guarda solo, en este equipo. La música, los efectos, las fotos y los clips pequeños van dentro del proyecto; los vídeos grandes de la cámara se quedan en tu carpeta y Leo los busca al abrir.
             </p>
           </div>
         </div>

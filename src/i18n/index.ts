@@ -1,5 +1,5 @@
 /**
- * Orion in other languages.
+ * Leo in other languages.
  *
  * The app is written in Spanish, and Spanish is the key of every translation (src/i18n/<lang>.json,
  * made from src/i18n/strings.json — `node scripts/i18n-extract.mjs` lists the texts again after changes).

@@ -5,7 +5,7 @@ import { getLang, t } from '../i18n';
 
 /**
  * Projects ("proyectos"): saved automatically in the browser's own database (IndexedDB),
- * so you can close Orion and continue later.
+ * so you can close Leo and continue later.
  *
  * - The timeline, settings, thumbnails and waveforms are always saved.
  * - Small files (music, effects, stickers, photos, short clips) are saved inside the project.
@@ -169,7 +169,7 @@ export async function saveNow(): Promise<void> {
     for (const m of s.media) {
       const key = `${proj.id}:${m.id}`;
       let stored = storedBlobs.has(key);
-      // files Orion made itself (reversed clips, frozen frames) can't be found again on disk: always keep them
+      // files Leo made itself (reversed clips, frozen frames) can't be found again on disk: always keep them
       if (!stored && !isMissing(m) && (m.file.size <= STORE_LIMIT || m.generated)) {
         // only write a file once
         const exists = (await idbKeys('blobs', IDBKeyRange.only(key))).length > 0;
@@ -203,7 +203,7 @@ export async function saveNow(): Promise<void> {
     await idbPut('projects', doc);
     status = { state: 'saved', at: Date.now() };
   } catch (e) {
-    console.error('Orion: no se pudo guardar el proyecto', e);
+    console.error('Leo: no se pudo guardar el proyecto', e);
     status = { state: 'error', error: e instanceof Error ? e.message : String(e) };
   }
   emit();
@@ -479,7 +479,7 @@ export async function exportProjectFile() {
 
 export async function importProjectFile(file: File) {
   const p = JSON.parse(await file.text()) as ProjectDoc;
-  if (p.version !== 1 || !Array.isArray(p.clips)) throw new Error('No es un proyecto de Orion');
+  if (p.version !== 1 || !Array.isArray(p.clips)) throw new Error('No es un proyecto de Leo');
   p.id = uid();
   p.media = p.media.map((m) => ({ ...m, stored: false }));
   p.updatedAt = Date.now();

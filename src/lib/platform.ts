@@ -21,7 +21,7 @@ export interface SavedFile {
 
 /**
  * Saves a file for the user: a normal download in the browser / Mac app,
- * or a file in Documentos/Orion on Android (written in pieces so big videos fit in memory).
+ * or a file in Documentos/Leo on Android (written in pieces so big videos fit in memory).
  */
 export async function saveFile(blob: Blob, name: string): Promise<SavedFile> {
   if (!isNative) {
@@ -43,8 +43,8 @@ export async function saveFile(blob: Blob, name: string): Promise<SavedFile> {
     return (await Filesystem.getUri({ path, directory })).uri;
   };
   try {
-    const uri = await write(Directory.Documents, `Orion/${name}`);
-    return { where: 'Documentos/Orion', uri };
+    const uri = await write(Directory.Documents, `Leo/${name}`);
+    return { where: 'Documentos/Leo', uri };
   } catch {
     // some phones don't let apps write to Documents: keep it in the app and offer "Compartir"
     const uri = await write(Directory.Data, `exports/${name}`);

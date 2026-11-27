@@ -6,7 +6,7 @@ import { openSuggestions } from './SuggestionsDialog';
 import { markDonated, useSupport } from '../lib/support';
 
 let openFn: (() => void) | null = null;
-/** Opens "Acerca de Orion · Invítame a un café" (also from the Mac app's menu and the ☕ button). */
+/** Opens "Acerca de Leo · Invítame a un café" (also from the Mac app's menu and the ☕ button). */
 export function openAbout() {
   openFn?.();
 }
@@ -146,7 +146,7 @@ export default function AboutDialog() {
             <div className="about-top">
               <div className="about-logo">◆</div>
               <div>
-                <b style={{ fontSize: 18 }}>Orion</b>
+                <b style={{ fontSize: 18 }}>Leo</b>
                 <div className="hint">Editor de vídeo gratis{VERSION ? ` · versión ${VERSION}` : ''}</div>
               </div>
             </div>

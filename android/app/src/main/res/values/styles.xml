@@ -13,7 +13,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <!-- Orion is dark: dark bars behind the clock and the gesture bar -->
+        <!-- Leo is dark: dark bars behind the clock and the gesture bar -->
         <item name="android:windowBackground">@color/orionBg</item>
         <item name="android:statusBarColor">@color/orionBg</item>
         <item name="android:navigationBarColor">@color/orionBg</item>

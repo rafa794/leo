@@ -1,5 +1,5 @@
 /**
- * Who made Orion — shown in "Acerca de Orion · Invítame a un café". Edit these and rebuild the app.
+ * Who made Leo — shown in "Acerca de Leo · Invítame a un café". Edit these and rebuild the app.
  *
  * - photo: your picture at public/author.jpg (square works best). If it's missing, your initials are shown.
  * - paypalMe: your PayPal.me name (the part after paypal.me/). The coffee buttons open
@@ -14,8 +14,8 @@
 export const AUTHOR = {
   name: 'Rafa Mendoza',
   photo: `${import.meta.env.BASE_URL}author.jpg`,
-  hello: '¡Hola! Soy Rafa, quien hace Orion 👋',
-  bio: 'Lo creé para editar mis vídeos sin pagar suscripciones. Orion es completamente gratis y siempre lo será: sin anuncios, sin marcas de agua y todo se procesa en tu ordenador.',
+  hello: '¡Hola! Soy Rafa, quien hace Leo 👋',
+  bio: 'Lo creé para editar mis vídeos sin pagar suscripciones. Leo es completamente gratis y siempre lo será: sin anuncios, sin marcas de agua y todo se procesa en tu ordenador.',
   ask: 'Si te ayuda y te apetece, invítame a algo. Desde 1 €, lo que tú quieras.',
   paypalMe: 'rafaLeoM794',
   currency: 'EUR',

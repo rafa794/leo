@@ -1,6 +1,6 @@
 # AGENTS.md — guide for AI coding agents (GitHub Copilot, Claude, Codex…)
 
-Read this whole file before changing anything. It is the shared memory of the project: what Orion is,
+Read this whole file before changing anything. It is the shared memory of the project: what Leo is,
 how it is built, the rules the maintainer cares about and the traps that already cost time.
 
 > **Talk to the maintainer in Spanish** (he writes in Spanish). Code, comments, commit messages and docs are in English,
@@ -8,10 +8,17 @@ how it is built, the rules the maintainer cares about and the traps that already
 
 ---
 
-## 1. What Orion is
+## 1. What Leo is
 
 A **free, open-source video editor** (GPL-3.0) with the editing model people know from CapCut — magnetic main
 track, overlay tracks, keyframes, quick tools — for **Mac, Windows, Linux, Android and the browser**.
+
+> **Leo was called "Orion" until 27 Nov 2026.** Everything users see says Leo, but these internal names stay
+> "orion" on purpose — changing them would lose people's projects or break updates: the Android `applicationId`
+> `app.orion.editor` (+ `.dev`), the Electron profile folder `Orion` (`app.setPath('userData', …)` in `main.cjs`),
+> the `app://orion` origin, IndexedDB `orion`, `localStorage` keys `orion.*`, `orion-models-v1` caches, the
+> `.orion.json` project file extension, `window.__orion*` / `orionApp` bridges, `ORION_*` env vars and the signing
+> folder `~/.orion-signing/`. Don't "finish the rename" on these.
 
 The promise to users, which every change must keep:
 
@@ -27,8 +34,8 @@ The maintainer is a solo creator (he also runs sports channels, but the product 
 editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me + card / Google Pay / Apple Pay via Stripe Payment Links)
 in `src/config/author.ts`.
 
-Website: https://orion.rafael-mendoza.com (Cloudflare Pages, `/` = landing page, `/app/` = web version).
-Repo: https://github.com/rafa794/orion. Releases: GitHub Releases.
+Website: https://leo.rafael-mendoza.com (Cloudflare Pages, `/` = landing page, `/app/` = web version).
+Repo: https://github.com/rafa794/leo. Releases: GitHub Releases.
 
 ---
 
@@ -52,14 +59,14 @@ Repo: https://github.com/rafa794/orion. Releases: GitHub Releases.
 npm install                # also copies MediaPipe wasm to public/ (postinstall)
 npm run dev                # browser version, http://localhost:5173
 npm run mac                # desktop app (Electron) from a fresh build
-npm run mac:build          # release/mac-arm64/Orion.app  ← the maintainer uses this app daily
+npm run mac:build          # release/mac-arm64/Leo.app  ← the maintainer uses this app daily
 npm run dist:mac | dist:win | dist:linux | dist:all   # installers (unsigned)
-npm run android:release    # signed APK → release/Orion-android.apk (key outside the repo, see §9)
-npm run android:live       # live reload on a USB-connected phone ("Orion Dev" app, see §8)
+npm run android:release    # signed APK → release/Leo-android.apk (key outside the repo, see §9)
+npm run android:live       # live reload on a USB-connected phone ("Leo Dev" app, see §8)
 npm run site:build         # website + web app → site-dist/ (Cloudflare Pages)
 npm test                   # unit tests
 npm run test:app           # end-to-end on the dev build (Electron, throwaway profile)
-npm run test:mac-app       # same tests on the packaged Orion.app
+npm run test:mac-app       # same tests on the packaged Leo.app
 npx tsc --noEmit -p .      # typecheck (must be clean)
 node scripts/i18n-extract.mjs   # refresh src/i18n/strings.json after UI text changes
 npm run promo:shots -- picture.jpg   # promo screenshots (Mac 16:9 + phone 9:16) → promo/ (git-ignored)
@@ -157,7 +164,7 @@ General
 - Export defaults: the frame rate of the footage, and never upscale beyond the project resolution.
 
 Phone editor (`src/mobile`, used for Android and any screen ≤ 820 px)
-- Not a shrunken desktop: it follows the mobile editor pattern (CapCut-like *behaviour*, Orion's own look).
+- Not a shrunken desktop: it follows the mobile editor pattern (CapCut-like *behaviour*, Leo's own look).
 - Home screen → "Nuevo proyecto" opens the gallery and goes **straight to the timeline** with the clips added.
 - Timeline: **playhead fixed in the middle**, the content scrolls under it (swipe = scrub, pinch = zoom),
   tap = select, `+` adds at the end, "+ Añadir audio / texto" lanes run **to the end of the timeline** (the end of
@@ -205,7 +212,7 @@ Coffee / donations
   viewer, background export of a real MP4, projects, dialogs, voice-isolation progress, language switching, and
   the **phone flow** (home → new project → timeline → swipe → magnet trim → split → sheets).
 - Phone checks: the Android emulator AVD `Medium_Phone_API_35` (no real GPU: imports and redraws are slow there,
-  that's not a bug). The maintainer's own phone runs **Orion Dev** (`npm run android:live`): a separate app id
+  that's not a bug). The maintainer's own phone runs **Leo Dev** (`npm run android:live`): a separate app id
   (`app.orion.editor.dev`) that loads the dev server through `adb reverse`, so code changes appear live.
   Don't take screenshots of the maintainer's real phone; use the emulator for visual checks.
 - Big camera files are not stored inside projects; after a reload they are relinked by folder.
@@ -215,9 +222,9 @@ Coffee / donations
 ## 9. Releases and publishing
 
 - Version in `package.json` (+ `versionName`/`versionCode` in `android/app/build.gradle`).
-- Installers: `npm run dist:all` + `npm run android:release`, then a GitHub Release on `rafa794/orion`.
-  Asset names have **no version** (`Orion-mac-arm64.dmg`, `Orion-Setup-x64.exe`, `Orion-Portable.exe`,
-  `Orion-linux-x86_64.AppImage`, `Orion-linux-amd64.deb`, `Orion-android.apk`…) so the website's
+- Installers: `npm run dist:all` + `npm run android:release`, then a GitHub Release on `rafa794/leo`.
+  Asset names have **no version** (`Leo-mac-arm64.dmg`, `Leo-Setup-x64.exe`, `Leo-Portable.exe`,
+  `Leo-linux-x86_64.AppImage`, `Leo-linux-amd64.deb`, `Leo-android.apk`…) so the website's
   `releases/latest/download/<name>` links keep working.
 - Apps are unsigned (no paid certificates): the website and README explain the macOS / SmartScreen first-run steps.
 - **Android signing key lives outside the repo** (`~/.orion-signing/`). Never commit keys, passwords,
@@ -267,7 +274,7 @@ Coffee / donations
 
 ## 12. Roadmap / ideas (ask before starting big ones)
 
-Things CapCut keeps behind "Pro" that Orion should offer free (CPU-friendly versions):
+Things CapCut keeps behind "Pro" that Leo should offer free (CPU-friendly versions):
 - Object / person removal with AI ("borrar con IA"), face retouch, quality enhance / upscale.
 - Voice changer effects, text-to-speech, noise reduction presets.
 - Animated word-by-word caption templates (TikTok style).

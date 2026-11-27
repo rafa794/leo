@@ -41,8 +41,8 @@ export default function SuggestionsDialog() {
   if (!open) return null;
 
   const label = KINDS.find((k) => k[0] === kind)![1];
-  const subject = `Orion · ${label.replace(/^\S+\s/, '')}`;
-  const info = `Orion ${VERSION} · ${platform()}`;
+  const subject = `Leo · ${label.replace(/^\S+\s/, '')}`;
+  const info = `Leo ${VERSION} · ${platform()}`;
   const canSend = text.trim().length >= 3 && (AUTHOR.web3formsKey || AUTHOR.suggestionsEmail);
 
   const send = async () => {
@@ -62,7 +62,7 @@ export default function SuggestionsDialog() {
         body: JSON.stringify({
           access_key: AUTHOR.web3formsKey,
           subject,
-          from_name: 'Orion — sugerencias',
+          from_name: 'Leo — sugerencias',
           tipo: label,
           mensaje: text.trim(),
           email_para_responder: email.trim() || '(no lo ha dejado)',
@@ -114,12 +114,12 @@ export default function SuggestionsDialog() {
             <textarea
               className="input"
               rows={6}
-              placeholder={kind === 'bug' ? 'Qué estabas haciendo y qué pasó…' : 'Me encantaría que Orion pudiera…'}
+              placeholder={kind === 'bug' ? 'Qué estabas haciendo y qué pasó…' : 'Me encantaría que Leo pudiera…'}
               value={text}
               onChange={(e) => setText(e.target.value)}
             />
             <input className="input" style={{ width: '100%', marginTop: 8 }} type="email" placeholder="Tu email (opcional, por si quieres respuesta)" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <p className="hint">Se adjunta la versión de Orion y el sistema ({info}). Nada más.</p>
+            <p className="hint">Se adjunta la versión de Leo y el sistema ({info}). Nada más.</p>
             {state === 'error' && <p style={{ color: 'var(--danger)' }}>No se pudo enviar. ¿Tienes conexión? Inténtalo de nuevo.</p>}
             {!AUTHOR.web3formsKey && !AUTHOR.suggestionsEmail && <p className="hint" style={{ color: '#fbbf24' }}>(Falta configurar el correo de sugerencias en src/config/author.ts)</p>}
             <button className="btn primary block" disabled={!canSend || state === 'sending'} onClick={send}>

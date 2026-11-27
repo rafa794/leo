@@ -1,19 +1,19 @@
 <div align="center">
 
-<img src="build/icon.png" width="96" alt="Orion icon" />
+<img src="build/icon.png" width="96" alt="Leo icon" />
 
-# Orion
+# Leo
 
 **A free, open-source video editor. No account, no watermark, no subscription.**
 Everything — AI included — runs on your own computer. Your videos never leave it.
 
-[**Download**](https://orion.rafael-mendoza.com) · [**Use it in the browser**](https://orion.rafael-mendoza.com/app/) · [Releases](https://github.com/rafa794/orion/releases) · [Español](README.es.md)
+[**Download**](https://leo.rafael-mendoza.com) · [**Use it in the browser**](https://leo.rafael-mendoza.com/app/) · [Releases](https://github.com/rafa794/leo/releases) · [Español](README.es.md)
 
-<img src="docs/screenshot.png" alt="Orion editor" width="900" />
+<img src="docs/screenshot.png" alt="Leo editor" width="900" />
 
 </div>
 
-## Why Orion
+## Why Leo
 
 - **Free for real** — every feature, no watermark, no "Pro" tier, no sign-up.
 - **Private** — editing, exporting and the AI run locally. Nothing is uploaded.
@@ -61,29 +61,29 @@ and are found again automatically.
 
 ## Download
 
-Get the latest version from the [website](https://orion.rafael-mendoza.com) or the [releases page](https://github.com/rafa794/orion/releases/latest):
+Get the latest version from the [website](https://leo.rafael-mendoza.com) or the [releases page](https://github.com/rafa794/leo/releases/latest):
 
 | System | File |
 |---|---|
-| macOS (Apple Silicon) | `Orion-mac-arm64.dmg` |
-| macOS (Intel) | `Orion-mac-x64.dmg` |
-| Windows (installer) | `Orion-Setup-x64.exe` · `Orion-Setup-arm64.exe` |
-| Windows (portable) | `Orion-Portable.exe` |
-| Linux | `Orion-linux-x86_64.AppImage` · `.deb` |
-| Android 7+ | `Orion-android.apk` (allow installing from this source when asked) |
+| macOS (Apple Silicon) | `Leo-mac-arm64.dmg` |
+| macOS (Intel) | `Leo-mac-x64.dmg` |
+| Windows (installer) | `Leo-Setup-x64.exe` · `Leo-Setup-arm64.exe` |
+| Windows (portable) | `Leo-Portable.exe` |
+| Linux | `Leo-linux-x86_64.AppImage` · `.deb` |
+| Android 7+ | `Leo-android.apk` (allow installing from this source when asked) |
 
 > The apps are not signed with paid certificates yet.
-> **macOS:** the first time, right-click Orion in Applications → *Open* → *Open*.
+> **macOS:** the first time, right-click Leo in Applications → *Open* → *Open*.
 > **Windows:** on the SmartScreen notice click *More info* → *Run anyway*.
 
-Or skip installing and [open it in your browser](https://orion.rafael-mendoza.com/app/) (Chrome or Edge recommended).
+Or skip installing and [open it in your browser](https://leo.rafael-mendoza.com/app/) (Chrome or Edge recommended).
 
 ## Build from source
 
 Requirements: Node.js 22+.
 
 ```bash
-git clone https://github.com/rafa794/orion.git
+git clone https://github.com/rafa794/leo.git
 cd orion
 npm install
 npm run dev            # browser version at http://localhost:5173
@@ -92,16 +92,16 @@ npm run dev            # browser version at http://localhost:5173
 | Command | What it does |
 |---|---|
 | `npm run mac` | Run the desktop app (Electron) |
-| `npm run mac:build` | Build `release/mac-*/Orion.app` |
+| `npm run mac:build` | Build `release/mac-*/Leo.app` |
 | `npm run dist:mac` / `dist:win` / `dist:linux` | Installers for each system |
 | `npm run site:build` | Website + web app (`site-dist/`, for Cloudflare Pages) |
 | `npm run android:release` | Signed Android APK (Capacitor, needs Java 21 + Android SDK) |
-| `npm run android:live` | Live reload on a phone plugged in by USB (installs a separate "Orion Dev" app) |
+| `npm run android:live` | Live reload on a phone plugged in by USB (installs a separate "Leo Dev" app) |
 
 ### Developing on an Android phone
 
 Turn on *Developer options → USB debugging* on the phone, plug it in, accept the prompt, then run
-`npm run android:live`. It installs **Orion Dev** next to the normal app and loads the editor from your
+`npm run android:live`. It installs **Leo Dev** next to the normal app and loads the editor from your
 computer through the cable, so every code change appears on the phone right away. Chrome → `chrome://inspect`
 shows the phone's console. If you unplug the cable, run the command again.
 
@@ -110,7 +110,7 @@ shows the phone's console. If you unplug the cable, run the command again.
 ```bash
 npm test               # unit tests (Vitest): keyframes, timeline, export, stabilizer…
 npm run test:app       # end-to-end on the real desktop app (Playwright + Electron)
-npm run test:mac-app   # the same, on the packaged Orion.app
+npm run test:mac-app   # the same, on the packaged Leo.app
 ```
 
 App tests use a throwaway profile, so they never touch your projects.
@@ -129,7 +129,7 @@ src/
   i18n/         translations (Spanish is the source text)
 electron/       desktop app
 functions/      Cloudflare Pages function for the web version
-website/        orion.rafael-mendoza.com
+website/        leo.rafael-mendoza.com
 tests/          unit and end-to-end tests
 ```
 
@@ -146,8 +146,8 @@ before opening a PR. Suggestions can also be sent from inside the app (*Help →
 
 ## Support the project
 
-Orion is free and will stay free. If it helps you, you can buy me a coffee ☕ — from the app
-(*Orion → About Orion · Buy me a coffee*) or right here:
+Leo is free and will stay free. If it helps you, you can buy me a coffee ☕ — from the app
+(*Leo → About Leo · Buy me a coffee*) or right here:
 
 - [PayPal](https://paypal.me/rafaLeoM794)
 - [Card · Google Pay · Apple Pay](https://buy.stripe.com/bJe3cx8XC5Au4XR7OIb7y04) (you choose the amount)
@@ -156,6 +156,6 @@ Thank you!
 
 ## License
 
-[GPL-3.0](LICENSE). You can use, study, share and modify Orion; if you distribute a modified version, it must
+[GPL-3.0](LICENSE). You can use, study, share and modify Leo; if you distribute a modified version, it must
 stay open source under the same license. Third-party libraries, models and assets keep their own licenses —
 see *Help → Licenses and credits* in the app.

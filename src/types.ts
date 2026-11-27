@@ -20,7 +20,7 @@ export interface MediaItem {
   missing?: boolean;
   /** original file size, to find it again when relinking */
   size?: number;
-  /** made by Orion (reversed clip, frozen frame…): always saved inside the project */
+  /** made by Leo (reversed clip, frozen frame…): always saved inside the project */
   generated?: boolean;
 }
 

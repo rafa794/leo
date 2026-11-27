@@ -1,4 +1,4 @@
-// Collects the licenses of every library that goes into Orion (and of the models, fonts and stickers it uses)
+// Collects the licenses of every library that goes into Leo (and of the models, fonts and stickers it uses)
 // into public/licenses.json, shown in the app under "Licencias y créditos". Runs before every build.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -98,6 +98,6 @@ const resources = [
   { name: 'Música y efectos (Openverse: Jamendo, Freesound)', license: 'CC0 / CC BY', url: 'https://openverse.org', note: 'No van dentro de la app: se buscan y descargan cuando los eliges. Las pistas CC BY exigen citar al autor en tus vídeos (botón «Copiar créditos»).' },
 ];
 
-const out = { generated: new Date().toISOString().slice(0, 10), app: { name: rootPkg.productName ?? 'Orion', version: rootPkg.version }, libraries, resources };
+const out = { generated: new Date().toISOString().slice(0, 10), app: { name: rootPkg.productName ?? 'Leo', version: rootPkg.version }, libraries, resources };
 writeFileSync(join(root, 'public', 'licenses.json'), JSON.stringify(out));
 console.log(`licenses.json: ${libraries.length} librerías, ${resources.length} recursos`);

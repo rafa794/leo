@@ -1,9 +1,9 @@
-// Screenshots of Orion for promotion (website, social posts, AI video start/end frames):
+// Screenshots of Leo for promotion (website, social posts, AI video start/end frames):
 //   npm run promo:shots -- path/to/picture-or-video [more files…]
 // Opens the dev build in a throwaway profile (never your own projects), imports the files, puts them on the
 // timeline with a filter and a title, and saves 16:9 (Mac/PC) and 9:16 (phone) pictures to promo/.
 import { _electron as electron } from '@playwright/test';
-import { existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -30,14 +30,22 @@ const optional = async (what, fn) => {
 try {
   const page = await app.firstWindow();
   page.on('pageerror', (e) => console.warn('page error:', e.message));
+  // sharp pictures: render at 3× (Mac 4800×2700, phone 1236×2196) so they stay crisp in a 1080p / 4K video
+  const SCALE = Number(process.env.PROMO_SCALE ?? 3);
+  const cdp = await page.context().newCDPSession(page);
+  const setSize = async (width, height) => {
+    await page.setViewportSize({ width, height });
+    await cdp.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: SCALE, mobile: false });
+  };
   const shot = async (name) => {
     await page.waitForTimeout(700);
-    await page.screenshot({ path: join(OUT, `${name}.png`) });
+    const { data } = await cdp.send('Page.captureScreenshot', { format: 'png' }); // at device pixels (SCALE×)
+    writeFileSync(join(OUT, `${name}.png`), Buffer.from(data, 'base64'));
     console.log(`promo/${name}.png`);
   };
 
   // ---- Mac / PC (16:9) ----
-  await page.setViewportSize({ width: 1600, height: 900 });
+  await setSize(1600, 900);
   await page.locator('.lang-opt', { hasText: 'Español' }).click();
   await page.locator('.panel-body input[type=file]').first().setInputFiles(files);
   await page.locator('[data-media-id]').nth(files.length - 1).waitFor({ timeout: 60_000 });
@@ -60,6 +68,7 @@ try {
     await page.locator('.panel.right .chip', { hasText: /^Todos$/ }).click();
     await page.locator(`.panel.right .look[data-look="${FILTER}"]`).click();
   });
+  await page.waitForTimeout(3500); // let notices ("Formato del vídeo original…") fade out
   await shot('orion-mac-filtros');
   await optional('effects tab', async () => {
     await page.locator('.main-tabs button', { hasText: /^Efectos$/ }).click();
@@ -68,7 +77,7 @@ try {
   await shot('orion-mac-efectos');
 
   // ---- phone (9:16): the same app switches to the phone editor on a narrow window ----
-  await page.setViewportSize({ width: 412, height: 732 });
+  await setSize(412, 732);
   await page.locator('.m-app').first().waitFor();
   await optional('open project', async () => {
     if (await page.locator('.m-home').isVisible()) await page.locator('.m-project').first().click();

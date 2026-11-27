@@ -1,6 +1,6 @@
 # Copilot instructions
 
-Everything an agent needs to work on Orion is in [`AGENTS.md`](../AGENTS.md) at the repository root:
+Everything an agent needs to work on Leo is in [`AGENTS.md`](../AGENTS.md) at the repository root:
 what the project is, its rules (free, local, no GPU required, no paid services, translations for every UI text),
 the architecture, commands, tests, release process and known traps. **Read it before making changes.**
 
