@@ -246,7 +246,9 @@ Coffee / donations
 - Electron: links open in the system browser; downloads in tests are redirected with `will-download`.
 - Cloudflare Pages applies `_redirects` **before** static files: never add a catch-all like `/app/* /app/ 200`
   (it served every CSS / image as HTML and the web editor went blank). After deploying, check that
-  `/app/assets/*.css` comes back as `text/css`.
+  `/app/assets/*.css` comes back as `text/css`. Don't add year-long `immutable` cache headers either: a request made
+  while a deploy is spreading can get a page instead of the file and that wrong answer would stay cached.
+  `website/404.html` makes missing files a real 404 (not the landing page).
 
 ---
 

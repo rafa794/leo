@@ -20,17 +20,10 @@ for (const f of readdirSync('site-dist/app/assets')) {
 // "/app/* … 200" rule would answer every asset (CSS, images…) with the HTML page and the editor stays blank.
 writeFileSync('site-dist/_redirects', ['/app /app/ 301', ''].join('\n'));
 
+// No long "immutable" cache: if a file is asked for while a deploy is still spreading, Cloudflare may answer with
+// a page instead, and a year-long cache would keep that wrong answer (the web editor went blank once).
 writeFileSync(
   'site-dist/_headers',
-  [
-    '/*',
-    '  X-Content-Type-Options: nosniff',
-    '  Referrer-Policy: strict-origin-when-cross-origin',
-    '/app/assets/*',
-    '  Cache-Control: public, max-age=31536000, immutable',
-    '/app/mediapipe-wasm/*',
-    '  Cache-Control: public, max-age=604800',
-    '',
-  ].join('\n'),
+  ['/*', '  X-Content-Type-Options: nosniff', '  Referrer-Policy: strict-origin-when-cross-origin', ''].join('\n'),
 );
 console.log('site-dist ready: website at /, editor at /app/');

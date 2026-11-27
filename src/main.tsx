@@ -8,6 +8,8 @@ import './styles.css';
 if (navigator.userAgent.includes('Electron')) document.documentElement.classList.add('is-app', /Mac/.test(navigator.platform) ? 'is-mac' : 'is-other');
 
 initI18n();
+// which version is running (handy when checking a deploy or a bug report)
+document.documentElement.dataset.version = import.meta.env.VITE_APP_VERSION ?? '';
 // a model left over from a feature that was tried and removed (smooth slow motion): free the space
 void globalThis.caches?.delete('orion-models-v1').catch(() => {});
 createRoot(document.getElementById('root')!).render(
