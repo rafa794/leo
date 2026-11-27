@@ -647,3 +647,16 @@ input[type=color] { width: 100%; height: 30px; border: 1px solid var(--border); 
 .pay-btn.card { background: #635bff; color: #fff; border-color: #635bff; }
 .pay-card-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
 .pay-card-text small { font-size: 10.5px; font-weight: 600; opacity: .85; }
+
+/* "Borrar objetos" (beta) */
+.erase-modal { width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; }
+.beta { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: rgba(168, 85, 247, .18); color: #c084fc; }
+.erase-stage { position: relative; display: grid; place-items: center; background: #000; border-radius: 10px; overflow: hidden; min-height: 160px; }
+.erase-stage canvas { grid-area: 1 / 1; max-width: 100%; max-height: min(56vh, 520px); width: auto; height: auto; display: block; }
+.erase-mask { opacity: .5; touch-action: none; }
+.erase-mask.hidden-strokes { opacity: 0; }
+.erase-loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
+.erase-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.erase-tools .chips { margin: 0; }
+.erase-size { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 160px; font-size: 12px; color: var(--muted); }
+.erase-size .range { flex: 1; }

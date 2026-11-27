@@ -436,3 +436,62 @@ test('phone: home → new project → timeline, clip tools, split, sheets', asyn
   await expect(page.locator('.m-tool[data-tool="text"]')).toBeVisible();
   await page.setViewportSize({ width: 1440, height: 900 });
 });
+
+test('photo: erase an object with AI (beta), then save the picture', async () => {
+  const PHOTO = join(ROOT, 'public/_test/photo.jpg');
+  await page.locator('.panel-body input[type=file]').first().setInputFiles([PHOTO]);
+  const item = page.locator('[data-media-id][title^="photo.jpg"]');
+  await item.waitFor({ timeout: 30_000 });
+  await item.dblclick();
+  const clip = page.locator('.tl-clip', { hasText: 'photo.jpg' }).first();
+  await clip.click({ position: { x: 12, y: 20 } });
+  await page.locator('.panel.right [data-tool="erase"]').click();
+  await expect(page.locator('.erase-modal')).toBeVisible();
+  await expect(page.locator('.erase-loading')).toHaveCount(0, { timeout: 20_000 });
+  // a box over the red block (x 300–360, y 180–300 of the 640×400 photo)
+  await page.locator('.erase-tools .chip[data-erase="box"]').click();
+  const b = (await page.getByTestId('erase-mask').boundingBox())!;
+  const at = (x: number, y: number) => [b.x + (x * b.width) / 640, b.y + (y * b.height) / 400] as const;
+  await page.mouse.move(...at(290, 170));
+  await page.mouse.down();
+  await page.mouse.move(...at(372, 312), { steps: 6 });
+  await page.mouse.up();
+  await page.getByTestId('erase-apply').click();
+  // the model runs on this computer; the clip switches to a new picture without the red block
+  await expect(page.locator('.erase-modal')).toHaveCount(0, { timeout: 90_000 });
+  const erased = page.locator('[data-media-id][title^="photo (sin objetos).jpg"]');
+  await expect(erased).toHaveCount(1);
+  await expect(page.locator('.tl-clip', { hasText: 'photo (sin objetos).jpg' })).toHaveCount(1);
+  const redShare = (sel: string) =>
+    page.locator(sel).locator('img').first().evaluate(async (img: HTMLImageElement) => {
+      await img.decode().catch(() => {});
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 40;
+      const g = c.getContext('2d')!;
+      g.drawImage(img, 0, 0, 64, 40);
+      const d = g.getImageData(0, 0, 64, 40).data;
+      let red = 0;
+      for (let i = 0; i < d.length; i += 4) if (d[i] > 150 && d[i + 1] < 110 && d[i + 2] < 110) red++;
+      return red / (64 * 40);
+    });
+  expect(await redShare('[data-media-id][title^="photo.jpg"]')).toBeGreaterThan(0.01);
+  expect(await redShare('[data-media-id][title^="photo (sin objetos).jpg"]')).toBeLessThan(0.002);
+  // undo brings the original picture back
+  await page.keyboard.press('Meta+z');
+  await expect(page.locator('.tl-clip', { hasText: 'photo.jpg' })).toHaveCount(1);
+
+  // "Foto" export: one picture of the viewer, saved as JPG
+  await page.locator('.topbar .btn.primary').click();
+  await page.locator('.modal .chip[data-mode="photo"]').click();
+  await page.locator('.modal input.input').first().fill('foto-test');
+  await page.getByTestId('save-photo').click();
+  await expect.poll(() => {
+    try {
+      return statSync(join(downloads, 'foto-test.jpg')).size;
+    } catch {
+      return 0;
+    }
+  }, { timeout: 30_000 }).toBeGreaterThan(5_000);
+});
+

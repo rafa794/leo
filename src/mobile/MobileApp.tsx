@@ -16,6 +16,7 @@ import { clipHasAudio } from '../lib/timeline';
 import { isMediaClip, type MediaClip } from '../types';
 import Preview from '../components/Preview';
 import { openAbout } from '../components/AboutDialog';
+import { openEraser } from '../components/EraseDialog';
 import ProjectBar from '../components/ProjectBar';
 import LeftPanel from '../components/LeftPanel';
 import Inspector from '../components/Inspector';
@@ -154,6 +155,7 @@ export default function MobileApp({ dialogs }: { dialogs: ReactNode }) {
                 { id: 'adjust', label: 'Ajustar', icon: <SlidersHorizontal size={22} />, run: clipTool('adjust', 'Ajustar') },
                 { id: 'bg', label: 'Quitar fondo', icon: <Eraser size={22} />, run: clipTool('video', 'Quitar fondo', 'bg') },
                 { id: 'mask', label: 'Máscara', icon: <CircleDashed size={22} />, run: clipTool('video', 'Máscara', 'mask') },
+                { id: 'erase', label: 'Borrar objetos', icon: <Eraser size={22} />, run: () => openEraser(sel.id) },
               ]
             : []),
           ...(media?.type === 'video'

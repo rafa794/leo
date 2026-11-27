@@ -323,3 +323,46 @@ export async function exportVideo(
   if (disk) return await disk.file(); // a file on disk: no size limit
   return new Blob([(output.target as BufferTarget).buffer!], { type: 'video/mp4' });
 }
+
+export interface ImageExportOptions {
+  width: number;
+  height: number;
+  /** timeline second to capture (the playhead) */
+  time: number;
+  format: 'png' | 'jpeg';
+}
+
+/**
+ * Exports ONE frame of the timeline as a picture (photo editing, or a still from a video): the same renderer
+ * as the preview and the video export, at the chosen size.
+ */
+export async function exportImage(job: ExportJob, opts: ImageExportOptions): Promise<Blob> {
+  const { clips, tracks, media } = job;
+  const { width, height, format } = opts;
+  const time = Math.max(0, opts.time);
+  const leaves = flattenLeaves(clips, tracks).filter((l) => !l.hidden && l.clip.type !== 'audio' && time >= l.t0 && time < l.t1);
+  const lost = media.filter((m) => m.missing && leaves.some((l) => l.clip.mediaId === m.id));
+  if (lost.length) throw new Error(`Faltan ${lost.length} vídeo(s): elige su carpeta en el aviso de arriba antes de exportar (${lost.map((m) => m.name).join(', ')})`);
+  const current = new Map<string, FrameSource | null>();
+  const pullers: FramePuller[] = [];
+  try {
+    for (const l of leaves) {
+      const m = media.find((x) => x.id === l.clip.mediaId);
+      if (!m) continue;
+      const t = Math.max(0, Math.min(m.duration - 0.001, l.src0 + (time - l.t0) * l.rate));
+      const p = await createPuller(l.clip, m, [t]);
+      pullers.push(p);
+      current.set(l.key, await p.next());
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { alpha: format === 'png' })!;
+    renderFrame(ctx, width, height, { time, tracks, clips, settings: job.settings, getSource: (_c, key) => current.get(key) ?? null, pool: new Map() });
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, `image/${format}`, 0.92));
+    if (!blob) throw new Error('No se pudo crear la imagen');
+    return blob;
+  } finally {
+    pullers.forEach((p) => p.close());
+  }
+}

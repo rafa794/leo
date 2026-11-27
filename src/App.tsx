@@ -11,6 +11,7 @@ import PasteAttributes from './components/PasteAttributes';
 import ExportJobs from './components/ExportJobs';
 import LicensesDialog from './components/LicensesDialog';
 import AboutDialog from './components/AboutDialog';
+import EraseDialog from './components/EraseDialog';
 import SuggestionsDialog from './components/SuggestionsDialog';
 import { initAutoFormat } from './lib/autoFormat';
 import { useShortcuts } from './lib/shortcuts';
@@ -120,6 +121,7 @@ export default function App() {
             <ExportJobs />
             <LicensesDialog />
             <AboutDialog />
+            <EraseDialog />
             <SuggestionsDialog />
             <Toast />
           </>
@@ -145,6 +147,7 @@ export default function App() {
       <ExportJobs />
       <LicensesDialog />
       <AboutDialog />
+      <EraseDialog />
       <SuggestionsDialog />
       <Toast />
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Check,
+  Check, Eraser,
   Loader2,
   AlignCenterHorizontal, AlignCenterVertical, AlignEndHorizontal, AlignEndVertical, AlignStartHorizontal, AlignStartVertical,
   ChevronLeft, ChevronRight, Diamond, Download, Combine, FolderInput, Waves, Snowflake, Rewind, FlipHorizontal2, FlipVertical2, Pipette, RotateCcw, RotateCw, Undo2, Ungroup, Upload,
@@ -8,6 +8,7 @@ import {
 import { useEditor, MIN_CLIP, defaultAdjust } from '../store/editor';
 import type { AnimName, BlendMode, ClipAnimation, ClipEffect, Lut, Mask, MaskShape, MediaClip, Stabilization } from '../types';
 import { cancelReverse, freezeFrame, onReverseJobs, reverseClip, reverseJob } from '../lib/clipTools';
+import { openEraser } from './EraseDialog';
 import { STAB_DEFAULT, analyzeClip, cancelAnalysis, onStabJobs, stabCovers, stabJob, stabPath } from '../lib/stabilize';
 import { onSegmenterChange, segmenterState, ensureSegmenter } from '../ai/segmenter';
 import { clipHasAudio, sourceDuration } from '../lib/timeline';
@@ -299,6 +300,15 @@ function VideoBasic({ clip, multi = false }: { clip: MediaClip; multi?: boolean 
 
       <CropGroup clip={clip} />
       {clip.type === 'video' && !multi && <ClipToolsGroup clip={clip} />}
+      {clip.type === 'image' && !multi && (
+        <Group title="Herramientas">
+          <div className="btn-row">
+            <button className="btn small" data-tool="erase" title="Pinta lo que quieres quitar y la IA lo borra (beta)" onClick={() => openEraser(clip.id)}>
+              <Eraser size={13} /> Borrar objetos <span className="beta">beta</span>
+            </button>
+          </div>
+        </Group>
+      )}
       {clip.type === 'video' && <StabilizeGroup clip={clip} />}
 
       <Group title="Mezcla" clip={clip} paths={['opacity']} onReset={() => store.updateClip(clip.id, { opacity: 1, blend: undefined, keyframes: stripKeys(clip, ['opacity']) })}>
@@ -404,6 +414,9 @@ function ClipToolsGroup({ clip }: { clip: MediaClip }) {
           onClick={() => void reverseClip(clip.id)}
         >
           <Rewind size={13} /> {clip.reversedFrom ? 'Revertido · deshacer' : 'Revertir'}
+        </button>
+        <button className="btn small" data-tool="erase" title="Pinta lo que quieres quitar y la IA lo borra (beta)" onClick={() => openEraser(clip.id)}>
+          <Eraser size={13} /> Borrar objetos <span className="beta">beta</span>
         </button>
       </div>
       {job && (

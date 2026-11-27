@@ -97,12 +97,13 @@ src/
   lib/fileAccess.ts       remembered file handles (Chrome / desktop)
   lib/stabilize.ts        stabilizer path smoothing (ADMM, "tube" constraint so borders never show)
   lib/clipTools.ts        freeze frame, reverse
+  lib/objectRemoval.ts    "Borrar objetos" (beta): mask helpers, photo / video erase jobs; components/EraseDialog.tsx = painting UI
   lib/attributes.ts       copy / paste attributes
   lib/gl.ts               WebGL2 color / filter (LUT) / effect / chroma / mask pass, built-in filters (FILTER_GROUPS)
   lib/effects.ts          the "Efectos" catalog (id → shader code); lib/lookPreview.ts = gallery thumbnails
   lib/library.ts, stickers.ts   free music / SFX (Openverse) and Fluent Emoji 3D stickers
   lib/platform.ts         save / share on Android vs desktop vs browser
-  ai/                     workers: whisper, stabilize (OpenCV), voice (RNNoise); segmenter (MediaPipe)
+  ai/                     workers: whisper, stabilize (OpenCV), voice (RNNoise), inpaint (MI-GAN); segmenter (MediaPipe)
   components/             desktop UI (Timeline, Preview, Inspector/MediaInspector, panels, dialogs)
   components/Range.tsx    the slider used everywhere (no native blue sliders)
   components/MaskOverlay.tsx   mask handles drawn over the viewer
@@ -137,6 +138,13 @@ tests/unit, tests/app     Vitest and Playwright suites
   drawn by the same single shader pass with the clip's own time (so preview and export match). Keep them cheap:
   a handful of texture reads per pixel, no extra passes, nothing that needs a dedicated GPU. New effect = an entry in
   `EFFECTS` + a branch in the shader's `warp` / `fetch` / `effectColor` + its name in the translations.
+- **Borrar objetos (beta)**: MI-GAN 512 Places2 (MIT, Picsart) converted to ONNX with the authors' own
+  `create_onnx_pipeline.py`, run on the CPU by onnxruntime-web in `ai/inpaint.worker.ts`. The model ships with the app
+  in `public/models/migan/` split in two parts (Cloudflare Pages takes files ≤ 25 MiB); the worker joins them. Only a
+  crop around the painted area goes to the model (fast on 4K). Photos → a new generated picture; videos → the same area
+  repainted on every frame via mediabunny `Conversion` (audio copied). Both switch the clip's media and are undoable.
+- **Photo export (beta)**: `exportImage()` in `lib/exporter.ts` renders one frame (the playhead) with the same
+  renderer; the export dialog has "Vídeo / Foto" and opens on Foto when the project only has pictures.
 - **Compound clips**: nested timelines (`compound`), entered/exited with `enterCompound` / `exitCompound`.
 - **Generated media** (reversed clips, frozen frames) are stored inside the project (`generated: true`).
 - **Inspector props** (`Prop` in `MediaInspector.tsx`): `min`/`max` are in the value's own units (volume 0–2,

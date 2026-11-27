@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Download, X } from 'lucide-react';
-import { isNative } from '../lib/platform';
+import { Download, Image as ImageIcon, Video, X } from 'lucide-react';
+import { isNative, saveFile } from '../lib/platform';
 import { enqueueExport } from '../lib/exportQueue';
 import { EXPORT_FPS, nearestFps, sourceFps } from '../lib/fps';
 import { getRootTimeline, useEditor } from '../store/editor';
-import { exportDuration, selectionJob, singleClipJob, type ExportOptions } from '../lib/exporter';
+import { exportDuration, exportImage, selectionJob, singleClipJob, type ExportOptions } from '../lib/exporter';
 import { isMediaClip } from '../types';
 import { formatTime } from '../lib/util';
 
@@ -51,6 +51,17 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
   const [srcFps, setSrcFps] = useState<number | null>(null);
   const [quality, setQuality] = useState<ExportOptions['quality']>('high');
   const touchedFps = useRef(false);
+  // "Foto" (beta): one picture of what the viewer shows at the playhead. A project made only of pictures opens on it.
+  const whole = !clipId && !multi;
+  const onlyPictures = useEditor((s) => {
+    const used = new Set(s.clips.flatMap((c) => (isMediaClip(c) ? [c.mediaId] : [])));
+    const items = s.media.filter((m) => used.has(m.id));
+    return items.length > 0 && items.every((m) => m.kind === 'image');
+  });
+  const [mode, setMode] = useState<'video' | 'photo'>(whole && onlyPictures ? 'photo' : 'video');
+  const [photoFormat, setPhotoFormat] = useState<'jpeg' | 'png'>('jpeg');
+  const [photoSize, setPhotoSize] = useState(0); // 0 = project size, else short side
+  const [saving, setSaving] = useState(false);
 
   // what goes into the video: a snapshot taken now (you can keep editing while it exports)
   const buildJob = () => {
@@ -90,12 +101,32 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
     onClose();
   };
 
+  const pk = photoSize ? photoSize / shortSide : 1;
+  const photoW = even(settings.width * pk);
+  const photoH = even(settings.height * pk);
+  const savePhoto = async () => {
+    setSaving(true);
+    const st = useEditor.getState();
+    try {
+      const job = buildJob();
+      const t = Math.min(st.time, Math.max(0, exportDuration(job.clips, job.tracks) - 0.001));
+      const blob = await exportImage(job, { width: photoW, height: photoH, time: t, format: photoFormat });
+      const saved = await saveFile(blob, `${name || 'foto'}.${photoFormat === 'png' ? 'png' : 'jpg'}`);
+      st.setStatus(`Foto guardada en ${saved.where}`);
+      onClose();
+    } catch (e) {
+      st.setStatus(e instanceof Error ? e.message : 'No se pudo guardar la foto');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="modal-back" onPointerDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="row" style={{ marginBottom: 6 }}>
           <h3 style={{ margin: 0 }}>
-            {clipId ? (clip?.type === 'compound' ? 'Exportar clip combinado' : 'Exportar este clip') : multi ? `Exportar ${clipIds!.length} clips seleccionados` : 'Exportar vídeo'}
+            {clipId ? (clip?.type === 'compound' ? 'Exportar clip combinado' : 'Exportar este clip') : multi ? `Exportar ${clipIds!.length} clips seleccionados` : mode === 'photo' ? 'Exportar foto' : 'Exportar vídeo'}
           </h3>
           <div style={{ flex: 'none' }}>
             <button className="icon-btn" onClick={onClose}>
@@ -103,6 +134,60 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
             </button>
           </div>
         </div>
+        {whole && (
+          <div className="chips" style={{ marginBottom: 10 }}>
+            <button className={`chip ${mode === 'video' ? 'active' : ''}`} data-mode="video" onClick={() => setMode('video')}>
+              <Video size={13} /> Vídeo
+            </button>
+            <button className={`chip ${mode === 'photo' ? 'active' : ''}`} data-mode="photo" onClick={() => setMode('photo')}>
+              <ImageIcon size={13} /> Foto <span className="beta">beta</span>
+            </button>
+          </div>
+        )}
+        {mode === 'photo' ? (
+          <>
+            <p className="hint" style={{ marginTop: 0 }}>
+              Guarda lo que se ve en el visor en la posición de la aguja, con filtros, efectos, textos y stickers.
+            </p>
+            <div className="field">
+              <label>Nombre del archivo</label>
+              <input className="input" style={{ width: '100%' }} value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div className="row">
+              <div className="field">
+                <label>Tamaño</label>
+                <select className="input" style={{ width: '100%' }} value={photoSize} onChange={(e) => setPhotoSize(Number(e.target.value))}>
+                  <option value={0}>{`Original · ${settings.width}×${settings.height}`}</option>
+                  {[1080, 2160].filter((v) => v !== shortSide).map((v) => (
+                    <option key={v} value={v}>
+                      {`${v}p${v > shortSide ? ' · ampliado' : ''}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="field">
+                <label>Formato</label>
+                <div className="chips">
+                  <button className={`chip ${photoFormat === 'jpeg' ? 'active' : ''}`} onClick={() => setPhotoFormat('jpeg')}>
+                    JPG
+                  </button>
+                  <button className={`chip ${photoFormat === 'png' ? 'active' : ''}`} onClick={() => setPhotoFormat('png')}>
+                    PNG
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p className="hint">
+              Salida: {photoW}×{photoH} · {photoFormat === 'png' ? 'PNG (sin pérdida)' : 'JPG'}
+            </p>
+            <div className="row" style={{ marginTop: 10 }}>
+              <button className="btn primary block" data-testid="save-photo" disabled={saving} onClick={() => void savePhoto()}>
+                <Download size={16} /> {saving ? 'Guardando…' : 'Guardar foto'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
         <p className="hint" style={{ marginTop: 0 }}>
           {clipId && 'Solo este clip, sin el resto de la línea de tiempo · '}
           {multi && 'Solo los clips seleccionados, juntos · '}Duración {formatTime(duration)} · MP4 · {isNative ? 'se procesa en tu móvil' : 'se procesa en tu ordenador'}
@@ -181,6 +266,8 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
         <p className="hint" style={{ marginBottom: 0, textAlign: 'center' }}>
           Se exporta en segundo plano: puedes cerrar esto y seguir editando. Verás el progreso abajo a la derecha.
         </p>
+          </>
+        )}
       </div>
     </div>
   );

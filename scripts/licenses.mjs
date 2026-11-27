@@ -91,6 +91,7 @@ const resources = [
   { name: 'Whisper (OpenAI) — subtítulos automáticos', license: 'MIT', url: 'https://github.com/openai/whisper', note: 'Modelos onnx-community/whisper-base, whisper-small y whisper-large-v3-turbo; se descargan la primera vez que generas subtítulos.' },
   { name: 'MediaPipe Selfie Multiclass (Google) — quitar fondo', license: 'Apache-2.0', url: 'https://ai.google.dev/edge/mediapipe/solutions/vision/image_segmenter', note: 'Modelo selfie_multiclass_256x256; se descarga la primera vez que quitas el fondo.' },
   { name: 'RNNoise (Xiph.Org / Jean-Marc Valin) — aislar o quitar voz', license: 'BSD-3-Clause', url: 'https://github.com/xiph/rnnoise' },
+  { name: 'MI-GAN (Picsart AI Research) — borrar objetos', license: 'MIT', url: 'https://github.com/Picsart-AI-Research/MI-GAN', note: 'Modelo migan_512_places2 convertido a ONNX con el script oficial; viene con la app (public/models/migan).' },
   { name: 'OpenCV — estabilizador', license: 'Apache-2.0', url: 'https://opencv.org' },
   { name: 'Fluent Emoji (Microsoft) — stickers', license: 'MIT', url: 'https://github.com/microsoft/fluentui-emoji', text: existsSync(fluent) ? readFileSync(fluent, 'utf8').trim() : '' },
   { name: 'Fuentes Anton, Bebas Neue, Montserrat e Inter (Google Fonts)', license: 'OFL-1.1', url: 'https://fonts.google.com', note: 'SIL Open Font License 1.1.' },

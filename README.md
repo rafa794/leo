@@ -50,10 +50,12 @@ Everything — AI included — runs on your own computer. Your videos never leav
 | Automatic subtitles + `.srt` | OpenAI Whisper via transformers.js | Downloaded once (80–800 MB) |
 | Background removal | Google MediaPipe Selfie Multiclass | ~16 MB |
 | Voice isolation / removal | RNNoise | Included |
+| Object removal (beta) — paint over it, photos and videos | MI-GAN (Picsart AI Research, MIT) | Included (~28 MB), runs on the CPU |
 
 **Export**
 - MP4 (H.264 + AAC) from 720p to 4K, 24–60 fps, in the background while you keep editing.
 - Export the whole video, a single clip, a selection or a single track.
+- **Photo (beta):** save what the viewer shows as a JPG or PNG — edit photos with the same tools (crop, color, filters, effects, texts, stickers, object removal).
 - Formats: original size of your footage, 16:9, 9:16, 1:1, 4:5.
 
 **Projects** save themselves as you edit and reopen where you left them; large camera files stay in your folders
