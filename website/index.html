@@ -6,21 +6,21 @@
   <title>Leo — free video editor, no watermark, no account</title>
   <meta name="description" content="Free, open-source video editor for Mac, Windows, Linux, Android and the browser. No account, no watermark, no ads. AI subtitles, background removal, filters and effects — all on your device." />
   <meta name="theme-color" content="#0e0e10" />
-  <link rel="canonical" href="https://leo.rafael-mendoza.com/" />
+  <link rel="canonical" href="https://leoapp.dev/" />
   <meta name="keywords" content="free video editor, no watermark, open source video editor, video editor mac, video editor windows, editor de vídeo gratis, sin marca de agua, subtítulos automáticos gratis, quitar fondo vídeo gratis" />
   <link rel="icon" type="image/png" href="icon.png" />
   <meta property="og:title" content="Leo — free video editor" />
   <meta property="og:description" content="No account, no watermark, no subscription. Everything — AI included — runs on your computer." />
-  <meta property="og:image" content="https://leo.rafael-mendoza.com/og.jpg" />
-  <meta property="og:url" content="https://leo.rafael-mendoza.com/" />
+  <meta property="og:image" content="https://leoapp.dev/og.jpg" />
+  <meta property="og:url" content="https://leoapp.dev/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
-  <link rel="alternate" hreflang="en" href="https://leo.rafael-mendoza.com/" />
-  <link rel="alternate" hreflang="es" href="https://leo.rafael-mendoza.com/es/" />
-  <link rel="alternate" hreflang="fr" href="https://leo.rafael-mendoza.com/fr/" />
-  <link rel="alternate" hreflang="pt" href="https://leo.rafael-mendoza.com/pt/" />
-  <link rel="alternate" hreflang="x-default" href="https://leo.rafael-mendoza.com/" />
+  <link rel="alternate" hreflang="en" href="https://leoapp.dev/" />
+  <link rel="alternate" hreflang="es" href="https://leoapp.dev/es/" />
+  <link rel="alternate" hreflang="fr" href="https://leoapp.dev/fr/" />
+  <link rel="alternate" hreflang="pt" href="https://leoapp.dev/pt/" />
+  <link rel="alternate" hreflang="x-default" href="https://leoapp.dev/" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -30,10 +30,10 @@
     "applicationCategory": "MultimediaApplication",
     "applicationSubCategory": "Video editor",
     "operatingSystem": "macOS, Windows, Linux, Android, Web",
-    "url": "https://leo.rafael-mendoza.com/",
+    "url": "https://leoapp.dev/",
     "downloadUrl": "https://github.com/rafa794/leo/releases/latest",
-    "screenshot": "https://leo.rafael-mendoza.com/screenshot.jpg",
-    "image": "https://leo.rafael-mendoza.com/og.jpg",
+    "screenshot": "https://leoapp.dev/screenshot.jpg",
+    "image": "https://leoapp.dev/og.jpg",
     "license": "https://www.gnu.org/licenses/gpl-3.0.html",
     "isAccessibleForFree": true,
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
@@ -92,11 +92,6 @@
 
     /* downloads */
     .dl { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
-    .hey { margin-bottom: 14px; font-size: 15px; line-height: 1.6; color: var(--muted); border-color: rgba(251, 191, 36, .35); background: linear-gradient(180deg, rgba(251, 191, 36, .07), transparent 70%), var(--panel); }
-    .hey b { color: var(--text); }
-    .hey .coffee { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
-    .hey .coffee a { padding: 9px 14px; border-radius: 10px; font-weight: 700; font-size: 14px; background: #fbbf24; color: #1a1200; }
-    .hey .coffee a.alt { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
     .dl .card { display: flex; flex-direction: column; gap: 10px; }
     .dl .os { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
     .dl .os svg { width: 22px; height: 22px; }
@@ -104,6 +99,12 @@
     .dl a.file:hover { border-color: var(--accent); }
     .dl a.file > span:last-child { color: var(--muted); font-weight: 400; font-size: 13px; }
     .dl a.file.mine { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(34, 211, 238, .12); }
+    #about { margin-top: 60px; }
+    .about { display: flex; gap: 26px; align-items: center; padding: 28px; }
+    .about .me { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid rgba(34, 211, 238, .5); }
+    .about h2 { margin: 0 0 10px; font-size: 26px; }
+    .about p { margin: 0 0 10px; line-height: 1.65; }
+    @media (max-width: 640px) { .about { flex-direction: column; text-align: center; padding: 22px; } }
     .note { margin-top: 14px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     .note .card { font-size: 14px; color: var(--muted); }
     .note b { color: var(--text); }
@@ -150,9 +151,9 @@
 
   <header class="hero">
     <div class="wrap">
-      <span class="badge"><b>●</b> <span data-i="hero.badge">Free · Open source · No account</span></span>
+      <span class="badge"><b>●</b> <span data-i="hero.badge">Free · Open source · No ads</span></span>
       <h1 data-i="hero.title" data-html>The video editor that's <span class="grad">free for real</span></h1>
-      <p class="lead" data-i="hero.lead">No watermark, no subscription, no sign-up. Everything — AI included — runs on your computer, and your videos never leave it.</p>
+      <p class="lead" data-i="hero.lead">Open source and public: anyone can see it, use it and make it better. No watermark, no subscription, no ads and no sign-up. And everything, AI included, runs on your device.</p>
       <div class="cta">
         <a class="btn primary" id="main-dl" href="#download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 19h16" /></svg>
@@ -183,18 +184,23 @@
     </div>
   </section>
 
+  <section id="about">
+    <div class="wrap">
+      <div class="card about">
+        <img class="me" src="author.jpg" width="120" height="120" alt="Rafa Mendoza" />
+        <div>
+          <h2 data-i="a.title">Who's behind this?</h2>
+          <p data-i="a.text">Hi, I'm Rafa. I make Leo on my own, in my free time. I got tired of video editors charging you for every little feature, filling everything with ads, or ending up downloading a pirated copy from who knows where. So I did the opposite: an editor that's open, free and ad-free, with its code out in the open for anyone to see. My only goal is that anyone can edit video, whatever computer or phone they have.</p>
+          <p class="muted small" data-i="a.coffee">If it's useful to you and you ever feel like it, there's a button inside the app to buy me a coffee. If not, use it anyway: that's what it's for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="download">
     <div class="wrap">
       <h2 data-i="d.title">Download Leo</h2>
       <p class="sub" data-i="d.sub">Free for every system. No graphics card needed.</p>
-      <div class="card hey">
-        <div data-i="d.hey" data-html><b>Hey, one thing before you download.</b> I make Leo on my own, in my free time and with no money behind it. That's why it isn't on the App Store, Google Play or the Microsoft Store: being there costs money every year, and right now I don't have it. Yes, installing it like this is a bit rough around the edges. I know. But there are no viruses, no ads, no account, and it doesn't listen through your microphone. If you don't trust me (fair enough), the whole source code is on GitHub so you can read it, change it or make it better. And if it's useful to you and you want to give me a hand, buy me a coffee: maybe one day it’ll be in the stores like a proper app.</div>
-        <div class="coffee">
-          <a href="https://paypal.me/rafaLeoM794" target="_blank" rel="noopener">☕ PayPal</a>
-          <a class="alt" href="https://buy.stripe.com/bJe3cx8XC5Au4XR7OIb7y04" target="_blank" rel="noopener" data-i="d.card">☕ Card · Google Pay · Apple Pay</a>
-          <a class="alt" href="https://github.com/rafa794/leo" target="_blank" rel="noopener" data-i="d.code">See the code</a>
-        </div>
-      </div>
       <div class="dl">
         <div class="card">
           <div class="os"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.9-.9-3.1-.8c-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3.1.7 2-1.1 2.8-2.3c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-.9-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.8 1-2.9-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2.1-.5 2.7-1.3z" /></svg> macOS</div>
@@ -264,15 +270,15 @@
   <script>
     const T = {
       es: {
+        'a.coffee': 'Si te sirve y algún día te apetece, dentro de la app hay un botón para invitarme a un café. Si no, úsalo igual: para eso está.',
+        'a.text': 'Hola, soy Rafa. Hago Leo yo solo, en mis ratos libres. Me cansé de que para editar un vídeo te cobren por cada función, te llenen todo de anuncios o acabes bajando una versión pirata de quién sabe dónde. Así que hice lo contrario: un editor abierto, gratis y sin anuncios, con el código a la vista de todo el mundo. Mi única idea es que cualquiera pueda editar vídeo, tenga el ordenador o el móvil que tenga.',
+        'a.title': '¿Quién hay detrás?',
         'd.ios': 'Apple no deja instalar apps desde una web (salvo que pagues 99 € al año, y en eso estamos). Lo que sí puedes hacer: abre Leo en <b>Safari</b>, toca <b>Compartir</b> → <b>Añadir a pantalla de inicio</b> y lo tendrás con su icono como una app más.',
         'd.ios.btn': 'Abrir en Safari',
-        'd.code': 'Ver el código',
-        'd.card': '☕ Tarjeta · Google Pay · Apple Pay',
-        'd.hey': '<b>Hey, una cosa antes de descargar.</b> Leo lo hago yo solo, en mis ratos libres y sin un duro detrás. Por eso no está en la App Store, ni en Google Play, ni en la tienda de Microsoft: estar ahí cuesta dinero cada año y ahora mismo no lo tengo. Sí, instalarlo así es un poco cutre. Lo sé. Pero no lleva virus, ni anuncios, ni te pide cuenta, ni te escucha por el micro. Si no te fías (haces bien), el código está entero en GitHub para que lo mires, lo cambies o lo mejores. Y si te sirve y me quieres echar un cable, invítame a un café: a lo mejor algún día lo subo a las tiendas como Dios manda.',
         'nav.features': 'Funciones', 'nav.download': 'Descargar', 'nav.code': 'Código',
-        'hero.badge': 'Gratis · Código abierto · Sin cuenta',
+        'hero.badge': 'Gratis · Código abierto · Sin anuncios',
         'hero.title': 'El editor de vídeo <span class="grad">gratis de verdad</span>',
-        'hero.lead': 'Sin marca de agua, sin suscripción, sin registrarte. Todo —también la IA— funciona en tu ordenador y tus vídeos nunca salen de él.',
+        'hero.lead': 'Código abierto y público: cualquiera puede verlo, usarlo y mejorarlo. Sin marca de agua, sin suscripción, sin anuncios y sin registrarte. Y todo, también la IA, funciona en tu dispositivo.',
         'hero.download': 'Descargar', 'hero.web': 'Abrir en el navegador', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome y Edge',
         'f.title': 'Todo lo que necesitas para editar', 'f.sub': 'Línea de tiempo y paneles como los editores que ya conoces, sin pagar por ellos.',
         'f1.t': 'Línea de tiempo profesional', 'f1.d': 'Pista principal magnética, capas, pistas de texto y audio, clips combinados y vista previa fluida, incluso en 4K.',
@@ -291,15 +297,15 @@
         'foot.made': 'Hecho por', 'foot.issues': 'Avisar de un fallo',
       },
       fr: {
+        'a.coffee': 'S’il te sert et qu’un jour ça te dit, il y a un bouton dans l’app pour m’offrir un café. Sinon, utilise-le quand même : c’est fait pour ça.',
+        'a.text': 'Salut, moi c’est Rafa. Je fais Leo tout seul, sur mon temps libre. J’en avais marre des éditeurs vidéo qui font payer chaque petite fonction, qui mettent de la pub partout, ou de finir par télécharger une version piratée d’on ne sait où. Alors j’ai fait l’inverse : un éditeur ouvert, gratuit et sans pub, avec son code visible par tout le monde. Mon seul but, c’est que tout le monde puisse monter des vidéos, quel que soit son ordinateur ou son téléphone.',
+        'a.title': 'Qui est derrière ?',
         'd.ios': 'Apple ne laisse pas installer d’apps depuis un site (sauf si tu paies 99 € par an, et c’est là que j’en suis). Ce que tu peux faire : ouvre Leo dans <b>Safari</b>, touche <b>Partager</b> → <b>Sur l’écran d’accueil</b> et il sera là avec son icône comme n’importe quelle app.',
         'd.ios.btn': 'Ouvrir dans Safari',
-        'd.code': 'Voir le code',
-        'd.card': '☕ Carte · Google Pay · Apple Pay',
-        'd.hey': '<b>Hey, un truc avant de télécharger.</b> Leo, je le fais tout seul, sur mon temps libre et sans un sou. C’est pour ça qu’il n’est ni sur l’App Store, ni sur Google Play, ni sur le Microsoft Store : y être coûte de l’argent chaque année, et là, je ne l’ai pas. Oui, l’installer comme ça fait un peu bricolage. Je sais. Mais il n’y a pas de virus, pas de pub, pas de compte, et il ne t’écoute pas par le micro. Si tu ne me fais pas confiance (tu as raison), tout le code est sur GitHub pour que tu le lises, le modifies ou l’améliores. Et s’il te sert et que tu veux me donner un coup de main, offre-moi un café : peut-être qu’un jour il sera dans les stores comme une vraie app.',
         'nav.features': 'Fonctions', 'nav.download': 'Télécharger', 'nav.code': 'Code source',
-        'hero.badge': 'Gratuit · Open source · Sans compte',
+        'hero.badge': 'Gratuit · Open source · Sans pub',
         'hero.title': 'L’éditeur vidéo <span class="grad">vraiment gratuit</span>',
-        'hero.lead': 'Sans filigrane, sans abonnement, sans inscription. Tout — IA comprise — tourne sur ton ordinateur, et tes vidéos ne le quittent jamais.',
+        'hero.lead': 'Open source et public : tout le monde peut le voir, l’utiliser et l’améliorer. Sans filigrane, sans abonnement, sans pub et sans inscription. Et tout, IA comprise, tourne sur ton appareil.',
         'hero.download': 'Télécharger', 'hero.web': 'Ouvrir dans le navigateur', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome et Edge',
         'f.title': 'Tout ce qu’il faut pour monter', 'f.sub': 'Une timeline et des panneaux comme dans les éditeurs que tu connais déjà, sans les payer.',
         'f1.t': 'Timeline pro', 'f1.d': 'Piste principale magnétique, calques, pistes texte et audio, clips composés et lecture fluide, même en 4K.',
@@ -318,15 +324,15 @@
         'foot.made': 'Fait par', 'foot.issues': 'Signaler un bug',
       },
       pt: {
+        'a.coffee': 'Se ele te ajuda e um dia você quiser, dentro do app tem um botão para me pagar um café. Se não, use do mesmo jeito: é para isso que ele existe.',
+        'a.text': 'Oi, eu sou o Rafa. Faço o Leo sozinho, no meu tempo livre. Cansei de editores de vídeo que cobram por cada funçãozinha, enchem tudo de anúncio ou fazem você acabar baixando uma versão pirata sabe-se lá de onde. Então fiz o contrário: um editor aberto, grátis e sem anúncios, com o código à vista de todo mundo. Minha única ideia é que qualquer pessoa possa editar vídeo, seja qual for o computador ou o celular.',
+        'a.title': 'Quem está por trás?',
         'd.ios': 'A Apple não deixa instalar apps a partir de um site (a não ser que você pague 99 € por ano, e é aí que eu estou). O que dá para fazer: abra o Leo no <b>Safari</b>, toque em <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b> e ele fica lá com o ícone, como qualquer app.',
         'd.ios.btn': 'Abrir no Safari',
-        'd.code': 'Ver o código',
-        'd.card': '☕ Cartão · Google Pay · Apple Pay',
-        'd.hey': '<b>Ei, uma coisa antes de baixar.</b> Eu faço o Leo sozinho, no meu tempo livre e sem grana nenhuma por trás. Por isso ele não está na App Store, nem no Google Play, nem na loja da Microsoft: estar lá custa dinheiro todo ano, e agora eu não tenho. Sim, instalar assim é meio gambiarra. Eu sei. Mas não tem vírus, nem anúncio, nem conta, e ele não fica te ouvindo pelo microfone. Se você não confia em mim (faz bem), o código inteiro está no GitHub para você ler, mudar ou melhorar. E se ele te ajuda e você quer me dar uma força, me paga um café: quem sabe um dia ele chega nas lojas como app de verdade.',
         'nav.features': 'Recursos', 'nav.download': 'Baixar', 'nav.code': 'Código-fonte',
-        'hero.badge': 'Grátis · Código aberto · Sem conta',
+        'hero.badge': 'Grátis · Código aberto · Sem anúncios',
         'hero.title': 'O editor de vídeo <span class="grad">grátis de verdade</span>',
-        'hero.lead': 'Sem marca d’água, sem assinatura, sem cadastro. Tudo — inclusive a IA — roda no seu computador, e seus vídeos nunca saem dele.',
+        'hero.lead': 'Código aberto e público: qualquer pessoa pode ver, usar e melhorar. Sem marca d’água, sem assinatura, sem anúncios e sem cadastro. E tudo, inclusive a IA, roda no seu dispositivo.',
         'hero.download': 'Baixar', 'hero.web': 'Abrir no navegador', 'hero.systems': 'macOS · Windows · Linux · Android · Chrome e Edge',
         'f.title': 'Tudo o que você precisa para editar', 'f.sub': 'Linha do tempo e painéis como os editores que você já conhece, sem pagar por eles.',
         'f1.t': 'Linha do tempo profissional', 'f1.d': 'Faixa principal magnética, sobreposições, faixas de texto e áudio, clipes compostos e prévia fluida, até em 4K.',

@@ -19,7 +19,7 @@ export const AUTHOR = {
   ask: 'Si te ayuda y te apetece, invítame a algo. Desde 1 €, lo que tú quieras.',
   paypalMe: 'rafaLeoM794',
   currency: 'EUR',
-  website: '',
+  website: 'https://leoapp.dev',
   thanksVideo: `${import.meta.env.BASE_URL}support/dance.webm`,
   suggestionsEmail: 'rafamendo1994@gmail.com',
   web3formsKey: 'fd33d176-6aa4-42f2-90b2-56c0052dd733',

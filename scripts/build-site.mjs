@@ -8,7 +8,7 @@ cpSync('website', 'site-dist', { recursive: true });
 
 // ---- one page per language (/es/, /fr/, /pt/) so search engines index every language ----
 // The landing page is written in English; its inline script holds the translations (const T = {...}).
-const SITE = 'https://leo.rafael-mendoza.com';
+const SITE = 'https://leoapp.dev';
 const LOCALES = { es: 'es_ES', fr: 'fr_FR', pt: 'pt_BR' };
 const html = readFileSync('website/index.html', 'utf8');
 const tStart = html.indexOf('const T = {');

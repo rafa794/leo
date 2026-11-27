@@ -7,7 +7,7 @@
 **Editor de vídeo gratis y de código abierto. Sin cuenta, sin marca de agua, sin suscripción.**
 Todo —también la IA— funciona en tu ordenador. Tus vídeos no salen de él.
 
-[**Descargar**](https://leo.rafael-mendoza.com) · [**Usarlo en el navegador**](https://leo.rafael-mendoza.com/app/) · [Versiones](https://github.com/rafa794/leo/releases) · [English](README.md)
+[**Descargar**](https://leoapp.dev) · [**Usarlo en el navegador**](https://leoapp.dev/app/) · [Versiones](https://github.com/rafa794/leo/releases) · [English](README.md)
 
 <img src="docs/screenshot.png" alt="Editor Leo" width="900" />
 
@@ -61,7 +61,7 @@ carpetas y Leo los vuelve a encontrar.
 
 ## Descargar
 
-Desde la [web](https://leo.rafael-mendoza.com) o la [última versión](https://github.com/rafa794/leo/releases/latest):
+Desde la [web](https://leoapp.dev) o la [última versión](https://github.com/rafa794/leo/releases/latest):
 
 | Sistema | Archivo |
 |---|---|
@@ -76,7 +76,7 @@ Desde la [web](https://leo.rafael-mendoza.com) o la [última versión](https://g
 > **macOS:** la primera vez, clic derecho sobre Leo en Aplicaciones → *Abrir* → *Abrir*.
 > **Windows:** en el aviso de SmartScreen pulsa *Más información* → *Ejecutar de todas formas*.
 
-O úsalo sin instalar nada [en el navegador](https://leo.rafael-mendoza.com/app/) (mejor en Chrome o Edge).
+O úsalo sin instalar nada [en el navegador](https://leoapp.dev/app/) (mejor en Chrome o Edge).
 
 ## Compilar desde el código
 

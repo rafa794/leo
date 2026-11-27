@@ -34,7 +34,7 @@ The maintainer is a solo creator (he also runs sports channels, but the product 
 editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me + card / Google Pay / Apple Pay via Stripe Payment Links)
 in `src/config/author.ts`.
 
-Website: https://leo.rafael-mendoza.com (Cloudflare Pages, `/` = landing page, `/app/` = web version).
+Website: https://leoapp.dev (Cloudflare Pages, `/` = landing page, `/app/` = web version).
 Repo: https://github.com/rafa794/leo. Releases: GitHub Releases.
 
 ---

@@ -7,7 +7,7 @@
 **A free, open-source video editor. No account, no watermark, no subscription.**
 Everything — AI included — runs on your own computer. Your videos never leave it.
 
-[**Download**](https://leo.rafael-mendoza.com) · [**Use it in the browser**](https://leo.rafael-mendoza.com/app/) · [Releases](https://github.com/rafa794/leo/releases) · [Español](README.es.md)
+[**Download**](https://leoapp.dev) · [**Use it in the browser**](https://leoapp.dev/app/) · [Releases](https://github.com/rafa794/leo/releases) · [Español](README.es.md)
 
 <img src="docs/screenshot.png" alt="Leo editor" width="900" />
 
@@ -63,7 +63,7 @@ and are found again automatically.
 
 ## Download
 
-Get the latest version from the [website](https://leo.rafael-mendoza.com) or the [releases page](https://github.com/rafa794/leo/releases/latest):
+Get the latest version from the [website](https://leoapp.dev) or the [releases page](https://github.com/rafa794/leo/releases/latest):
 
 | System | File |
 |---|---|
@@ -78,7 +78,7 @@ Get the latest version from the [website](https://leo.rafael-mendoza.com) or the
 > **macOS:** the first time, right-click Leo in Applications → *Open* → *Open*.
 > **Windows:** on the SmartScreen notice click *More info* → *Run anyway*.
 
-Or skip installing and [open it in your browser](https://leo.rafael-mendoza.com/app/) (Chrome or Edge recommended).
+Or skip installing and [open it in your browser](https://leoapp.dev/app/) (Chrome or Edge recommended).
 
 ## Build from source
 
@@ -131,7 +131,7 @@ src/
   i18n/         translations (Spanish is the source text)
 electron/       desktop app
 functions/      Cloudflare Pages function for the web version
-website/        leo.rafael-mendoza.com
+website/        leoapp.dev
 tests/          unit and end-to-end tests
 ```
 

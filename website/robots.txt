@@ -3,4 +3,4 @@ Allow: /
 Disallow: /app/__download
 Disallow: /gracias
 
-Sitemap: https://leo.rafael-mendoza.com/sitemap.xml
+Sitemap: https://leoapp.dev/sitemap.xml
