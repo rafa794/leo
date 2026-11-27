@@ -146,8 +146,13 @@ before opening a PR. Suggestions can also be sent from inside the app (*Help →
 
 ## Support the project
 
-Orion is free and will stay free. If it helps you, you can buy me a coffee from the app
-(*Orion → About Orion · Buy me a coffee*). Thank you!
+Orion is free and will stay free. If it helps you, you can buy me a coffee ☕ — from the app
+(*Orion → About Orion · Buy me a coffee*) or right here:
+
+- [PayPal](https://paypal.me/rafaLeoM794)
+- [Card · Google Pay · Apple Pay](https://buy.stripe.com/bJe3cx8XC5Au4XR7OIb7y04) (you choose the amount)
+
+Thank you!
 
 ## License
 
