@@ -728,7 +728,6 @@
   "⌥G — crear clip combinado": "⌥G — créer un clip composé",
   "⌥⌘C / ⌥⌘V — copiar / pegar atributos": "⌥⌘C / ⌥⌘V — copier / coller les attributs",
   "⌫ — borrar": "⌫ — supprimer",
-  "☕ ¿Te ha servido Orion? Invítame a un café": "☕ Orion t'a été utile ? Offre-moi un café",
   "✓ Aislar voz (quitar ruido)": "✓ Isoler la voix (réduire le bruit)",
   "✓ Quitar voz": "✓ Supprimer la voix",
   "🐞 Algo falla": "🐞 Quelque chose ne marche pas",
@@ -856,5 +855,10 @@
   "Separación RGB": "Séparation RVB",
   "Sepia": "Sépia",
   "VHS": "VHS",
-  "Western": "Western"
+  "Western": "Western",
+  "Invitar a un café": "M’offrir un café",
+  "Ya he invitado": "C’est déjà fait",
+  "No volveré a recordártelo": "Je ne te le rappellerai plus",
+  "💛 ¡Gracias por tu café!": "💛 Merci pour le café !",
+  "☕ ¡Ya llevas {0} vídeos hechos con Orion! Si te está sirviendo, puedes invitarme a un café. Solo te lo digo esta vez.": "☕ Tu as déjà fait {0} vidéos avec Orion ! S’il te rend service, tu peux m’offrir un café. Je ne le dirai qu’une fois."
 }

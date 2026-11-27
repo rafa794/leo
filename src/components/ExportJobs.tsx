@@ -3,11 +3,13 @@ import { CheckCircle2, ChevronDown, ChevronUp, Download, Loader2, Share2, Triang
 import { cancelExport, dismissExport, useExports } from '../lib/exportQueue';
 import { shareFile } from '../lib/platform';
 import { openAbout } from './AboutDialog';
+import { NUDGE_AT, markDonated, useSupport } from '../lib/support';
 
 /** Background exports: a small card at the bottom right, so you can keep editing. */
 export default function ExportJobs() {
   const tasks = useExports((s) => s.tasks);
   const [small, setSmall] = useState(false);
+  const donated = useSupport((s) => s.donated);
   if (!tasks.length) return null;
   const active = tasks.filter((t) => t.state === 'running' || t.state === 'queued' || t.state === 'saving').length;
   return (
@@ -71,10 +73,18 @@ export default function ExportJobs() {
               </div>
             )}
             {t.state === 'error' && <div className="hint" style={{ color: 'var(--danger)' }}>{t.error}</div>}
-            {t.state === 'done' && (
-              <button className="link coffee-nudge" onClick={() => openAbout()}>
-                ☕ ¿Te ha servido Orion? Invítame a un café
-              </button>
+            {t.state === 'done' && t.nudge && !donated && (
+              <div className="coffee-nudge">
+                <span>{`☕ ¡Ya llevas ${NUDGE_AT} vídeos hechos con Orion! Si te está sirviendo, puedes invitarme a un café. Solo te lo digo esta vez.`}</span>
+                <div className="coffee-nudge-actions">
+                  <button className="btn small coffee-yes" onClick={() => openAbout()}>
+                    Invitar a un café
+                  </button>
+                  <button className="link coffee-done" onClick={markDonated}>
+                    Ya he invitado
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         ))}

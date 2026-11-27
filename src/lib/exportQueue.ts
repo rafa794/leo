@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { countExport } from './support';
 import { cleanupExportFiles, exportVideo, removeExportFile, type ExportJob, type ExportOptions } from './exporter';
 import { saveFile } from './platform';
 
@@ -19,6 +20,8 @@ export interface ExportTask {
   startedAt?: number;
   result?: { url: string; size: number; where: string; uri?: string; secs: number; file?: string };
   error?: string;
+  /** show the one-time coffee reminder under this export */
+  nudge?: boolean;
   ctrl: AbortController;
 }
 
@@ -87,6 +90,7 @@ async function runNext() {
     patch(task.id, {
       state: 'done',
       label: 'Listo',
+      nudge: countExport(),
       result: { url: URL.createObjectURL(blob), size: blob.size, where: saved.where, uri: saved.uri, secs: (performance.now() - t0) / 1000, file: blob instanceof File ? blob.name : undefined },
     });
   } catch (e) {

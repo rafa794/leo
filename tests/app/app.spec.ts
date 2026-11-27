@@ -244,6 +244,8 @@ test('exports an MP4 in the background', async () => {
   await page.locator('.modal input.input').first().fill('orion-test');
   await page.locator('.modal .btn.primary').click();
   await expect(page.locator('.export-jobs .ej-row.done')).toHaveCount(1, { timeout: 90_000 });
+  // no coffee reminder on a normal export (only once, on the 10th)
+  await expect(page.locator('.coffee-nudge')).toHaveCount(0);
   await expect.poll(() => {
     try {
       return statSync(join(downloads, 'orion-test.mp4')).size;
@@ -296,6 +298,25 @@ test('about, suggestions and licenses dialogs open (nothing is sent)', async () 
   expect(opened).toEqual(['https://buy.stripe.com/8x25kFddS9QK0HBfhab7y00']);
   await page.locator('.about-close').click(); // the X stays clickable over the thank-you screen
   await expect(page.locator('.modal')).toHaveCount(0);
+});
+
+test('coffee reminder: once on the 10th export, and "Ya he invitado" hides it for good', async () => {
+  // pretend 8 exports were already made (one was made above): the next one is the 10th
+  expect(await page.evaluate(() => localStorage.getItem('orion.exportCount'))).toBe('1');
+  await page.evaluate(() => localStorage.setItem('orion.exportCount', '9'));
+  await page.locator('.topbar .btn.primary').click();
+  await page.locator('.modal input.input').first().fill('orion-test-10');
+  await page.locator('.modal .btn.primary').click();
+  await expect(page.locator('.export-jobs .ej-row.done')).toHaveCount(2, { timeout: 90_000 });
+  await expect(page.locator('.coffee-nudge')).toHaveCount(1);
+  await page.locator('.coffee-nudge .coffee-done').click();
+  await expect(page.locator('.coffee-nudge')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem('orion.donated'))).toBe('1');
+  // the coffee dialog thanks instead of offering the button again
+  await page.locator('.coffee-btn').click();
+  await expect(page.locator('.about-donated')).toBeVisible();
+  await expect(page.locator('.modal .coffee-done')).toHaveCount(0);
+  await page.locator('.about-close').click();
 });
 
 test('voice isolation shows real progress and finishes', async () => {

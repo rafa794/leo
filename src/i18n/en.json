@@ -741,7 +741,6 @@
   "⌥G — crear clip combinado": "⌥G — create compound clip",
   "⌥⌘C / ⌥⌘V — copiar / pegar atributos": "⌥⌘C / ⌥⌘V — copy / paste attributes",
   "⌫ — borrar": "⌫ — delete",
-  "☕ ¿Te ha servido Orion? Invítame a un café": "☕ Did Orion help you? Buy me a coffee",
   "✓ Aislar voz (quitar ruido)": "✓ Isolate voice (remove noise)",
   "✓ Quitar voz": "✓ Remove voice",
   "🐞 Algo falla": "🐞 Something's broken",
@@ -870,5 +869,10 @@
   "Separación RGB": "RGB split",
   "Sepia": "Sepia",
   "VHS": "VHS",
-  "Western": "Western"
+  "Western": "Western",
+  "Invitar a un café": "Buy me a coffee",
+  "Ya he invitado": "I already did",
+  "No volveré a recordártelo": "I won’t remind you again",
+  "💛 ¡Gracias por tu café!": "💛 Thanks for the coffee!",
+  "☕ ¡Ya llevas {0} vídeos hechos con Orion! Si te está sirviendo, puedes invitarme a un café. Solo te lo digo esta vez.": "☕ You’ve made {0} videos with Orion! If it’s useful to you, you can buy me a coffee. I’ll only mention it this once."
 }

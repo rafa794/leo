@@ -3,6 +3,7 @@ import { CreditCard, ExternalLink, Heart, Lightbulb, X } from 'lucide-react';
 import { AUTHOR, TREATS, donateUrl, cardUrl, STRIPE_LINKS } from '../config/author';
 import { openLicenses } from './LicensesDialog';
 import { openSuggestions } from './SuggestionsDialog';
+import { markDonated, useSupport } from '../lib/support';
 
 let openFn: (() => void) | null = null;
 /** Opens "Acerca de Orion · Invítame a un café" (also from the Mac app's menu and the ☕ button). */
@@ -62,6 +63,7 @@ export default function AboutDialog() {
   const [photoOk, setPhotoOk] = useState(true);
   const [custom, setCustom] = useState('');
   const [thanks, setThanks] = useState<{ emoji: string; label: string; amount?: number } | null>(null);
+  const donated = useSupport((s) => s.donated);
   useEffect(() => {
     openFn = () => {
       setThanks(null);
@@ -125,9 +127,18 @@ export default function AboutDialog() {
                   {`Con tarjeta, escribe ${thanks.amount} € en la página de pago.`}
                 </p>
               )}
-              <button className="link" onClick={() => setThanks(null)}>
-                Volver
-              </button>
+              <div className="about-links" style={{ marginTop: 0 }}>
+                <button className="link" onClick={() => setThanks(null)}>
+                  Volver
+                </button>
+                {donated ? (
+                  <span className="about-donated">💛 ¡Gracias por tu café!</span>
+                ) : (
+                  <button className="link coffee-done" onClick={markDonated} title="No volveré a recordártelo">
+                    Ya he invitado
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ) : (
@@ -200,6 +211,13 @@ export default function AboutDialog() {
               >
                 Licencias y créditos
               </button>
+              {donated ? (
+                <span className="about-donated">💛 ¡Gracias por tu café!</span>
+              ) : (
+                <button className="link coffee-done" onClick={markDonated} title="No volveré a recordártelo">
+                  Ya he invitado
+                </button>
+              )}
               <span className="hint">
                 Hecho con <Heart size={11} style={{ verticalAlign: -1 }} /> y software libre
               </span>
