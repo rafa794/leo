@@ -17,7 +17,7 @@ for (const f of readdirSync('site-dist/app/assets')) {
 }
 
 // the editor is a single-page app: unknown paths under /app go to its page
-writeFileSync('site-dist/_redirects', ['/app /app/ 301', '/app/* /app/index.html 200', ''].join('\n'));
+writeFileSync('site-dist/_redirects', ['/app /app/ 301', '/app/* /app/ 200', ''].join('\n'));
 
 writeFileSync(
   'site-dist/_headers',
