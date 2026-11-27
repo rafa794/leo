@@ -62,6 +62,8 @@ npm run test:app           # end-to-end on the dev build (Electron, throwaway pr
 npm run test:mac-app       # same tests on the packaged Orion.app
 npx tsc --noEmit -p .      # typecheck (must be clean)
 node scripts/i18n-extract.mjs   # refresh src/i18n/strings.json after UI text changes
+npm run promo:shots -- picture.jpg   # promo screenshots (Mac 16:9 + phone 9:16) → promo/ (git-ignored)
+npm run stats              # downloads per installer from GitHub Releases
 ```
 
 After any change the maintainer will use: **typecheck, `npm test`, `npm run test:app`, then rebuild the app he
@@ -189,7 +191,9 @@ Coffee / donations
   `{values}`, so they translate as a unit.
 - Put `translate="no"` on user content (clip names, typed text, project names).
 - The Electron menus are translated in `electron/main.cjs` (`MENU`), updated through the preload bridge.
-- The website has its own small dictionary inside `website/index.html`.
+- The website has its own small dictionary inside `website/index.html` (`const T`). `scripts/build-site.mjs` turns it
+  into one static page per language (`/es/`, `/fr/`, `/pt/`, English at `/`) with hreflang, so search engines index
+  every language; keep the `sitemap.xml` alternates in sync when adding a language.
 
 ---
 
@@ -252,7 +256,10 @@ Coffee / donations
 - Electron: links open in the system browser; downloads in tests are redirected with `will-download`.
 - Cloudflare Pages applies `_redirects` **before** static files: never add a catch-all like `/app/* /app/ 200`
   (it served every CSS / image as HTML and the web editor went blank). After deploying, check that
-  `/app/assets/*.css` comes back as `text/css`. Don't add year-long `immutable` cache headers either: a request made
+  `/app/assets/*.css` comes back as `text/css`.
+- Website analytics: Cloudflare Web Analytics (free, no cookies), injected by `build-site.mjs` **only into the website
+  pages** when the Pages env var `CF_ANALYTICS_TOKEN` is set. Never add analytics, telemetry or trackers to the editor
+  (`/app/`, desktop, Android), and don't enable Pages' automatic Web Analytics toggle (it would inject into `/app/`). Don't add year-long `immutable` cache headers either: a request made
   while a deploy is spreading can get a page instead of the file and that wrong answer would stay cached.
   `website/404.html` makes missing files a real 404 (not the landing page).
 
@@ -268,6 +275,6 @@ Things CapCut keeps behind "Pro" that Orion should offer free (CPU-friendly vers
 - Transitions between clips; premium-like effects, filters, fonts and templates (free assets only).
 - Long video → short highlights (e.g. detect loud moments in the audio); AI color correction, curves, HSL.
 - Phone editor: long-press to reorder clips, transitions button between clips, dedicated volume panel.
-- Promotion helpers: tutorial pages on the website (SEO), Google Search Console, Cloudflare Web Analytics.
+- Promotion helpers: tutorial pages on the website (SEO). Search Console + Cloudflare Web Analytics are set up by the maintainer in their dashboards.
 
 Rejected: anything that needs a GPU to be usable (e.g. RIFE smooth slow motion), paid services, accounts, tracking.

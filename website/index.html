@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orion — free video editor</title>
-  <meta name="description" content="Free, open-source video editor for Mac, Windows, Linux and the browser. No account, no watermark. AI subtitles, background removal and more — all on your computer." />
+  <title>Orion — free video editor, no watermark, no account</title>
+  <meta name="description" content="Free, open-source video editor for Mac, Windows, Linux, Android and the browser. No account, no watermark, no ads. AI subtitles, background removal, filters and effects — all on your device." />
   <meta name="theme-color" content="#0e0e10" />
   <link rel="canonical" href="https://orion.rafael-mendoza.com/" />
   <meta name="keywords" content="free video editor, no watermark, open source video editor, video editor mac, video editor windows, editor de vídeo gratis, sin marca de agua, subtítulos automáticos gratis, quitar fondo vídeo gratis" />
@@ -14,6 +14,32 @@
   <meta property="og:image" content="https://orion.rafael-mendoza.com/og.jpg" />
   <meta property="og:url" content="https://orion.rafael-mendoza.com/" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <link rel="alternate" hreflang="en" href="https://orion.rafael-mendoza.com/" />
+  <link rel="alternate" hreflang="es" href="https://orion.rafael-mendoza.com/es/" />
+  <link rel="alternate" hreflang="fr" href="https://orion.rafael-mendoza.com/fr/" />
+  <link rel="alternate" hreflang="pt" href="https://orion.rafael-mendoza.com/pt/" />
+  <link rel="alternate" hreflang="x-default" href="https://orion.rafael-mendoza.com/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Orion",
+    "description": "Free, open-source video editor. No account, no watermark, no ads. AI subtitles, background removal, voice isolation, stabilizer, filters and effects run on your device.",
+    "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "Video editor",
+    "operatingSystem": "macOS, Windows, Linux, Android, Web",
+    "url": "https://orion.rafael-mendoza.com/",
+    "downloadUrl": "https://github.com/rafa794/orion/releases/latest",
+    "screenshot": "https://orion.rafael-mendoza.com/screenshot.jpg",
+    "image": "https://orion.rafael-mendoza.com/og.jpg",
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Person", "name": "Rafa Mendoza", "url": "https://github.com/rafa794" }
+  }
+  </script>
   <style>
     :root {
       --bg: #0b0b0d; --panel: #141417; --panel-2: #1b1b1f; --border: #26262c; --text: #ededf0; --muted: #9a9aa3;
@@ -212,6 +238,7 @@
       <a href="https://github.com/rafa794/orion/issues" data-i="foot.issues">Report a bug</a>
       <a href="https://github.com/rafa794/orion/blob/main/LICENSE">GPL-3.0</a>
       <a href="https://github.com/rafa794/orion">GitHub</a>
+      <span class="small muted privacy-note" data-i="foot.privacy" hidden>This website counts visits anonymously, without cookies. The editor counts nothing.</span>
     </div>
   </footer>
 
@@ -236,6 +263,7 @@
         'd.win': '<b>¿Aviso de SmartScreen en Windows?</b> Pulsa <b>Más información</b> → <b>Ejecutar de todas formas</b>. Sale porque el instalador aún no está firmado con un certificado de pago.',
         'w.title': 'O úsalo en el navegador', 'w.text': 'El mismo editor, sin instalar nada. Va mejor en Chrome o Edge en un ordenador. Tus archivos se siguen procesando en tu equipo.', 'w.btn': 'Abrir Orion en el navegador',
         'o.title': 'Código abierto', 'o.text': 'Todo el código está en GitHub con licencia GPL-3.0. Léelo, compílalo, tradúcelo o envía un pull request: ideas y avisos de fallos son bienvenidos.', 'o.btn': 'Ver en GitHub',
+        'meta.title': 'Orion — editor de vídeo gratis, sin marca de agua y sin cuenta', 'meta.desc': 'Editor de vídeo gratis y de código abierto para Mac, Windows, Linux, Android y el navegador. Sin cuenta, sin marca de agua, sin anuncios. Subtítulos automáticos, quitar fondo, filtros y efectos con IA en tu dispositivo.', 'foot.privacy': 'Esta web cuenta las visitas de forma anónima, sin cookies. El editor no cuenta nada.',
         'foot.made': 'Hecho por', 'foot.issues': 'Avisar de un fallo',
       },
       fr: {
@@ -257,6 +285,7 @@
         'd.win': '<b>Alerte SmartScreen sur Windows ?</b> Clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>. Elle apparaît car l’installateur n’est pas encore signé.',
         'w.title': 'Ou utilise-le dans ton navigateur', 'w.text': 'Le même éditeur, rien à installer. Mieux dans Chrome ou Edge sur ordinateur. Tes fichiers restent traités sur ton appareil.', 'w.btn': 'Ouvrir Orion dans le navigateur',
         'o.title': 'Open source', 'o.text': 'Tout le code est sur GitHub sous licence GPL-3.0. Lis-le, compile-le, traduis-le ou envoie une pull request : idées et bugs sont les bienvenus.', 'o.btn': 'Voir sur GitHub',
+        'meta.title': 'Orion — éditeur vidéo gratuit, sans filigrane ni compte', 'meta.desc': 'Éditeur vidéo gratuit et open source pour Mac, Windows, Linux, Android et le navigateur. Sans compte, sans filigrane, sans pub. Sous-titres automatiques, suppression d’arrière-plan, filtres et effets avec l’IA sur ton appareil.', 'foot.privacy': 'Ce site compte les visites de façon anonyme, sans cookies. L’éditeur ne compte rien.',
         'foot.made': 'Fait par', 'foot.issues': 'Signaler un bug',
       },
       pt: {
@@ -278,6 +307,7 @@
         'd.win': '<b>Aviso do SmartScreen no Windows?</b> Clique em <b>Mais informações</b> → <b>Executar assim mesmo</b>. Aparece porque o instalador ainda não é assinado.',
         'w.title': 'Ou use no navegador', 'w.text': 'O mesmo editor, sem instalar nada. Funciona melhor no Chrome ou Edge em um computador. Seus arquivos continuam sendo processados no seu dispositivo.', 'w.btn': 'Abrir o Orion no navegador',
         'o.title': 'Código aberto', 'o.text': 'Todo o código está no GitHub sob a licença GPL-3.0. Leia, compile, traduza ou envie um pull request: ideias e relatos de bugs são bem-vindos.', 'o.btn': 'Ver no GitHub',
+        'meta.title': 'Orion — editor de vídeo grátis, sem marca d’água e sem conta', 'meta.desc': 'Editor de vídeo grátis e de código aberto para Mac, Windows, Linux, Android e navegador. Sem conta, sem marca d’água, sem anúncios. Legendas automáticas, remover fundo, filtros e efeitos com IA no seu dispositivo.', 'foot.privacy': 'Este site conta as visitas de forma anônima, sem cookies. O editor não conta nada.',
         'foot.made': 'Feito por', 'foot.issues': 'Relatar um bug',
       },
     };
@@ -293,6 +323,7 @@
         else el.textContent = v;
       });
       sel.value = lang;
+      if (d['meta.title']) document.title = d['meta.title'];
       osButton(lang);
       try { localStorage.setItem('orion.site.lang', lang); } catch {}
     }
@@ -324,9 +355,18 @@
     let saved = null;
     try { saved = localStorage.getItem('orion.site.lang'); } catch {}
     const guess = (navigator.language || 'en').slice(0, 2);
-    sel.addEventListener('change', () => apply(sel.value));
-    apply(saved ?? (T[guess] ? guess : 'en'));
+    // each language also has its own page (/es/, /fr/, /pt/, built by scripts/build-site.mjs) so search engines
+    // can find it; picking a language goes to its page, and a language page always opens in its language
+    const page = document.documentElement.dataset.page;
+    const onSite = location.protocol.startsWith('http');
+    sel.addEventListener('change', () => {
+      try { localStorage.setItem('orion.site.lang', sel.value); } catch {}
+      if (onSite) location.href = sel.value === 'en' ? '/' : `/${sel.value}/`;
+      else apply(sel.value);
+    });
+    apply(page ?? saved ?? (T[guess] ? guess : 'en'));
     detect();
   </script>
+  <!-- analytics -->
 </body>
 </html>

@@ -13,3 +13,6 @@ site-dist/
 *.iml
 .vscode/
 .wrangler/
+
+# promotional screenshots (npm run promo:shots)
+promo/
