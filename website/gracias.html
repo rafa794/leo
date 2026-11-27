@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¡Gracias! — Orion</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <style>
+    :root { --bg: #0b0b0d; --panel: #141417; --border: #26262c; --text: #ededf0; --muted: #9a9aa3; --accent: #22d3ee; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: radial-gradient(600px 320px at 50% 35%, rgba(249, 115, 22, .28), transparent 70%), var(--bg); color: var(--text); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; text-align: center; }
+    main { width: min(460px, 100%); }
+    video { width: 220px; max-width: 70%; display: block; margin: 0 auto -6px; }
+    h1 { margin: 0; font-size: clamp(34px, 9vw, 46px); font-weight: 900; letter-spacing: 1px; text-shadow: 0 3px 0 #f97316, 0 8px 24px rgba(0, 0, 0, .6); }
+    p { color: var(--muted); margin: 12px auto 26px; max-width: 380px; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    a { display: inline-flex; align-items: center; justify-content: center; height: 46px; padding: 0 20px; border-radius: 12px; font-weight: 700; text-decoration: none; color: var(--text); background: var(--panel); border: 1px solid var(--border); }
+    a.primary { border: none; color: #061016; background: linear-gradient(90deg, var(--accent), #7dd3fc); }
+  </style>
+</head>
+<body>
+  <main>
+    <video src="dance.webm" autoplay loop muted playsinline></video>
+    <h1 data-i="t">¡GRACIAS! ☕</h1>
+    <p data-i="p">Tu café me ayuda a seguir haciendo Orion gratis para todo el mundo. Ya puedes volver a editar.</p>
+    <div class="row">
+      <a class="primary" href="/app/" data-i="app">Abrir Orion</a>
+      <a href="/" data-i="home">Volver a la web</a>
+    </div>
+  </main>
+  <script>
+    const T = {
+      en: { t: 'THANK YOU! ☕', p: 'Your coffee helps me keep Orion free for everyone. You can go back to editing now.', app: 'Open Orion', home: 'Back to the website' },
+      fr: { t: 'MERCI ! ☕', p: 'Ton café m’aide à garder Orion gratuit pour tout le monde. Tu peux reprendre ton montage.', app: 'Ouvrir Orion', home: 'Retour au site' },
+      pt: { t: 'OBRIGADO! ☕', p: 'Seu café me ajuda a manter o Orion grátis para todo mundo. Já pode voltar a editar.', app: 'Abrir o Orion', home: 'Voltar ao site' },
+    };
+    let l = 'es';
+    try { l = localStorage.getItem('orion.site.lang') || localStorage.getItem('orion.lang') || (navigator.language || 'es').slice(0, 2); } catch {}
+    const d = T[l];
+    if (d) { document.documentElement.lang = l; document.querySelectorAll('[data-i]').forEach((el) => (el.textContent = d[el.dataset.i])); }
+  </script>
+</body>
+</html>
