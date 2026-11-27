@@ -20,6 +20,8 @@
 /* the hidden attribute always wins over a class's display */
 [hidden] { display: none !important; }
 html, body, #root { height: 100%; margin: 0; }
+/* phones: don't enlarge text on their own when rotating */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--text);
