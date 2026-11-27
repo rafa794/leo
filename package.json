@@ -58,7 +58,7 @@
     "typescript": "^7.0.2",
     "typescript-js": "npm:typescript@^5.9.3",
     "vite": "^8.3.8",
-    "vitest": "^3.2.7"
+    "vitest": "^5.1.2"
   },
   "main": "electron/main.cjs",
   "description": "Free, open-source video editor. No account, no watermark — everything (AI included) runs on your computer.",
