@@ -6,7 +6,7 @@ import {
   ChevronLeft, ChevronRight, Diamond, Download, Combine, FolderInput, Waves, Snowflake, Rewind, FlipHorizontal2, FlipVertical2, Pipette, RotateCcw, RotateCw, Undo2, Ungroup, Upload,
 } from 'lucide-react';
 import { useEditor, MIN_CLIP, defaultAdjust } from '../store/editor';
-import type { AnimName, BlendMode, ClipAnimation, Mask, MaskShape, MediaClip, Stabilization } from '../types';
+import type { AnimName, BlendMode, ClipAnimation, ClipEffect, Lut, Mask, MaskShape, MediaClip, Stabilization } from '../types';
 import { cancelReverse, freezeFrame, onReverseJobs, reverseClip, reverseJob } from '../lib/clipTools';
 import { STAB_DEFAULT, analyzeClip, cancelAnalysis, onStabJobs, stabCovers, stabJob, stabPath } from '../lib/stabilize';
 import { onSegmenterChange, segmenterState, ensureSegmenter } from '../ai/segmenter';
@@ -14,7 +14,9 @@ import { clipHasAudio, sourceDuration } from '../lib/timeline';
 import { useFxStatus } from '../ai/voice';
 import type { AudioFx } from '../types';
 import { TRANSFORM_KEYS, hasKeyAt, keyTimes, srcTime, timelineTime, valueAt } from '../lib/keyframes';
-import { BUILTIN_LUTS, importCube, importedLuts, onLutsChange } from '../lib/gl';
+import { BUILTIN_LUTS, FILTER_GROUPS, importCube, importedLuts, onLutsChange } from '../lib/gl';
+import { EFFECTS, EFFECT_GROUPS, effectDef } from '../lib/effects';
+import { loadBase, lookThumb } from '../lib/lookPreview';
 import { player } from '../lib/player';
 import { clamp } from '../lib/util';
 import { isPickingColor, onColorPickChange, startColorPick } from './Preview';
@@ -919,15 +921,6 @@ const ADJ_PATHS = ADJ.map(([k]) => `adjust.${k}`);
 
 function AdjustTab({ clip }: { clip: MediaClip }) {
   const store = useEditor.getState();
-  const [, force] = useState(0);
-  useEffect(() => onLutsChange(() => force((n) => n + 1)), []);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const lut = clip.lut;
-  const setLut = (id: string) => {
-    if (!id) return store.updateClip(clip.id, { lut: undefined, keyframes: stripKeys(clip, ['lut.intensity']) });
-    const name = BUILTIN_LUTS.find((l) => l[0] === id)?.[1] ?? importedLuts.get(id) ?? id;
-    store.updateClip(clip.id, { lut: { id, name, intensity: lut?.intensity ?? 100 } });
-  };
   const applyToAll = () => {
     const st = useEditor.getState();
     st.checkpoint();
@@ -940,55 +933,6 @@ function AdjustTab({ clip }: { clip: MediaClip }) {
   };
   return (
     <>
-      <Group
-        title="LUT (estilo de color)"
-        clip={lut ? clip : undefined}
-        paths={['lut.intensity']}
-        onReset={lut ? () => setLut('') : undefined}
-      >
-        <div className="btn-row">
-          <select className="input" style={{ flex: 1, minWidth: 0 }} value={lut?.id ?? ''} onChange={(e) => setLut(e.target.value)}>
-            <option value="">Ninguno</option>
-            <optgroup label="Incluidos">
-              {BUILTIN_LUTS.map(([id, name]) => (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              ))}
-            </optgroup>
-            {importedLuts.size > 0 && (
-              <optgroup label="Importados">
-                {[...importedLuts].map(([id, name]) => (
-                  <option key={id} value={id}>
-                    {name}
-                  </option>
-                ))}
-              </optgroup>
-            )}
-          </select>
-          <button className="btn small" title="Importar un LUT .cube (hay muchos gratis en internet)" onClick={() => fileRef.current?.click()}>
-            <Upload size={13} /> .cube
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".cube"
-            hidden
-            onChange={async (e) => {
-              const f = e.target.files?.[0];
-              e.target.value = '';
-              if (!f) return;
-              try {
-                setLut(await importCube(f));
-              } catch (err) {
-                store.setStatus(err instanceof Error ? err.message : 'LUT no válido');
-              }
-            }}
-          />
-        </div>
-        {lut && <Prop clip={clip} path="lut.intensity" label="Intensidad" min={0} max={100} keys={false} />}
-      </Group>
-
       <Group title="Ajustar" clip={clip} paths={ADJ_PATHS} onReset={() => store.updateClip(clip.id, { adjust: defaultAdjust(), keyframes: stripKeys(clip, prefixed(clip, 'adjust.')) })}>
         {ADJ.map(([k, label, min, max]) => (
           <Prop key={k} clip={clip} path={`adjust.${k}`} label={label} min={min} max={max} />
@@ -998,7 +942,7 @@ function AdjustTab({ clip }: { clip: MediaClip }) {
         </p>
       </Group>
       <div className="btn-row">
-        <button className="btn small" onClick={applyToAll} title="Copia este color (ajustes y LUT) a todos los clips de vídeo">
+        <button className="btn small" onClick={applyToAll} title="Copia este color (ajustes y filtro) a todos los clips de vídeo">
           Aplicar a todo
         </button>
       </div>
@@ -1006,9 +950,185 @@ function AdjustTab({ clip }: { clip: MediaClip }) {
   );
 }
 
+/* =================== Filtros / Efectos =================== */
+
+/** The picture the gallery tiles are made from: this clip at the playhead (or its middle). */
+function useLookBase(clip: MediaClip) {
+  const media = useEditor((s) => s.media.find((m) => m.id === clip.mediaId));
+  const time = useEditor.getState().time;
+  const thumbs = media?.thumbnails ?? [];
+  let src: string | undefined;
+  if (thumbs.length) {
+    const inside = time >= clip.start && time < clip.start + clip.duration;
+    const t = inside ? srcTime(clip, time) : clip.trimStart + (clip.duration * clip.speed) / 2;
+    const i = clip.type === 'image' ? 0 : Math.min(thumbs.length - 1, Math.max(0, Math.floor((t / Math.max(0.01, media!.duration)) * thumbs.length)));
+    src = thumbs[i];
+  }
+  const [base, setBase] = useState<{ key: string; canvas: HTMLCanvasElement } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    loadBase(src).then((canvas) => alive && setBase({ key: src ? `${clip.mediaId}:${src.length}:${src.slice(-24)}` : 'sample', canvas }));
+    return () => {
+      alive = false;
+    };
+  }, [src, clip.mediaId]);
+  return base;
+}
+
+function LookTile({ id, name, thumb, active, onClick }: { id: string; name: string; thumb?: string; active: boolean; onClick: () => void }) {
+  return (
+    <button className={`look ${active ? 'active' : ''}`} data-look={id || 'none'} onClick={onClick} title={name}>
+      <span className="look-img">{thumb ? <img src={thumb} alt="" draggable={false} /> : <span className="look-none">∅</span>}</span>
+      <span className="look-name">{name}</span>
+    </button>
+  );
+}
+
+/** Copies this clip's filter or effect to every video / photo clip. */
+function applyLookToAll(clip: MediaClip, what: 'lut' | 'effect') {
+  const st = useEditor.getState();
+  st.checkpoint();
+  const visualTracks = new Set(st.tracks.filter((t) => t.kind === 'video').map((t) => t.id));
+  st.clips.forEach((c) => {
+    if (c.id === clip.id || c.type === 'text' || c.type === 'audio' || !visualTracks.has(c.trackId)) return;
+    const v = clip[what];
+    st.updateClip(c.id, { [what]: v ? { ...v } : undefined } as Partial<MediaClip>, false);
+  });
+  st.setStatus(what === 'lut' ? 'Filtro aplicado a todos los clips de vídeo' : 'Efecto aplicado a todos los clips de vídeo');
+}
+
+let lastFilterCat = 0;
+function FiltersTab({ clip }: { clip: MediaClip }) {
+  const store = useEditor.getState();
+  const [, force] = useState(0);
+  useEffect(() => onLutsChange(() => force((n) => n + 1)), []);
+  const [cat, setCat] = useState(lastFilterCat);
+  lastFilterCat = cat;
+  const fileRef = useRef<HTMLInputElement>(null);
+  const base = useLookBase(clip);
+  const lut = clip.lut;
+  const nameOf = (id: string) => BUILTIN_LUTS.find((l) => l[0] === id)?.[1] ?? importedLuts.get(id) ?? id;
+  const setLut = (id: string) => {
+    if (!id) return store.updateClip(clip.id, { lut: undefined, keyframes: stripKeys(clip, ['lut.intensity']) });
+    store.updateClip(clip.id, { lut: { id, name: nameOf(id), intensity: lut?.intensity ?? 100 } });
+  };
+  const groups: [string, string[]][] = [...FILTER_GROUPS, ['Todos', BUILTIN_LUTS.map(([id]) => id)]];
+  if (importedLuts.size) groups.push(['Importados', [...importedLuts.keys()]]);
+  const c = Math.min(cat, groups.length - 1);
+  const thumb = (id: string) => (base ? lookThumb(base.canvas, base.key, { lut: { id, name: '', intensity: 100 } as Lut }) : undefined);
+  return (
+    <>
+      <div className="chips look-cats">
+        {groups.map(([label], i) => (
+          <button key={label} className={`chip ${i === c ? 'active' : ''}`} onClick={() => setCat(i)}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className="look-grid">
+        <LookTile id="" name="Ninguno" active={!lut} onClick={() => setLut('')} />
+        {groups[c][1].map((id) => (
+          <LookTile key={id} id={id} name={nameOf(id)} thumb={thumb(id)} active={lut?.id === id} onClick={() => setLut(id)} />
+        ))}
+      </div>
+      {lut && (
+        <Group title={`Filtro: ${lut.name}`} clip={clip} paths={['lut.intensity']} onReset={() => setLut('')}>
+          <Prop clip={clip} path="lut.intensity" label="Intensidad" min={0} max={100} keys={false} />
+        </Group>
+      )}
+      <div className="btn-row">
+        <button className="btn small" title="Importar un LUT .cube (hay muchos gratis en internet)" onClick={() => fileRef.current?.click()}>
+          <Upload size={13} /> Importar .cube
+        </button>
+        {lut && (
+          <button className="btn small" onClick={() => applyLookToAll(clip, 'lut')} title="Pone este filtro en todos los clips de vídeo">
+            Aplicar a todo
+          </button>
+        )}
+        <input
+          ref={fileRef}
+          type="file"
+          accept=".cube"
+          hidden
+          onChange={async (e) => {
+            const f = e.target.files?.[0];
+            e.target.value = '';
+            if (!f) return;
+            try {
+              setLut(await importCube(f));
+            } catch (err) {
+              store.setStatus(err instanceof Error ? err.message : 'LUT no válido');
+            }
+          }}
+        />
+      </div>
+    </>
+  );
+}
+
+let lastEffectCat = 0;
+function EffectsTab({ clip }: { clip: MediaClip }) {
+  const store = useEditor.getState();
+  const [cat, setCat] = useState(lastEffectCat);
+  lastEffectCat = cat;
+  const base = useLookBase(clip);
+  const fx = clip.effect;
+  const def = effectDef(fx?.id);
+  const groups: [string, string[]][] = [...EFFECT_GROUPS, ['Todos', EFFECTS.map((e) => e.id)]];
+  const c = Math.min(cat, groups.length - 1);
+  const thumb = (id: string) => (base ? lookThumb(base.canvas, base.key, { effect: { id, intensity: effectDef(id)!.intensity, speed: 1 } }) : undefined);
+  // play a bit of the clip so the effect is seen moving
+  const preview = () => {
+    const t = useEditor.getState().time;
+    const from = t >= clip.start && t < clip.start + clip.duration - 0.3 ? t : clip.start;
+    player.seek(from);
+    player.play();
+    const len = Math.min(2.5, clip.start + clip.duration - from);
+    setTimeout(() => useEditor.getState().playing && player.pause(), len * 1000);
+  };
+  const choose = (id: string) => {
+    if (!id) return store.updateClip(clip.id, { effect: undefined, keyframes: stripKeys(clip, ['effect.intensity', 'effect.speed']) });
+    const d = effectDef(id)!;
+    const e: ClipEffect = { id, intensity: fx?.id === id ? fx.intensity : d.intensity, speed: fx?.speed ?? 1 };
+    store.updateClip(clip.id, { effect: e });
+    if (d.animated) preview();
+  };
+  return (
+    <>
+      <div className="chips look-cats">
+        {groups.map(([label], i) => (
+          <button key={label} className={`chip ${i === c ? 'active' : ''}`} onClick={() => setCat(i)}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className="look-grid">
+        <LookTile id="" name="Ninguno" active={!fx} onClick={() => choose('')} />
+        {groups[c][1].map((id) => (
+          <LookTile key={id} id={id} name={effectDef(id)!.name} thumb={thumb(id)} active={fx?.id === id} onClick={() => choose(id)} />
+        ))}
+      </div>
+      {fx && def && (
+        <Group title={`Efecto: ${def.name}`} clip={clip} paths={['effect.intensity']} onReset={() => choose('')}>
+          <Prop clip={clip} path="effect.intensity" label="Intensidad" min={0} max={100} />
+          {def.animated && <Prop clip={clip} path="effect.speed" label="Velocidad" min={0.25} max={3} step={0.05} decimals={2} unit="x" keys={false} />}
+        </Group>
+      )}
+      {fx && (
+        <div className="btn-row">
+          <button className="btn small" onClick={() => applyLookToAll(clip, 'effect')} title="Pone este efecto en todos los clips de vídeo">
+            Aplicar a todo
+          </button>
+        </div>
+      )}
+      <p className="hint">Los efectos se ven en el visor y salen en el vídeo exportado. La intensidad tiene su ◆ para cambiarla a lo largo del clip.</p>
+    </>
+  );
+}
+
 /* =================== shell =================== */
 
-export type MainTab = 'video' | 'audio' | 'speed' | 'anim' | 'adjust';
+export type MainTab = 'video' | 'audio' | 'speed' | 'anim' | 'adjust' | 'filters' | 'effects';
 export type VideoTab = 'basic' | 'bg' | 'mask';
 let lastMain: MainTab = 'video';
 let lastVideo: VideoTab = 'basic';
@@ -1025,7 +1145,7 @@ export default function MediaInspector({ clip, multi, only, videoSub }: { clip: 
   if (visual) tabs.push(['video', clip.type === 'image' ? 'Imagen' : 'Vídeo']);
   if (hasAudio || clip.type === 'audio') tabs.push(['audio', 'Audio']);
   if (clip.type !== 'image') tabs.push(['speed', 'Velocidad']);
-  if (visual) tabs.push(['anim', 'Animación'], ['adjust', 'Ajustar']);
+  if (visual) tabs.push(['filters', 'Filtros'], ['effects', 'Efectos'], ['anim', 'Animación'], ['adjust', 'Ajustar']);
   const [main, setMain] = useState<MainTab>(tabs.some((t) => t[0] === lastMain) ? lastMain : tabs[0][0]);
   const [vt0, setVt] = useState<VideoTab>(lastVideo);
   // several clips: only what makes sense for all of them (no background removal, mask or tools)
@@ -1095,6 +1215,8 @@ export default function MediaInspector({ clip, multi, only, videoSub }: { clip: 
         {active === 'speed' && <SpeedTab clip={clip} />}
         {active === 'anim' && <AnimTab clip={clip} />}
         {active === 'adjust' && <AdjustTab clip={clip} />}
+        {active === 'filters' && <FiltersTab clip={clip} />}
+        {active === 'effects' && <EffectsTab clip={clip} />}
 
         <div className="section" hidden={!!only}>
           {multi ? (

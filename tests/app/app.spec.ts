@@ -75,7 +75,7 @@ test('adds them to the timeline', async () => {
 test('selecting a clip opens its properties with every tab', async () => {
   await clips().first().click({ position: { x: 30, y: 30 } });
   await expect(page.locator('.panel.right .title-main')).toHaveText(/clip1/);
-  for (const name of ['Vídeo', 'Audio', 'Velocidad', 'Animación', 'Ajustar']) {
+  for (const name of ['Vídeo', 'Audio', 'Velocidad', 'Filtros', 'Efectos', 'Animación', 'Ajustar']) {
     await tab(name).click();
     await expect(tab(name)).toHaveClass(/active/);
   }
@@ -89,6 +89,51 @@ test('color sliders change the value', async () => {
   for (let i = 0; i < 10; i++) await page.keyboard.press('ArrowRight');
   const v = Number(await slider.inputValue());
   expect(v).toBeGreaterThan(0);
+});
+
+/** A tiny copy of the viewer's pixels (to see that a filter / effect really changes the picture). */
+const viewerPixels = () =>
+  page.locator('.stage canvas').first().evaluate((c: HTMLCanvasElement) => {
+    const t = document.createElement('canvas');
+    t.width = 64;
+    t.height = 36;
+    const g = t.getContext('2d')!;
+    g.drawImage(c, 0, 0, 64, 36);
+    return [...g.getImageData(0, 0, 64, 36).data];
+  });
+const pixelDiff = (a: number[], b: number[]) => a.reduce((s, v, i) => s + Math.abs(v - b[i]), 0) / a.length;
+const look = (id: string) => page.locator(`.panel.right .look[data-look="${id}"]`);
+
+test('filters and effects: galleries with previews, they change the picture, and can be removed', async () => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await clips().first().click({ position: { x: 30, y: 30 } });
+  await tab('Filtros').click();
+  // every tile shows this clip through its filter
+  await expect(page.locator('.panel.right .look-img img').first()).toHaveAttribute('src', /^data:image\/jpeg/, { timeout: 10_000 });
+  expect(await page.locator('.panel.right .look').count()).toBeGreaterThan(5);
+  await page.locator('.panel.right .chip', { hasText: /^Blanco y negro$/ }).click();
+  const before = await viewerPixels();
+  await look('noir').click();
+  await expect(look('noir')).toHaveClass(/active/);
+  await expect(page.locator('.panel.right .group-head b', { hasText: 'Filtro: Noir' })).toBeVisible();
+  await look('none').click();
+  await expect(page.locator('.panel.right .group-head b', { hasText: /^Filtro:/ })).toHaveCount(0);
+
+  await tab('Efectos').click();
+  await page.locator('.panel.right .chip', { hasText: /^Todos$/ }).click();
+  expect(await page.locator('.panel.right .look').count()).toBeGreaterThan(20);
+  await look('invert').click();
+  await expect(page.locator('.panel.right .group-head b', { hasText: 'Efecto: Negativo' })).toBeVisible();
+  await page.waitForTimeout(400);
+  expect(pixelDiff(await viewerPixels(), before), 'the negative effect changes the viewer').toBeGreaterThan(40);
+  // animated effects have a speed setting
+  await look('glitch').click();
+  await expect(prop('Velocidad')).toBeVisible();
+  await expect(prop('Intensidad')).toBeVisible();
+  await look('none').click();
+  await expect(page.locator('.panel.right .group-head b', { hasText: /^Efecto:/ })).toHaveCount(0);
+  expect(errors).toEqual([]);
 });
 
 /** Moves a slider to a value like a user would (React sees a real input event). */
@@ -351,6 +396,18 @@ test('phone: home → new project → timeline, clip tools, split, sheets', asyn
   // a tool opens its panel as a sheet
   await page.locator('.m-tool[data-tool="speed"]').click();
   await expect(page.locator('.m-sheet')).toBeVisible();
+  await page.locator('.m-sheet-head .icon-btn').click();
+  await expect(page.locator('.m-sheet')).toHaveCount(0);
+  // filters and effects open as galleries
+  await page.locator('.m-tool[data-tool="filters"]').click();
+  await expect(page.locator('.m-sheet .look-grid')).toBeVisible();
+  await page.locator('.m-sheet-head .icon-btn').click();
+  await page.locator('.m-tool[data-tool="effects"]').click();
+  await expect(page.locator('.m-sheet .look-grid')).toBeVisible();
+  await page.locator('.m-sheet .look[data-look="pixel"]').click();
+  await expect(page.locator('.m-sheet .look[data-look="pixel"]')).toHaveClass(/active/);
+  await page.locator('.m-sheet .look[data-look="none"]').click();
+  await expect(page.locator('.m-sheet .look[data-look="none"]')).toHaveClass(/active/);
   await page.locator('.m-sheet-head .icon-btn').click();
   await expect(page.locator('.m-sheet')).toHaveCount(0);
   // back to the general tools

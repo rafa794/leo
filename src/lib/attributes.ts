@@ -2,10 +2,11 @@ import type { Key, KeyTracks, MediaClip, MediaItem } from '../types';
 import { sourceDuration } from './timeline';
 
 /** "Copiar / pegar atributos" (CapCut): copy settings from one clip to others, by group. */
-export type AttrGroup = 'adjust' | 'audio' | 'anim' | 'transform' | 'blend' | 'mask' | 'background' | 'speed';
+export type AttrGroup = 'adjust' | 'effect' | 'audio' | 'anim' | 'transform' | 'blend' | 'mask' | 'background' | 'speed';
 
 export const ATTR_GROUPS: [AttrGroup, string, string][] = [
-  ['adjust', 'Ajustar', 'Color, LUT y nitidez'],
+  ['adjust', 'Ajustar', 'Color, filtro y nitidez'],
+  ['effect', 'Efecto', ''],
   ['audio', 'Audio', 'Volumen, fundidos, silencio y voz IA'],
   ['anim', 'Animación', 'Entrada, salida y combinado'],
   ['transform', 'Posición y tamaño', 'Escala, posición, giro y volteo'],
@@ -18,6 +19,7 @@ export const ATTR_GROUPS: [AttrGroup, string, string][] = [
 /** Keyframe paths that belong to each group. */
 const KEY_PREFIX: Record<AttrGroup, string[]> = {
   adjust: ['adjust.', 'lut.'],
+  effect: ['effect.'],
   audio: ['volume'],
   anim: [],
   transform: ['transform.'],
@@ -41,6 +43,7 @@ export function applyAttributes(target: MediaClip, src: MediaClip, groups: AttrG
     c = { ...c, speed: src.speed, duration: Math.max(0.1, duration) };
   }
   if (has('adjust')) c = { ...c, adjust: { ...src.adjust }, lut: src.lut && { ...src.lut } };
+  if (has('effect')) c = { ...c, effect: src.effect && { ...src.effect } };
   if (has('audio')) c = { ...c, volume: src.volume, fadeIn: Math.min(src.fadeIn, c.duration / 2), fadeOut: Math.min(src.fadeOut, c.duration / 2), muted: src.muted, audioFx: src.audioFx };
   if (has('anim')) c = { ...c, animIn: src.animIn && { ...src.animIn }, animOut: src.animOut && { ...src.animOut }, animLoop: src.animLoop && { ...src.animLoop } };
   if (has('transform')) c = { ...c, transform: { ...src.transform }, flipX: src.flipX, flipY: src.flipY };

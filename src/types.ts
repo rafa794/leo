@@ -127,6 +127,13 @@ export interface Lut {
   intensity: number; // 0..100
 }
 
+/** A video effect ("Efectos", CapCut style): drawn by the same WebGL pass as the color. */
+export interface ClipEffect {
+  id: string; // see EFFECTS in lib/effects.ts
+  intensity: number; // 0..100
+  speed: number; // 0.25..3 (animated effects)
+}
+
 interface BaseClip {
   id: string;
   trackId: string;
@@ -162,6 +169,7 @@ export interface MediaClip extends BaseClip {
   blend?: BlendMode;
   adjust: Adjustments;
   lut?: Lut;
+  effect?: ClipEffect;
   chroma?: ChromaKey;
   mask?: Mask;
   animIn?: ClipAnimation;

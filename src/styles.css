@@ -395,6 +395,19 @@ input[type=color] { width: 100%; height: 30px; border: 1px solid var(--border); 
 .btn-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
 .btn-row .spacer { flex: 1; }
 .btn-row.align { background: var(--panel-2); border-radius: 8px; padding: 2px; gap: 0; justify-content: space-between; }
+/* Filtros / Efectos galleries */
+.look-cats { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-bottom: 10px; padding-bottom: 2px; }
+.look-cats::-webkit-scrollbar { display: none; }
+.look-cats .chip { flex: none; white-space: nowrap; }
+.look-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.look { display: flex; flex-direction: column; gap: 4px; padding: 0; border: none; background: none; color: var(--muted); font-size: 11px; cursor: pointer; min-width: 0; text-align: center; }
+.look-img { display: grid; place-items: center; aspect-ratio: 8 / 5; border-radius: 8px; overflow: hidden; background: var(--panel-2); border: 2px solid transparent; }
+.look-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.look-none { font-size: 22px; color: var(--muted); }
+.look-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.look:hover .look-img { border-color: var(--border); }
+.look.active .look-img { border-color: var(--accent); }
+.look.active { color: var(--accent); }
 .shape-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 6px; margin-bottom: 12px; }
 .shape { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel-2); cursor: pointer; font-size: 11px; color: var(--muted); }
 .shape span { font-size: 20px; line-height: 1; color: var(--text); }

@@ -65,6 +65,7 @@ export async function freezeFrame(seconds = 3) {
     flipY: clip.flipY,
     adjust: { ...clip.adjust },
     lut: clip.lut && { ...clip.lut },
+    effect: clip.effect && { ...clip.effect },
     crop: clip.crop && { ...clip.crop },
     mask: clip.mask && { ...clip.mask },
     blend: clip.blend,

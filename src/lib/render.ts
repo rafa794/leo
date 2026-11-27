@@ -223,7 +223,7 @@ function drawMedia(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingConte
   // color, LUT, chroma key and mask on the GPU
   let fallbackFilter = '';
   if (needsColorPass(clip)) {
-    const out = colorPass.run(clip, image, src.width, src.height, w, h);
+    const out = colorPass.run(clip, image, src.width, src.height, w, h, time - clip.start);
     if (out) image = out;
     else {
       const a = clip.adjust;

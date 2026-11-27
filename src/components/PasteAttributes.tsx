@@ -9,7 +9,7 @@ export function openPasteAttributes(ids: string[]) {
   openFn?.(ids);
 }
 
-const DEFAULT: AttrGroup[] = ['adjust', 'audio', 'anim', 'blend', 'mask', 'background'];
+const DEFAULT: AttrGroup[] = ['adjust', 'effect', 'audio', 'anim', 'blend', 'mask', 'background'];
 let remembered: AttrGroup[] = DEFAULT;
 
 /** Choose which settings to paste (like CapCut). Remembers the last choice. */

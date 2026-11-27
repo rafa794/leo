@@ -2,7 +2,7 @@ import { useRef, useState, type ReactNode } from 'react';
 import {
   AudioLines, Captions, Coffee, ChevronDown, ChevronLeft, Copy, Diamond, Download, Eraser, Film, Gauge, Layers, Maximize2, Minimize2, Move, Music,
   Pause, Pencil, Play, Redo2, Rewind, Scissors, SlidersHorizontal, Snowflake, Sparkles, Sticker, Trash2, Type, Undo2, Volume2, X,
-  CircleDashed, RectangleHorizontal,
+  CircleDashed, RectangleHorizontal, Aperture, WandSparkles,
 } from 'lucide-react';
 import { MAIN_TRACK, projectDuration, useEditor } from '../store/editor';
 import { useLayout, type LeftTab } from '../store/layout';
@@ -100,6 +100,16 @@ export default function MobileApp({ dialogs }: { dialogs: ReactNode }) {
   const inside = !!sel && time >= sel.start && time < sel.start + sel.duration;
   const clipTool = (only: MainTab, title: string, sub?: VideoTab) => () => setSheet({ kind: 'clip', only, sub, title });
 
+  // general bar: filters / effects go to the video under the playhead (selected, so its tools show after)
+  const onClipUnder = (only: MainTab, title: string) => {
+    const s = useEditor.getState();
+    const under =
+      s.clips.find((c) => c.trackId === MAIN_TRACK && s.time >= c.start && s.time < c.start + c.duration) ?? s.clips.find((c) => c.trackId === MAIN_TRACK);
+    if (!under) return s.setStatus('Añade primero un vídeo');
+    s.select([under.id]);
+    setSheet({ kind: 'clip', only, title });
+  };
+
   const rootTools: Tool[] = [
     {
       id: 'edit',
@@ -112,6 +122,8 @@ export default function MobileApp({ dialogs }: { dialogs: ReactNode }) {
       },
     },
     { id: 'audio', label: 'Audio', icon: <Music size={22} />, run: () => openLeft('audio', 'Audio') },
+    { id: 'filters', label: 'Filtros', icon: <Aperture size={22} />, run: () => onClipUnder('filters', 'Filtros') },
+    { id: 'effects', label: 'Efectos', icon: <WandSparkles size={22} />, run: () => onClipUnder('effects', 'Efectos') },
     { id: 'text', label: 'Texto', icon: <Type size={22} />, run: () => openLeft('text', 'Texto') },
     { id: 'overlay', label: 'Superposición', icon: <Layers size={22} />, run: () => add('overlay') },
     { id: 'stickers', label: 'Stickers', icon: <Sticker size={22} />, run: () => openLeft('stickers', 'Stickers') },
@@ -136,6 +148,8 @@ export default function MobileApp({ dialogs }: { dialogs: ReactNode }) {
           ...(hasAudio || media?.type === 'audio' ? [{ id: 'vol', label: 'Volumen', icon: <Volume2 size={22} />, run: clipTool('audio', 'Audio') }] : []),
           ...(visual
             ? [
+                { id: 'filters', label: 'Filtros', icon: <Aperture size={22} />, run: clipTool('filters', 'Filtros') },
+                { id: 'effects', label: 'Efectos', icon: <WandSparkles size={22} />, run: clipTool('effects', 'Efectos') },
                 { id: 'anim', label: 'Animación', icon: <Sparkles size={22} />, run: clipTool('anim', 'Animación') },
                 { id: 'adjust', label: 'Ajustar', icon: <SlidersHorizontal size={22} />, run: clipTool('adjust', 'Ajustar') },
                 { id: 'bg', label: 'Quitar fondo', icon: <Eraser size={22} />, run: clipTool('video', 'Quitar fondo', 'bg') },

@@ -36,7 +36,7 @@ Repo: https://github.com/rafa794/orion. Releases: GitHub Releases.
 
 - **React 19 + TypeScript + Vite 8**, state in **zustand** (`src/store`).
 - **mediabunny** (WebCodecs) to decode / encode MP4 (H.264 + AAC), stream exports to OPFS (no 2 GB Blob limit).
-- **WebGL2** color pass (`src/lib/gl.ts`): adjustments, LUTs (`.cube`), chroma key, shape masks.
+- **WebGL2** color pass (`src/lib/gl.ts`): adjustments, filters (built-in looks + `.cube` LUTs), video effects, chroma key, shape masks.
 - **OpenCV.js** (stabilizer, in a worker), **transformers.js / Whisper** (subtitles), **MediaPipe** (background
   removal), **RNNoise** (voice isolation / removal). Models download once and are cached.
 - **Electron** (desktop: `electron/main.cjs`, `electron/preload.cjs`, served from `app://orion`).
@@ -89,7 +89,8 @@ src/
   lib/stabilize.ts        stabilizer path smoothing (ADMM, "tube" constraint so borders never show)
   lib/clipTools.ts        freeze frame, reverse
   lib/attributes.ts       copy / paste attributes
-  lib/gl.ts               WebGL2 color / LUT / chroma / mask pass
+  lib/gl.ts               WebGL2 color / filter (LUT) / effect / chroma / mask pass, built-in filters (FILTER_GROUPS)
+  lib/effects.ts          the "Efectos" catalog (id → shader code); lib/lookPreview.ts = gallery thumbnails
   lib/library.ts, stickers.ts   free music / SFX (Openverse) and Fluent Emoji 3D stickers
   lib/platform.ts         save / share on Android vs desktop vs browser
   ai/                     workers: whisper, stabilize (OpenCV), voice (RNNoise); segmenter (MediaPipe)
@@ -122,6 +123,11 @@ tests/unit, tests/app     Vitest and Playwright suites
   the footage when a clip is trimmed, split or sped up. Splitting prunes keys outside each part.
 - **Undo**: call `checkpoint()` once at the start of a gesture, then update with `commit = false`.
 - **Linked edit**: with several clips selected, inspector changes apply only the changed property to all of them.
+- **Filters and effects** ("Filtros" / "Efectos" tabs in the inspector, tools on the phone): a filter is `clip.lut`
+  (built-in looks are made by code in `gl.ts`, no image files), an effect is `clip.effect` ({ id, intensity, speed }),
+  drawn by the same single shader pass with the clip's own time (so preview and export match). Keep them cheap:
+  a handful of texture reads per pixel, no extra passes, nothing that needs a dedicated GPU. New effect = an entry in
+  `EFFECTS` + a branch in the shader's `warp` / `fetch` / `effectColor` + its name in the translations.
 - **Compound clips**: nested timelines (`compound`), entered/exited with `enterCompound` / `exitCompound`.
 - **Generated media** (reversed clips, frozen frames) are stored inside the project (`generated: true`).
 - **Inspector props** (`Prop` in `MediaInspector.tsx`): `min`/`max` are in the value's own units (volume 0–2,
