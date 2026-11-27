@@ -899,5 +899,15 @@
   "Recuadro": "Retângulo",
   "Ver original": "Ver original",
   "Vista previa": "Pré-visualização",
-  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "Num vídeo a mesma área é apagada nos {0} quadros do clipe (cerca de {1} min): funciona melhor com a câmera parada e coisas que não se mexem (um logo, uma pessoa parada…)."
+  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min, en segundo plano mientras sigues editando): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "Num vídeo a mesma área é apagada nos {0} quadros do clipe (cerca de {1} min, em segundo plano enquanto você continua editando): funciona melhor com a câmera parada e coisas que não se mexem (um logo, uma pessoa parada…).",
+  "Borrando objetos en segundo plano: puedes seguir editando": "Removendo objetos em segundo plano: você pode continuar editando",
+  "Borrando objetos": "Removendo objetos",
+  "En segundo plano": "Em segundo plano",
+  "Analizando el movimiento de la cámara": "Analisando o movimento da câmera",
+  "Revirtiendo un clip": "Invertendo um clipe",
+  "En espera: {0}. Exportaremos cuando termine.": "Aguardando: {0}. Vamos exportar quando terminar.",
+  "Todavía se está ejecutando: {0}. Exportaremos cuando termine.": "Ainda em andamento: {0}. Vamos exportar quando terminar.",
+  "Esperando a que termine…": "Aguardando terminar…",
+  "Guardar foto cuando termine": "Salvar foto quando terminar",
+  "Exportar cuando termine": "Exportar quando terminar"
 }

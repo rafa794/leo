@@ -1,4 +1,5 @@
 import { useEditor } from '../store/editor';
+import { syncTasks } from './busy';
 import type { MediaClip, StabData, Stabilization } from '../types';
 
 /**
@@ -25,7 +26,10 @@ let worker: Worker | null = null;
 let nextId = 1;
 const jobs = new Map<string, Job>(); // by clip id
 const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((f) => f());
+const emit = () => {
+  listeners.forEach((f) => f());
+  syncTasks('stab', 'Analizando el movimiento de la cámara', [...jobs.values()].filter((j) => !j.error).map((j) => ({ id: j.clipId, progress: j.progress, cancel: () => cancelAnalysis(j.clipId) })));
+};
 export const onStabJobs = (f: () => void) => (listeners.add(f), () => void listeners.delete(f));
 export const stabJob = (clipId: string) => jobs.get(clipId);
 

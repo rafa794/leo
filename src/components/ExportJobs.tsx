@@ -4,21 +4,41 @@ import { cancelExport, dismissExport, useExports } from '../lib/exportQueue';
 import { shareFile } from '../lib/platform';
 import { openAbout } from './AboutDialog';
 import { NUDGE_AT, markDonated, useSupport } from '../lib/support';
+import { useBusy } from '../lib/busy';
 
 /** Background exports: a small card at the bottom right, so you can keep editing. */
 export default function ExportJobs() {
   const tasks = useExports((s) => s.tasks);
   const [small, setSmall] = useState(false);
   const donated = useSupport((s) => s.donated);
-  if (!tasks.length) return null;
+  const busy = useBusy((s) => s.tasks);
+  if (!tasks.length && !busy.length) return null;
   const active = tasks.filter((t) => t.state === 'running' || t.state === 'queued' || t.state === 'saving').length;
   return (
     <div className="export-jobs">
       <div className="ej-head" onClick={() => setSmall(!small)}>
-        <b>{active ? `Exportando ${active > 1 ? `(${active})` : ''}` : 'Exportaciones'}</b>
+        <b>{active ? `Exportando ${active > 1 ? `(${active})` : ''}` : tasks.length ? 'Exportaciones' : 'En segundo plano'}</b>
         <span className="spacer" />
         {small ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
       </div>
+      {!small &&
+        busy.map((b) => (
+          <div key={b.id} className="ej-row running" data-busy={b.id}>
+            <div className="ej-title">
+              <Loader2 size={14} className="spin" />
+              <span className="name">{b.label}</span>
+              <span className="hint">{Math.round(b.progress * 100)} %</span>
+              {b.cancel && (
+                <button className="icon-btn sm" title="Cancelar" onClick={b.cancel}>
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+            <div className="progress">
+              <div style={{ width: `${Math.round(b.progress * 100)}%` }} />
+            </div>
+          </div>
+        ))}
       {!small &&
         tasks.map((t) => (
           <div key={t.id} className={`ej-row ${t.state}`}>

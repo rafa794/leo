@@ -892,5 +892,15 @@
   "Recuadro": "Cadre",
   "Ver original": "Voir l’original",
   "Vista previa": "Aperçu",
-  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "Dans une vidéo, la même zone est effacée sur les {0} images du clip (environ {1} min) : ça marche mieux avec une caméra fixe et des choses qui ne bougent pas (un logo, une personne immobile…)."
+  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min, en segundo plano mientras sigues editando): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "Dans une vidéo, la même zone est effacée sur les {0} images du clip (environ {1} min, en arrière-plan pendant que tu continues à monter) : ça marche mieux avec une caméra fixe et des choses qui ne bougent pas (un logo, une personne immobile…).",
+  "Borrando objetos en segundo plano: puedes seguir editando": "Suppression d’objets en arrière-plan : tu peux continuer à monter",
+  "Borrando objetos": "Suppression d’objets",
+  "En segundo plano": "En arrière-plan",
+  "Analizando el movimiento de la cámara": "Analyse du mouvement de la caméra",
+  "Revirtiendo un clip": "Inversion d’un clip",
+  "En espera: {0}. Exportaremos cuando termine.": "En attente : {0}. L’export démarrera à la fin.",
+  "Todavía se está ejecutando: {0}. Exportaremos cuando termine.": "Encore en cours : {0}. L’export démarrera à la fin.",
+  "Esperando a que termine…": "En attente de la fin…",
+  "Guardar foto cuando termine": "Enregistrer la photo à la fin",
+  "Exportar cuando termine": "Exporter à la fin"
 }

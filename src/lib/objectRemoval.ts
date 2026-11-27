@@ -2,6 +2,7 @@ import { BufferTarget, CanvasSink, Conversion, Mp4OutputFormat, Output, QUALITY_
 import { useEditor } from '../store/editor';
 import type { Key, KeyTracks, MediaClip, MediaItem } from '../types';
 import { importFile, loadWaveform, openInput } from './media';
+import { syncTasks } from './busy';
 
 /**
  * "Borrar objetos" (beta): the user paints what to remove on a frame of the clip; MI-GAN (src/ai/inpaint.worker.ts)
@@ -106,7 +107,10 @@ export interface EraseJob {
 }
 const jobs = new Map<string, EraseJob>();
 const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((f) => f());
+const emit = () => {
+  listeners.forEach((f) => f());
+  syncTasks('erase', 'Borrando objetos', [...jobs.values()].map((j) => ({ id: j.clipId, progress: j.progress, cancel: () => cancelErase(j.clipId) })));
+};
 export const onEraseJobs = (f: () => void) => (listeners.add(f), () => void listeners.delete(f));
 export const eraseJob = (clipId: string) => jobs.get(clipId);
 export const cancelErase = (clipId: string) => jobs.get(clipId)?.ctrl.abort();

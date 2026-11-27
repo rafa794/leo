@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { countExport } from './support';
 import { cleanupExportFiles, exportVideo, removeExportFile, type ExportJob, type ExportOptions } from './exporter';
 import { saveFile } from './platform';
+import { busyLabels, useBusy, whenIdle } from './busy';
 
 /**
  * Exports run in the background, one after another, while you keep editing.
@@ -20,6 +21,11 @@ export interface ExportTask {
   startedAt?: number;
   result?: { url: string; size: number; where: string; uri?: string; secs: number; file?: string };
   error?: string;
+  /**
+   * Started while something was still running in the background (erasing objects…): the export waits, and the
+   * project is read again when it starts, so the video includes that result.
+   */
+  build?: () => ExportJob;
   /** show the one-time coffee reminder under this export */
   nudge?: boolean;
   ctrl: AbortController;
@@ -31,8 +37,8 @@ let nextId = 1;
 const patch = (id: number, p: Partial<ExportTask>) =>
   useExports.setState((s) => ({ tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...p } : t)) }));
 
-export function enqueueExport(job: ExportJob, opts: ExportOptions, name: string) {
-  const task: ExportTask = { id: nextId++, name: name || 'video', opts, job, state: 'queued', progress: 0, label: 'En cola…', ctrl: new AbortController() };
+export function enqueueExport(job: ExportJob, opts: ExportOptions, name: string, build?: () => ExportJob) {
+  const task: ExportTask = { id: nextId++, name: name || 'video', opts, job, build, state: 'queued', progress: 0, label: 'En cola…', ctrl: new AbortController() };
   useExports.setState((s) => ({ tasks: [...s.tasks, task] }));
   void runNext();
   return task.id;
@@ -63,10 +69,35 @@ export const exportsRunning = () => useExports.getState().tasks.some((t) => t.st
 void cleanupExportFiles();
 
 let busy = false;
+let waitingIdle = false;
 async function runNext() {
   if (busy) return;
   const task = useExports.getState().tasks.find((t) => t.state === 'queued');
   if (!task) return;
+  // something is still running in the background: wait for it, then read the project again
+  if (useBusy.getState().tasks.length) {
+    patch(task.id, { label: `En espera: ${busyLabels()}. Exportaremos cuando termine.` });
+    if (!waitingIdle) {
+      waitingIdle = true;
+      const off = useBusy.subscribe(() => {
+        const t = useExports.getState().tasks.find((x) => x.state === 'queued');
+        if (t && useBusy.getState().tasks.length) patch(t.id, { label: `En espera: ${busyLabels()}. Exportaremos cuando termine.` });
+      });
+      void whenIdle().then(() => {
+        off();
+        waitingIdle = false;
+        void runNext();
+      });
+    }
+    return;
+  }
+  if (task.build) {
+    try {
+      task.job = task.build();
+    } catch {
+      /* the clip it was for is gone: keep the snapshot */
+    }
+  }
   busy = true;
   const t0 = performance.now();
   patch(task.id, { state: 'running', startedAt: Date.now(), label: 'Preparando…' });

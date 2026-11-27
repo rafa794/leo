@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Download, Image as ImageIcon, Video, X } from 'lucide-react';
 import { isNative, saveFile } from '../lib/platform';
+import { busyLabels, useBusy, whenIdle } from '../lib/busy';
 import { enqueueExport } from '../lib/exportQueue';
 import { EXPORT_FPS, nearestFps, sourceFps } from '../lib/fps';
 import { getRootTimeline, useEditor } from '../store/editor';
@@ -62,6 +63,8 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
   const [photoFormat, setPhotoFormat] = useState<'jpeg' | 'png'>('jpeg');
   const [photoSize, setPhotoSize] = useState(0); // 0 = project size, else short side
   const [saving, setSaving] = useState(false);
+  const running = useBusy((s) => s.tasks);
+  const waitNote = running.length ? `Todavía se está ejecutando: ${busyLabels(running)}. Exportaremos cuando termine.` : null;
 
   // what goes into the video: a snapshot taken now (you can keep editing while it exports)
   const buildJob = () => {
@@ -97,7 +100,8 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
   const camFps = srcFps ? nearestFps(srcFps) : null;
 
   const start = () => {
-    enqueueExport(buildJob(), { width, height, fps, quality }, name || 'video');
+    // while something runs in the background the export waits, and reads the project again when it starts
+    enqueueExport(buildJob(), { width, height, fps, quality }, name || 'video', useBusy.getState().tasks.length ? buildJob : undefined);
     onClose();
   };
 
@@ -108,6 +112,7 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
     setSaving(true);
     const st = useEditor.getState();
     try {
+      await whenIdle();
       const job = buildJob();
       const t = Math.min(st.time, Math.max(0, exportDuration(job.clips, job.tracks) - 0.001));
       const blob = await exportImage(job, { width: photoW, height: photoH, time: t, format: photoFormat });
@@ -180,9 +185,14 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
             <p className="hint">
               Salida: {photoW}×{photoH} · {photoFormat === 'png' ? 'PNG (sin pérdida)' : 'JPG'}
             </p>
+            {waitNote && (
+              <p className="hint wait-note" data-testid="export-wait">
+                {waitNote}
+              </p>
+            )}
             <div className="row" style={{ marginTop: 10 }}>
               <button className="btn primary block" data-testid="save-photo" disabled={saving} onClick={() => void savePhoto()}>
-                <Download size={16} /> {saving ? 'Guardando…' : 'Guardar foto'}
+                <Download size={16} /> {saving ? (waitNote ? 'Esperando a que termine…' : 'Guardando…') : waitNote ? 'Guardar foto cuando termine' : 'Guardar foto'}
               </button>
             </div>
           </>
@@ -258,9 +268,14 @@ export default function ExportDialog({ onClose, clipId, clipIds }: { onClose: ()
           </p>
         )}
 
+        {waitNote && (
+          <p className="hint wait-note" data-testid="export-wait">
+            {waitNote}
+          </p>
+        )}
         <div className="row" style={{ marginTop: 10 }}>
           <button className="btn primary block" onClick={start}>
-            <Download size={16} /> Exportar
+            <Download size={16} /> {waitNote ? 'Exportar cuando termine' : 'Exportar'}
           </button>
         </div>
         <p className="hint" style={{ marginBottom: 0, textAlign: 'center' }}>

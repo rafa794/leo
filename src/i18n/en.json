@@ -906,5 +906,15 @@
   "Recuadro": "Box",
   "Ver original": "Show original",
   "Vista previa": "Preview",
-  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "In a video the same area is erased in all {0} frames of the clip (about {1} min): it works best with a steady camera and things that don’t move (a logo, a person standing still…)."
+  "En vídeo se borra la misma zona en los {0} fotogramas del clip (unos {1} min, en segundo plano mientras sigues editando): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).": "In a video the same area is erased in all {0} frames of the clip (about {1} min, in the background while you keep editing): it works best with a steady camera and things that don’t move (a logo, a person standing still…).",
+  "Borrando objetos en segundo plano: puedes seguir editando": "Removing objects in the background: you can keep editing",
+  "Borrando objetos": "Removing objects",
+  "En segundo plano": "In the background",
+  "Analizando el movimiento de la cámara": "Analyzing camera motion",
+  "Revirtiendo un clip": "Reversing a clip",
+  "En espera: {0}. Exportaremos cuando termine.": "Waiting: {0}. It will export when that finishes.",
+  "Todavía se está ejecutando: {0}. Exportaremos cuando termine.": "Still running: {0}. It will export when that finishes.",
+  "Esperando a que termine…": "Waiting for it to finish…",
+  "Guardar foto cuando termine": "Save photo when it finishes",
+  "Exportar cuando termine": "Export when it finishes"
 }

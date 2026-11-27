@@ -2,6 +2,7 @@ import { AudioBufferSink, AudioBufferSource, BufferTarget, CanvasSink, CanvasSou
 import { MAIN_TRACK, useEditor } from '../store/editor';
 import type { Clip, Key, KeyTracks, MediaClip, MediaItem } from '../types';
 import { importFile, loadWaveform, openInput } from './media';
+import { syncTasks } from './busy';
 
 /**
  * Clip tools: "Congelar" (freeze frame) and "Revertir" (play a clip backwards).
@@ -87,7 +88,10 @@ export interface ReverseJob {
 }
 const jobs = new Map<string, ReverseJob>();
 const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((f) => f());
+const emit = () => {
+  listeners.forEach((f) => f());
+  syncTasks('reverse', 'Revirtiendo un clip', [...jobs.values()].map((j) => ({ id: j.clipId, progress: j.progress, cancel: () => cancelReverse(j.clipId) })));
+};
 export const onReverseJobs = (f: () => void) => (listeners.add(f), () => void listeners.delete(f));
 export const reverseJob = (clipId: string) => jobs.get(clipId);
 export const cancelReverse = (clipId: string) => jobs.get(clipId)?.ctrl.abort();

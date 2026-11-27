@@ -195,9 +195,11 @@ function EraseEditor({ clipId, onClose }: { clipId: string; onClose: () => void 
       }
       return;
     }
+    // video: it runs in the background (progress in the bottom-right card) so you can keep editing
     const el = maskRef.current!;
-    await eraseInVideo(clip.id, m, el.width, el.height);
-    if (!eraseJob(clip.id) && useEditor.getState().clips.find((c) => c.id === clip.id && (c as MediaClip).mediaId !== media?.id)) onClose();
+    void eraseInVideo(clip.id, m, el.width, el.height);
+    useEditor.getState().setStatus('Borrando objetos en segundo plano: puedes seguir editando');
+    onClose();
   };
 
   if (!clip || !media) return null;
@@ -260,7 +262,7 @@ function EraseEditor({ clipId, onClose }: { clipId: string; onClose: () => void 
 
         {isVideo && !job && (
           <p className="hint">
-            {`En vídeo se borra la misma zona en los ${frames} fotogramas del clip (unos ${Math.max(1, Math.ceil(frames / 60))} min): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).`}
+            {`En vídeo se borra la misma zona en los ${frames} fotogramas del clip (unos ${Math.max(1, Math.ceil(frames / 60))} min, en segundo plano mientras sigues editando): va mejor con la cámara quieta y cosas que no se mueven (un logo, una persona parada…).`}
           </p>
         )}
         {job && (

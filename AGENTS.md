@@ -143,6 +143,10 @@ tests/unit, tests/app     Vitest and Playwright suites
   in `public/models/migan/` split in two parts (Cloudflare Pages takes files ≤ 25 MiB); the worker joins them. Only a
   crop around the painted area goes to the model (fast on 4K). Photos → a new generated picture; videos → the same area
   repainted on every frame via mediabunny `Conversion` (audio copied). Both switch the clip's media and are undoable.
+- **Background jobs** (`lib/busy.ts`): long jobs (erase in video, reverse, stabilizer analysis) mirror themselves into
+  `useBusy` (`syncTasks`), show in the bottom-right card with progress and cancel, and never block editing. An export
+  started meanwhile waits ("En espera… exportaremos cuando termine") and rebuilds its snapshot when it starts, so the
+  result is included. New long jobs must register there too.
 - **Photo export (beta)**: `exportImage()` in `lib/exporter.ts` renders one frame (the playhead) with the same
   renderer; the export dialog has "Vídeo / Foto" and opens on Foto when the project only has pictures.
 - **Compound clips**: nested timelines (`compound`), entered/exited with `enterCompound` / `exitCompound`.

@@ -495,3 +495,33 @@ test('photo: erase an object with AI (beta), then save the picture', async () =>
   }, { timeout: 30_000 }).toBeGreaterThan(5_000);
 });
 
+test('long jobs run in the background and an export waits for them', async () => {
+  const done = await page.locator('.export-jobs .ej-row.done').count();
+  const video = page.locator('.tl-clip', { hasText: 'clip1.mp4' }).first();
+  await video.click({ position: { x: 12, y: 20 } });
+  await page.locator('.panel.right [data-tool="erase"]').click();
+  await expect(page.locator('.erase-loading')).toHaveCount(0, { timeout: 20_000 });
+  await page.locator('.erase-tools .chip[data-erase="box"]').click();
+  const b = (await page.getByTestId('erase-mask').boundingBox())!;
+  await page.mouse.move(b.x + b.width * 0.4, b.y + b.height * 0.4);
+  await page.mouse.down();
+  await page.mouse.move(b.x + b.width * 0.5, b.y + b.height * 0.55, { steps: 4 });
+  await page.mouse.up();
+  await page.getByTestId('erase-apply').click();
+  // the window closes at once and the job shows in the bottom-right card: you can keep editing
+  await expect(page.locator('.erase-modal')).toHaveCount(0);
+  const job = page.locator('.export-jobs [data-busy^="erase:"]');
+  await expect(job).toHaveCount(1);
+  // exporting now: the dialog warns, and the export waits in the queue
+  await page.locator('.topbar .btn.primary').click();
+  await expect(page.getByTestId('export-wait')).toBeVisible();
+  await page.locator('.modal .chip[data-mode="video"]').click();
+  await page.locator('.modal input.input').first().fill('espera-test');
+  await page.locator('.modal .btn.primary.block').click();
+  await expect(page.locator('.export-jobs .ej-row.queued')).toHaveCount(1);
+  // when the background job ends (here: cancelled), the export starts by itself
+  await job.locator('.icon-btn').click();
+  await expect(job).toHaveCount(0);
+  await expect(page.locator('.export-jobs .ej-row.done')).toHaveCount(done + 1, { timeout: 90_000 });
+});
+
