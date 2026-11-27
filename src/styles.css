@@ -625,3 +625,6 @@ input[type=color] { width: 100%; height: 30px; border: 1px solid var(--border); 
 .pay-logo { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; font-weight: 900; font-size: 14px; background: rgba(0, 0, 0, .14); }
 .thanks { justify-content: flex-start; padding-top: 6px; }
 .thanks-video { width: 190px; }
+.pay-btn.card { background: #635bff; color: #fff; border-color: #635bff; }
+.pay-card-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.pay-card-text small { font-size: 10.5px; font-weight: 600; opacity: .85; }

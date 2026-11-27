@@ -807,5 +807,7 @@
   "Transformar": "Transform",
   "Volver a tus proyectos": "Back to your projects",
   "{0} min {1} s": "{0} min {1} s",
-  "¿Cómo quieres pagar?": "How would you like to pay?"
+  "¿Cómo quieres pagar?": "How would you like to pay?",
+  "Tarjeta": "Card",
+  "Con tarjeta, escribe {0} € en la página de pago.": "By card, type {0} € on the payment page."
 }

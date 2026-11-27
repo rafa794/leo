@@ -33,6 +33,25 @@ export const TREATS = [
   { emoji: '🥤', name: 'Un frappé de cafetería', amount: 10 },
 ];
 
+/**
+ * Card / Google Pay / Apple Pay through Stripe Payment Links (public links, no keys): one per coffee and one
+ * where people type the amount. Create them at dashboard.stripe.com/payment-links.
+ */
+export const STRIPE_LINKS: { byAmount: Record<number, string>; custom: string } = {
+  byAmount: {
+    1: 'https://buy.stripe.com/8x25kFddS9QK0HBfhab7y00',
+    3: 'https://buy.stripe.com/8x28wRgq41ke4XRc4Yb7y01',
+    5: 'https://buy.stripe.com/3cIfZjddSfb4dun7OIb7y02',
+    10: 'https://buy.stripe.com/cNibJ30r63sm1LF0mgb7y03',
+  },
+  custom: 'https://buy.stripe.com/bJe3cx8XC5Au4XR7OIb7y04',
+};
+
+/** Stripe link for this amount: the coffee's own link, or the "type your amount" one (null if not set up). */
+export function cardUrl(amount?: number) {
+  return (amount && STRIPE_LINKS.byAmount[amount]) || STRIPE_LINKS.custom || null;
+}
+
 /** Link that opens the payment with the amount filled in (null if PayPal.me isn't set yet). */
 export function donateUrl(amount?: number) {
   if (!AUTHOR.paypalMe) return null;

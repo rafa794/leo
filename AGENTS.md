@@ -24,7 +24,7 @@ The promise to users, which every change must keep:
   (GitHub Releases, Cloudflare Pages). Never add paid APIs, paid SDKs or trackers.
 
 The maintainer is a solo creator (he also runs sports channels, but the product is pitched as a **general**
-editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me only)
+editor: don't add sports-specific marketing unless asked). Donations: "Invítame a un café" (PayPal.me + card / Google Pay / Apple Pay via Stripe Payment Links)
 in `src/config/author.ts`.
 
 Website: https://orion.rafael-mendoza.com (Cloudflare Pages, `/` = landing page, `/app/` = web version).
@@ -160,13 +160,16 @@ Phone editor (`src/mobile`, used for Android and any screen ≤ 820 px)
 - Viewer: drag to move, finger-sized corners, two-finger pinch to scale and twist to rotate.
 
 Coffee / donations
-- `AUTHOR.paypalMe` in `src/config/author.ts`. Picking a coffee shows, at the same time, the dance video
-  (`public/support/dance.webm`, full-screen thanks + confetti) on top and "¿Cómo quieres pagar?" (PayPal) below;
-  nothing opens by itself. Don't show the dance before a coffee is picked (the maintainer doesn't want it to feel
-  like spam).
+- `AUTHOR.paypalMe` and `STRIPE_LINKS` in `src/config/author.ts`. Picking a coffee shows, at the same time, the
+  dance video (`public/support/dance.webm`, full-screen thanks + confetti) on top and "¿Cómo quieres pagar?" below
+  with **PayPal** (paypal.me/<name>/<amount>EUR) and **Tarjeta · Google Pay · Apple Pay** (the coffee's own Stripe
+  Payment Link: 1 / 3 / 5 / 10 €; any other amount uses the "customer chooses" link). Nothing opens by itself.
+  Don't show the dance before a coffee is picked (the maintainer doesn't want it to feel like spam).
+- Stripe Payment Links are public URLs (`https://buy.stripe.com/...`). **Never put Stripe keys** (`sk_`, `pk_`,
+  `rk_`) in the repo. New amounts = new links created by the maintainer in dashboard.stripe.com/payment-links
+  (tax collection off).
 - **No Bizum**: Bizum has no payment links for individuals (only shops via Redsys), so it would require publishing
   the maintainer's phone number. **Never put his phone number in the repo, the app or the website.**
-  Card / Google Pay / Apple Pay would need a Stripe Payment Link or Ko-fi account created by the maintainer.
 
 ---
 

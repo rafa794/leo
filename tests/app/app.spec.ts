@@ -233,8 +233,22 @@ test('about, suggestions and licenses dialogs open (nothing is sent)', async () 
   await page.locator('.coffee-btn').click();
   await page.locator('.treat').first().click();
   await expect(page.locator('.thanks-video')).toBeVisible();
-  await expect(page.locator('.pay-btn')).toHaveCount(1);
+  await expect(page.locator('.pay-btn')).toHaveCount(2);
   await expect(page.locator('.pay-btn.paypal')).toBeVisible();
+  // card (Stripe): the 1 € coffee opens its own Stripe link (recorded instead of opening a window)
+  await page.evaluate(() => {
+    const w = window as unknown as { __opened: string[]; __open: typeof window.open };
+    w.__opened = [];
+    w.__open = window.open;
+    window.open = ((u?: string | URL) => (w.__opened.push(String(u)), null)) as typeof window.open;
+  });
+  await page.locator('.pay-btn.card').click();
+  const opened = await page.evaluate(() => {
+    const w = window as unknown as { __opened: string[]; __open: typeof window.open };
+    window.open = w.__open;
+    return w.__opened;
+  });
+  expect(opened).toEqual(['https://buy.stripe.com/8x25kFddS9QK0HBfhab7y00']);
   await page.locator('.about-close').click(); // the X stays clickable over the thank-you screen
   await expect(page.locator('.modal')).toHaveCount(0);
 });

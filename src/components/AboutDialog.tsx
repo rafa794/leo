@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExternalLink, Heart, Lightbulb, X } from 'lucide-react';
-import { AUTHOR, TREATS, donateUrl } from '../config/author';
+import { CreditCard, ExternalLink, Heart, Lightbulb, X } from 'lucide-react';
+import { AUTHOR, TREATS, donateUrl, cardUrl, STRIPE_LINKS } from '../config/author';
 import { openLicenses } from './LicensesDialog';
 import { openSuggestions } from './SuggestionsDialog';
 
@@ -110,7 +110,21 @@ export default function AboutDialog() {
                     PayPal
                   </button>
                 )}
+                {cardUrl(thanks.amount) && (
+                  <button className="pay-btn card" onClick={() => window.open(cardUrl(thanks.amount)!, '_blank', 'noopener')}>
+                    <CreditCard size={18} />
+                    <span className="pay-card-text">
+                      Tarjeta
+                      <small>Google Pay · Apple Pay</small>
+                    </span>
+                  </button>
+                )}
               </div>
+              {thanks.amount && !STRIPE_LINKS.byAmount[thanks.amount] && cardUrl(thanks.amount) && (
+                <p className="hint" style={{ margin: 0, textAlign: 'center' }}>
+                  {`Con tarjeta, escribe ${thanks.amount} € en la página de pago.`}
+                </p>
+              )}
               <button className="link" onClick={() => setThanks(null)}>
                 Volver
               </button>

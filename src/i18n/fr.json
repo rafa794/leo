@@ -793,5 +793,7 @@
   "Transformar": "Transformer",
   "Volver a tus proyectos": "Retour à tes projets",
   "{0} min {1} s": "{0} min {1} s",
-  "¿Cómo quieres pagar?": "Comment veux-tu payer ?"
+  "¿Cómo quieres pagar?": "Comment veux-tu payer ?",
+  "Tarjeta": "Carte",
+  "Con tarjeta, escribe {0} € en la página de pago.": "Par carte, saisis {0} € sur la page de paiement."
 }
